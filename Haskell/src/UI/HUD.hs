@@ -1,3 +1,5 @@
+module Haskell.UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
+
 -- Tela Principal da HUD 
 
 mainScreen :: IO()
