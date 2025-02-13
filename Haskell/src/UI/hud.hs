@@ -1,35 +1,25 @@
-import Data.ByteString (elemIndex)
+module Haskell.UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
+
 -- Tela Principal da HUD 
 
 mainScreen :: IO()
 mainScreen = do
-    --não preciso me preocupar com a centralização dos elementos na tela. vai ficar tudo alinhado na esquerda mesmo.
-    --tenho que aprender listas em Haskell pois irei precisar desse conhecimento para fazer os dois mapas (os quais são duas matrizes)
-
     let jogador = "Neymar"
-    -- let listaParaGeraLinhasTabela = [1..12]
-    -- let tabela1 = [['A'..'L'], ['1'] ++ (geraLinhasTabela listaParaGeraLinhasTabela), ['2'] ++ (geraLinhasTabela listaParaGeraLinhasTabela)]
-    -- putStrLn (show tabela1)
     putStrLn ("Jogador: " ++ jogador)
     putStrLn ""
     putStrLn ""
     imprimiTabelas 0
     putStrLn ""
     putStrLn ""
-
     let inimigosDerrotados = 4
     let inimigosTotais = 10
-    let inimigosDerrotadosOponente = 2
-    let tropasTotaisOponente = 10
-    putStrLn ("Inimigos derrotados: " ++ show inimigosDerrotados ++ "/" ++ show inimigosTotais ++ "  |  " ++
-     "Inimigos derrotados do oponente: " ++ show inimigosDerrotadosOponente ++ "/" ++ show tropasTotaisOponente)
+    putStrLn ("Inimigos: " ++ show inimigosDerrotados ++ "/" ++ show inimigosTotais)
+
 
     let espacosAtingidos = 3
     let espacosTotais = 12
-    let espacosAtingidosOponente = 5
-    let espacosTotaisOponente = 12
-    putStrLn ("Espaços especiais atingidos: " ++ show espacosAtingidos ++ "/" ++ show espacosTotais ++ "  |  " ++
-     "Espaços especiais atingidos pelo oponente: " ++ show inimigosDerrotadosOponente ++ "/" ++ show tropasTotaisOponente)
+    putStrLn ("Espaços especiais: " ++ show espacosAtingidos ++ "/" ++ show espacosTotais)
+
 
     let minasOuroAtingidas = 2
     let minasOuroTotais = 5
@@ -136,8 +126,6 @@ imprimiTabelas x = if x >= 11
                 let elemTabela = unwords (geraTabela !! x)
                 putStrLn (elemTabela ++ "                             " ++ elemTabela)
                 imprimiTabelas (x + 1)
-    
-
 
 
 geraTabela :: [[String]]
