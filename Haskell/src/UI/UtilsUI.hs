@@ -2,6 +2,9 @@ module UtilsUI where
 
 -- Funções utilitárias para as interfaces
 
+opcaoInvalida :: String
+opcaoInvalida = "> Opção inválida, digite novamente: "
+
 confirmacao :: String
 confirmacao = "> Tem certeza? [S/N]: "
 
@@ -15,5 +18,4 @@ saveStates = unlines
     ,"[3]. Slot 3 - Vazio"
     ,""
     ,""
-    ,"> Digite o slot ou 'v' para voltar: "
-    ]
+    ] ++ "> Digite o slot ou 'v' para voltar: "
