@@ -4,9 +4,13 @@ module Haskell.UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
 
 mainScreen :: IO()
 mainScreen = do
-    -- let jogador = "Neymar"
-    -- let primeira_linha = "          Jogador: " ++ jogador ++ "          Oponente: Bot"
-    -- putStrLn primeira_linha
+    let jogador = "Neymar"
+    putStrLn ("Jogador: " ++ jogador)
+    putStrLn ""
+    putStrLn ""
+    imprimiTabelas 0
+    putStrLn ""
+    putStrLn ""
     let inimigosDerrotados = 4
     let inimigosTotais = 10
     putStrLn ("Inimigos: " ++ show inimigosDerrotados ++ "/" ++ show inimigosTotais)
@@ -39,7 +43,7 @@ mainScreen = do
     
     putStrLn ""
 
-    putStr "> Digite a opção ou coordenadas:"
+    putStrLn "> Digite a opção ou coordenadas:"
 
 -- Tela Salvar Jogo
 
@@ -105,3 +109,46 @@ mostraInventario = do
     
     let moedas = 25
     putStrLn ("Moedas: " ++ show moedas)
+
+
+imprimiTabelas :: Int -> IO() 
+imprimiTabelas x = if x >= 11
+    then do
+        let elemTabela = unwords (geraTabela !! x)
+        putStrLn (elemTabela ++ "                             " ++ elemTabela)
+    else do
+        if x < 10 
+            then do
+                let elemTabela = " " ++ unwords (geraTabela !! x)
+                putStrLn (elemTabela ++ "                             " ++ elemTabela)
+                imprimiTabelas (x + 1)
+            else do
+                let elemTabela = unwords (geraTabela !! x)
+                putStrLn (elemTabela ++ "                             " ++ elemTabela)
+                imprimiTabelas (x + 1)
+
+
+geraTabela :: [[String]]
+geraTabela = geraTabelaAux [["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "]]
+-- geraTabela = geraTabelaAux ([[" "] ++ geraPrimeiraLinha ['A'..'L']])
+
+
+geraTabelaAux :: [[String]] -> [[String]]
+geraTabelaAux tabela = 
+    if length tabela >= 13
+        then [head tabela] ++ adicionaNumeroCadaLinha (tail tabela)
+        else geraTabelaAux (tabela ++ [geraLinhasComuns [1..12]])
+
+    
+
+-- geraPrimeiraLinha :: [Char] -> [String]
+-- geraPrimeiraLinha listaChar = [show x ++ " " | x <- listaChar]
+
+
+geraLinhasComuns :: [Int] -> [String]
+geraLinhasComuns [] = []
+geraLinhasComuns (a : as) = ["X "] ++ (geraLinhasComuns as)
+
+
+adicionaNumeroCadaLinha :: [[String]] -> [[String]]
+adicionaNumeroCadaLinha listaSemNumeros = [ [show i ++ " "] ++ x | (x, i) <- zip listaSemNumeros [1..] ]
