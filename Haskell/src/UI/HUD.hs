@@ -112,7 +112,7 @@ mostraInventario = do
 
 
 imprimiTabelas :: Int -> IO() 
-imprimiTabelas x = if x >= 11
+imprimiTabelas x = if x >= 12
     then do
         let elemTabela = unwords (geraTabela !! x)
         putStrLn (elemTabela ++ "                             " ++ elemTabela)
