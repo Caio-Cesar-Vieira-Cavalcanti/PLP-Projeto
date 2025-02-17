@@ -1,4 +1,5 @@
-module Haskell.UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
+module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
+import qualified Jogo.Tabuleiro as Jogo
 
 -- Tela Principal da HUD 
 
@@ -8,6 +9,7 @@ mainScreen = do
     putStrLn ("Jogador: " ++ jogador)
     putStrLn ""
     putStrLn ""
+--    let tabelaAtual = Jogo.geraTabelaInicial
     imprimiTabelas 0
     putStrLn ""
     putStrLn ""
@@ -114,41 +116,15 @@ mostraInventario = do
 imprimiTabelas :: Int -> IO() 
 imprimiTabelas x = if x >= 12
     then do
-        let elemTabela = unwords (geraTabela !! x)
+        let elemTabela = unwords (Jogo.geraTabela !! x)
         putStrLn (elemTabela ++ "                             " ++ elemTabela)
     else do
         if x < 10 
             then do
-                let elemTabela = " " ++ unwords (geraTabela !! x)
+                let elemTabela = " " ++ unwords (Jogo.geraTabela !! x)
                 putStrLn (elemTabela ++ "                             " ++ elemTabela)
                 imprimiTabelas (x + 1)
             else do
-                let elemTabela = unwords (geraTabela !! x)
+                let elemTabela = unwords (Jogo.geraTabela !! x)
                 putStrLn (elemTabela ++ "                             " ++ elemTabela)
                 imprimiTabelas (x + 1)
-
-
-geraTabela :: [[String]]
-geraTabela = geraTabelaAux [["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "]]
--- geraTabela = geraTabelaAux ([[" "] ++ geraPrimeiraLinha ['A'..'L']])
-
-
-geraTabelaAux :: [[String]] -> [[String]]
-geraTabelaAux tabela = 
-    if length tabela >= 13
-        then [head tabela] ++ adicionaNumeroCadaLinha (tail tabela)
-        else geraTabelaAux (tabela ++ [geraLinhasComuns [1..12]])
-
-    
-
--- geraPrimeiraLinha :: [Char] -> [String]
--- geraPrimeiraLinha listaChar = [show x ++ " " | x <- listaChar]
-
-
-geraLinhasComuns :: [Int] -> [String]
-geraLinhasComuns [] = []
-geraLinhasComuns (a : as) = ["X "] ++ (geraLinhasComuns as)
-
-
-adicionaNumeroCadaLinha :: [[String]] -> [[String]]
-adicionaNumeroCadaLinha listaSemNumeros = [ [show i ++ " "] ++ x | (x, i) <- zip listaSemNumeros [1..] ]
