@@ -1,4 +1,4 @@
-module UI.Menu (logoMenu, opcoesMenu, novoJogo, carregarJogo, historiaJogo, regrasJogo) where
+module UI.Menu (logoMenu, opcoesMenu, novoJogo, carregarJogo, historiaJogo, regrasJogo, creditosJogo) where
 
 import qualified UI.UtilsUI as UtilsUI
 

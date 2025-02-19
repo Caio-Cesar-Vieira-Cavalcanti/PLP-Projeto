@@ -1,4 +1,4 @@
-module Jogo.Tabuleiro (geraTabela) where
+module Modelos.Tabuleiro (geraTabela) where
 import Modelos.Coordenada as Coordenada
 
 type Tabela = [[String]]

@@ -1,6 +1,6 @@
 module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
 
-import qualified Jogo.Tabuleiro as Jogo
+import qualified Modelos.Tabuleiro as Jogo
 import qualified UI.UtilsUI as Utils
 
 {- Falta trocar os dummies  por valores reais passados como argumento -}
