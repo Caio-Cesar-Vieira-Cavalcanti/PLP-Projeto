@@ -1,91 +1,105 @@
-module Menu (logoMenu, opcoesMenu, novoJogo, carregarJogo, historiaJogo, regrasJogo) where
+module UI.Menu (logoMenu, opcoesMenu, novoJogo, carregarJogo, historiaJogo, regrasJogo) where
 
-import qualified UtilsUI 
+import qualified UI.UtilsUI as UtilsUI
 
 -- Funções Principais
 
-logoMenu :: String
-logoMenu =
-  asciiArt
-    ++ unlines
-      [ "             Pressione a tecla \"Enter\"",
-        "",
-        ""
-      ]
+logoMenu :: IO ()
+logoMenu = do
+  putStr
+    ( asciiArt
+        ++ unlines
+          [ "             Pressione a tecla \"Enter\"",
+            "",
+            ""
+          ]
+    )
 
-opcoesMenu :: String
-opcoesMenu =
-  asciiArt
-    ++ unlines
-      [ "             [1]. Novo Jogo",
-        "             [2]. Carregar Jogo",
-        "             [3]. História",
-        "             [4]. Regras",
-        "             [5]. Créditos",
-        "",
-        "             [6]. Sair do Jogo",
-        ""
-      ]
-    ++ "> Opção: "
+opcoesMenu :: IO ()
+opcoesMenu = do
+  putStr
+    ( asciiArt
+        ++ unlines
+          [ "             [1]. Novo Jogo",
+            "             [2]. Carregar Jogo",
+            "             [3]. História",
+            "             [4]. Regras",
+            "             [5]. Créditos",
+            "",
+            "             [6]. Sair do Jogo",
+            ""
+          ]
+        ++ "> Opção: "
+    )
 
-novoJogo :: String
-novoJogo =
-  unlines
-    [ "             CARREGANDO O NOVO JOGO...",
-      "",
-      ""
-    ]
-    ++ "> Digite o seu nome (ou 'v' para voltar ao menu): "
+novoJogo :: IO ()
+novoJogo = do
+  putStr
+    ( unlines
+        [ "             CARREGANDO O NOVO JOGO...",
+          "",
+          ""
+        ]
+        ++ "> Digite o seu nome (ou 'v' para voltar ao menu): "
+    )
 
-carregarJogo :: String
-carregarJogo =
-  unlines
-    [ "Escolha um slot para carregar o estado do jogo:",
-      ""
-    ]
-    ++ UtilsUI.saveStates
+carregarJogo :: IO ()
+carregarJogo = do
+  putStr
+    ( unlines
+        [ "Escolha um slot para carregar o estado do jogo:",
+          ""
+        ]
+        ++ UtilsUI.saveStates
+    )
 
-historiaJogo :: String
-historiaJogo =
-  unlines
-    [ "  _   _ _     _             _       ",
-      " | | | (_)___| |_ ___  _ __(_) __ _ ",
-      " | |_| | / __| __/ _ \\| '__| |/ _` |",
-      " |  _  | \\__ \\ || (_) | |  | | (_| |",
-      " |_| |_|_|___/\\__\\___/|_|  |_|\\__,_|",
-      "                                     ",
-      ""
-    ]
-    ++ historia
-    ++ UtilsUI.voltarMenu
+historiaJogo :: IO ()
+historiaJogo = do
+  putStr
+    ( unlines
+        [ "  _   _ _     _             _       ",
+          " | | | (_)___| |_ ___  _ __(_) __ _ ",
+          " | |_| | / __| __/ _ \\| '__| |/ _` |",
+          " |  _  | \\__ \\ || (_) | |  | | (_| |",
+          " |_| |_|_|___/\\__\\___/|_|  |_|\\__,_|",
+          "                                     ",
+          ""
+        ]
+        ++ historia
+        ++ UtilsUI.voltarMenu
+    )
 
-regrasJogo :: String
-regrasJogo =
-  unlines
-    [ "  ____                          ",
-      " |  _ \\ ___  __ _ _ __ __ _ ___ ",
-      " | |_) / _ \\/ _` | '__/ _` / __|",
-      " |  _ <  __/ (_| | | | (_| \\__ \\",
-      " |_| \\_\\___|\\__, |_|  \\__,_|___/",
-      "            |___/               ",
-      ""
-    ]
-    ++ regras
-    ++ UtilsUI.voltarMenu
+regrasJogo :: IO ()
+regrasJogo = do
+  putStr
+    ( unlines
+        [ "  ____                          ",
+          " |  _ \\ ___  __ _ _ __ __ _ ___ ",
+          " | |_) / _ \\/ _` | '__/ _` / __|",
+          " |  _ <  __/ (_| | | | (_| \\__ \\",
+          " |_| \\_\\___|\\__, |_|  \\__,_|___/",
+          "            |___/               ",
+          ""
+        ]
+        ++ regras
+        ++ UtilsUI.voltarMenu
+    )
 
-creditosJogo :: String
-creditosJogo =
-  unlines
-    [ "   ____              _ _ _            ",
-      "  / ___|_ __ ___  __| (_) |_ ___  ___ ",
-      " | |   | '__/ _ \\/ _` | | __/ _ \\/ __|",
-      " | |___| | |  __/ (_| | | || (_) \\__ \\",
-      "  \\____|_|  \\___|\\__,_|_|\\__\\___/|___/",
-      "                                      ",
-      ""
-    ]
-    ++ creditos
-    ++ UtilsUI.voltarMenu
+creditosJogo :: IO ()
+creditosJogo = do
+  putStr
+    ( unlines
+        [ "   ____              _ _ _            ",
+          "  / ___|_ __ ___  __| (_) |_ ___  ___ ",
+          " | |   | '__/ _ \\/ _` | | __/ _ \\/ __|",
+          " | |___| | |  __/ (_| | | || (_) \\__ \\",
+          "  \\____|_|  \\___|\\__,_|_|\\__\\___/|___/",
+          "                                      ",
+          ""
+        ]
+        ++ creditos
+        ++ UtilsUI.voltarMenu
+    )
 
 -- Funções Auxiliares
 
@@ -130,7 +144,7 @@ regras =
 
 creditos :: String
 creditos =
-    "-> Disciplina: Paradigmas de Linguagens de Programação - Universidade Federal de Campina Grande (UFCG)\n"
+  "-> Disciplina: Paradigmas de Linguagens de Programação - Universidade Federal de Campina Grande (UFCG)\n"
     ++ "-> Professor: Everton L. G. Alves \n"
     ++ "-> Participantes: Caio Cesar Vieira Cavalcanti\n\t\t  João Pedro Azevedo do Nascimento\n\t\t  Valdemar Victor Leite Carvalho"
     ++ "\n\t\t  Wendel Silva Italiano de Araujo\n\n"

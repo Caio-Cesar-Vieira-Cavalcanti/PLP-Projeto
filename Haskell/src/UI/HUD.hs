@@ -1,7 +1,13 @@
 module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
+
 import qualified Jogo.Tabuleiro as Jogo
+import qualified UI.UtilsUI as Utils
+
+{- Falta trocar os dummies  por valores reais passados como argumento -}
 
 -- Tela Principal da HUD 
+
+-- Argumento pode ser uma tupla com alguns valores a serem substituídos pelos dummies
 
 mainScreen :: IO()
 mainScreen = do
@@ -9,23 +15,28 @@ mainScreen = do
     putStrLn ("Jogador: " ++ jogador)
     putStrLn ""
     putStrLn ""
---    let tabelaAtual = Jogo.geraTabelaInicial
+
     imprimiTabelas 0
+
     putStrLn ""
     putStrLn ""
+
     let inimigosDerrotados = 4
     let inimigosTotais = 10
+
     putStrLn ("Inimigos: " ++ show inimigosDerrotados ++ "/" ++ show inimigosTotais)
 
 
     let espacosAtingidos = 3
     let espacosTotais = 12
+
     putStrLn ("Espaços especiais: " ++ show espacosAtingidos ++ "/" ++ show espacosTotais)
 
 
     let minasOuroAtingidas = 2
     let minasOuroTotais = 5
-    putStrLn ("Minas de ouro: " ++ show minasOuroAtingidas ++ "/" ++ show minasOuroTotais)
+
+    putStrLn ("Tesouro: " ++ show minasOuroAtingidas ++ "/" ++ show minasOuroTotais)
     
     putStrLn ""
 
@@ -37,8 +48,8 @@ mainScreen = do
     putStrLn "'1' -> Usar bombas pequenas"
     putStrLn "'2' -> Usar bombas médias"
     putStrLn "'3' -> Usar bombas grandes"
-    putStrLn "{COLUNAS}{LINHA} -> Coordenada que deseja atacar; Exemplo: C3"
     putStrLn "'4' -> Usar o drone visualizador de áreas"
+    putStrLn "{COLUNAS}{LINHA} -> Coordenada que deseja atacar; Exemplo: C3"
     putStrLn "'m' -> Acesso ao mercado"
     putStrLn "'s' -> Salvar o jogo no estado atual"
     putStrLn "'quit' -> Sair do jogo sem salvar"
@@ -52,16 +63,8 @@ mainScreen = do
 saveJogoScreen :: IO ()
 saveJogoScreen = do
     putStrLn "Escolha um slot para salvar:"
-    
     putStrLn ""
-
-    putStrLn "[1] Slot 1 - Vazio"
-    putStrLn "{nome jog.} - Jogo Salvo em {data}"
-    putStrLn "{nome jog.} - Jogo Salvo em {data}"
-    
-    putStrLn ""
-
-    putStr "> Digite o slot ou 'v' para voltar: "
+    putStr Utils.saveStates
 
 -- Tela Mercado 
 
@@ -102,17 +105,20 @@ mostraInventario = do
     let bombasPequenas = 3
     let bombasMedias = 1
     let bombasGrandes = 0
+
     putStrLn ("Bombas pequenas: " ++ show bombasPequenas ++ " | Bombas médias: " ++ show bombasMedias ++ " | Bombas grandes: " ++ show bombasGrandes)
 
     let drones = 2
+
     putStrLn ("Drone visualizador de áreas: " ++ show drones)
 
     putStrLn ""
     
     let moedas = 25
+
     putStrLn ("Moedas: " ++ show moedas)
 
-
+-- REVISAR 
 imprimiTabelas :: Int -> IO() 
 imprimiTabelas x = if x >= 12
     then do

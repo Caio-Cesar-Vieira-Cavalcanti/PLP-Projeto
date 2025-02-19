@@ -8,28 +8,28 @@ geraTabela = geraTabelaAux [["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H 
 
 
 geraTabelaAux :: [[String]] -> [[String]]
-geraTabelaAux tabela = 
+geraTabelaAux tabela =
     if length tabela >= 13
-        then [head tabela] ++ adicionaNumeroCadaLinha (tail tabela)
+        then head tabela : adicionaNumeroCadaLinha (tail tabela)
         else geraTabelaAux (tabela ++ [geraLinhasComuns [1..12]])
 
 
 geraLinhasComuns :: [Int] -> [String]
 geraLinhasComuns [] = []
 geraLinhasComuns (a : as) = do
-    let coord = criaCoordenada
-    [(checaSeFoiAcertado coord) ++ " "] ++ (geraLinhasComuns as)
+    let coord = Coordenada 'X' ' ' False
+    (getMascara coord : " ") : geraLinhasComuns as
 
 
 adicionaNumeroCadaLinha :: [[String]] -> [[String]]
-adicionaNumeroCadaLinha listaSemNumeros = [ [show i ++ " "] ++ x | (x, i) <- zip listaSemNumeros [1..] ]
+adicionaNumeroCadaLinha listaSemNumeros = [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros [1..] ]
 
 
-checaSeFoiAcertado :: Coordenada -> String
-checaSeFoiAcertado coord = 
-    if acertou coord
-        then valorVerdadeiro coord
-        else "X"
+-- checaSeFoiAcertado :: Coordenada -> String
+-- checaSeFoiAcertado coord =
+--     if acertou coord
+--         then representacao coord
+--         else "X"
 
 {-
 atualizaCoordenada :: [[Coordenada]] -> Int -> Int -> String -> Tabela
@@ -40,7 +40,3 @@ atualizaCoordenada tab coluna linha novoValor =
       else linhaAtual
   | (i, linhaAtual) <- zip [0..12] tab ]
 -}
-
-
-criaCoordenada :: Coordenada
-criaCoordenada = Coordenada { Coordenada.valorVerdadeiro = " ", Coordenada.acertou = False }
