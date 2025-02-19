@@ -87,10 +87,9 @@ mercadoScreen = do
     
     putStrLn ""
 
-    putStrLn "'1' -> Comprar bombas pequenas             ({preço})"
-    putStrLn "'2' -> Comprar bombas médias               ({preço})"
-    putStrLn "'3' -> Comprar bombas grandes              ({preço})"
-    putStrLn "'4' -> Comprar drone visualizador de áreas ({preço})"
+    putStrLn "'1' -> Comprar bombas médias               ($250)"
+    putStrLn "'2' -> Comprar bombas grandes              ($400)"
+    putStrLn "'3' -> Comprar drone visualizador de áreas ($350)"
 
     putStrLn ""
 
