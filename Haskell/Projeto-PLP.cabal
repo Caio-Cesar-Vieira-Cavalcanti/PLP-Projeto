@@ -80,6 +80,8 @@ executable Projeto-PLP
     default-language: Haskell2010
 
     others-modules: UI.Menu, 
-    		   UI.UtilsUI, 
-		   UI.HUD, 
-		   UI.TelasVitoriaDerrota
+    		UI.UtilsUI, 
+		    UI.HUD, 
+		    UI.TelasVitoriaDerrota,
+            Modelos.Jogador,
+            Modelos.Mercado
