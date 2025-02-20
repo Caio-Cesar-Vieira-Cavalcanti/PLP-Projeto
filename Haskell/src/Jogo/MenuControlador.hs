@@ -3,6 +3,7 @@ module Jogo.MenuControlador (iniciarMenu) where
 import qualified UI.Menu as Menu
 import qualified UI.UtilsUI as UtilsUI
 import System.Console.ANSI (clearScreen)
+import Jogo.Iniciar
 
 iniciarMenu :: IO ()
 iniciarMenu = do
@@ -19,6 +20,8 @@ processarOpcao :: String -> IO ()
 processarOpcao "1" = do
   clearScreen
   Menu.novoJogo
+  nomeJogador <- getLine
+  iniciarJogo (read nomeJogador)
   -- Executar a lógica de inicialização do jogo
 processarOpcao "2" = do
   clearScreen

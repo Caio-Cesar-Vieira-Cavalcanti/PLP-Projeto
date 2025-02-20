@@ -13,8 +13,7 @@ class MercadoClass m where
     comprarItem :: Jogador -> m -> String -> Jogador  
 
 data Mercado = Mercado 
-    { precoBombasPequenas :: Int
-    , precoBombasMedias :: Int
+    { precoBombasMedias :: Int
     , precoBombasGrandes :: Int
     , precoDroneVisualizador :: Int
     } deriving Show

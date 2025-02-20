@@ -84,4 +84,9 @@ executable Projeto-PLP
 		    UI.HUD, 
 		    UI.TelasVitoriaDerrota,
             Modelos.Jogador,
-            Modelos.Mercado
+            Modelos.Mercado,
+            Modelos.Jogo,
+            Modelos.Coordenada,
+            Modelos.Tabuleiro,
+            Jogo.Iniciar,
+            Jogo.MenuControlador

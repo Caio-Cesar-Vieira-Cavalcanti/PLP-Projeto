@@ -1,20 +1,20 @@
-module Modelos.Tabuleiro (geraTabela) where
+module Modelos.Tabuleiro where
 import Modelos.Coordenada as Coordenada
 
 type Tabela = [[String]]
 
-geraTabela :: Tabela
+geraTabelaInicial :: Tabela
 geraTabela = geraTabelaAux [["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "]]
 
 
-geraTabelaAux :: [[String]] -> [[String]]
+geraTabelaInicialAux :: [[String]] -> [[String]]
 geraTabelaAux tabela =
     if length tabela >= 13
         then head tabela : adicionaNumeroCadaLinha (tail tabela)
         else geraTabelaAux (tabela ++ [geraLinhasComuns [1..12]])
 
 
-geraLinhasComuns :: [Int] -> [String]
+geraLinhasIniciaisComuns :: [Int] -> [String]
 geraLinhasComuns [] = []
 geraLinhasComuns (a : as) = do
     let coord = Coordenada 'X' ' ' False
@@ -31,12 +31,11 @@ adicionaNumeroCadaLinha listaSemNumeros = [ (show i ++ " ") : x | (x, i) <- zip 
 --         then representacao coord
 --         else "X"
 
-{-
-atualizaCoordenada :: [[Coordenada]] -> Int -> Int -> String -> Tabela
+
+atualizaCoordenada :: Tabela -> Int -> Int -> String -> Tabela
 atualizaCoordenada tab coluna linha novoValor = 
     [ if i == linha
       then [ if j == coluna then novoValor else elemento
            | (j, elemento) <- zip [0..12] linhaAtual ]
       else linhaAtual
   | (i, linhaAtual) <- zip [0..12] tab ]
--}
