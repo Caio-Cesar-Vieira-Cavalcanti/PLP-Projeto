@@ -21,7 +21,8 @@ processarOpcao "1" = do
   clearScreen
   Menu.novoJogo
   nomeJogador <- getLine
-  iniciarJogo (read nomeJogador)
+  putStrLn nomeJogador -- TESTE
+  --iniciarJogo nomeJogador -- REVISAR O ERRO (atualizar o retorno da função para IO())
   -- Executar a lógica de inicialização do jogo
 processarOpcao "2" = do
   clearScreen

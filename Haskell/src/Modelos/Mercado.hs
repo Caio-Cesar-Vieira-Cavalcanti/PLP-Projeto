@@ -1,11 +1,10 @@
-module Mercado (Mercado(..), MercadoClass(..)) where
+module Modelos.Mercado (Mercado(..), MercadoClass(..)) where
 
-import Jogador (Jogador(..), JogadorClass(..))
+import Modelos.Jogador (Jogador(..), JogadorClass(..))
 
 -- Mercado
 
 class MercadoClass m where 
-    getPrecoBP :: m -> Int
     getPrecoBM :: m -> Int
     getPrecoBG :: m -> Int
     getPrecoDV :: m -> Int
@@ -19,16 +18,11 @@ data Mercado = Mercado
     } deriving Show
 
 instance MercadoClass Mercado where
-    getPrecoBP = precoBombasPequenas
     getPrecoBM = precoBombasMedias
     getPrecoBG = precoBombasGrandes
     getPrecoDV = precoDroneVisualizador
 
     comprarItem jogador mercado item = case item of
-        "bombaPequena" -> 
-            if getMoedas jogador >= getPrecoBP mercado
-                then setMoedas (setBombasPequenas jogador (getBombasPequenas jogador + 1)) (getMoedas jogador - getPrecoBP mercado)
-                else jogador  
         "bombaMedia" -> 
             if getMoedas jogador >= getPrecoBM mercado
                 then setMoedas (setBombasMedias jogador (getBombasMedias jogador + 1)) (getMoedas jogador - getPrecoBM mercado)

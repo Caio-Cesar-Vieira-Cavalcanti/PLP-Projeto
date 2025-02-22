@@ -1,4 +1,4 @@
-module Jogador (Jogador(..), JogadorClass(..)) where
+module Modelos.Jogador (Jogador(..), JogadorClass(..)) where
 
 -- Jogador
 

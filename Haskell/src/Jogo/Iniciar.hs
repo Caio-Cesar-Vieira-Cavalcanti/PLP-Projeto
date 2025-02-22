@@ -1,15 +1,7 @@
-import Modelos.Tabuleiro
-import Modelos.Jogador
-import Modelos.Mercado
+module Jogo.Iniciar (iniciarJogo) where
 
-iniciarJogador :: String -> Jogador
-iniciarJogador nome = Jogador nome 0 30 0 0 0
+import Modelos.Jogo
 
-iniciarMercado :: Mercado
-iniciarMercado = Mercado 250 400 350
-
-iniciarTabela :: Tabela
-iniciarTabela = geraTabelaInicial 
 
 iniciarJogo :: String -> Jogo
 iniciarJogo nomeJogador = Jogo (iniciarJogador nomeJogador) iniciarMercado iniciarTabela
