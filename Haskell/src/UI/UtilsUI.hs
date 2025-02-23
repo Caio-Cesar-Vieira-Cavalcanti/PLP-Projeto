@@ -1,4 +1,4 @@
-module UtilsUI where
+module UI.UtilsUI where
 
 -- Funções utilitárias para as interfaces
 
@@ -19,3 +19,6 @@ saveStates = unlines
     ,""
     ,""
     ] ++ "> Digite o slot ou 'v' para voltar: "
+
+-- Função para exibir os dados salvos no arquivo do estado de jogo
+-- foo()
