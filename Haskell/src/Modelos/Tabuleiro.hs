@@ -31,5 +31,4 @@ atualizaCoordenada tab coluna linha novoValor =
 --     if acertou coord
 --         then representacao coord
 --         else "X"
-
 -}

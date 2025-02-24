@@ -1,10 +1,12 @@
 module Modelos.Jogador (Jogador(..), JogadorClass(..)) where
 
+import Modelos.Tabuleiro
 -- Jogador
 
 class JogadorClass j where
     getNome :: j -> String
     getMoedas :: j -> Int
+    getTabela :: j -> Tabela
     setNome :: j -> String -> j
     setMoedas :: j -> Int -> j
 
@@ -21,6 +23,7 @@ class JogadorClass j where
 data Jogador = Jogador
     { nome :: String
     , moedas :: Int
+    , tabela :: Tabela
     , bombasPequenas :: Int
     , bombasMedias :: Int
     , bombasGrandes :: Int
@@ -30,6 +33,7 @@ data Jogador = Jogador
 instance JogadorClass Jogador where
     getNome = nome
     getMoedas = moedas
+    getTabela = tabela
     setNome jogador novoNome = jogador { nome = novoNome }
     setMoedas jogador novasMoedas = jogador { moedas = novasMoedas }
 

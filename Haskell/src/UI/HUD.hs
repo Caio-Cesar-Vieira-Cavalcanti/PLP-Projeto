@@ -1,6 +1,8 @@
 module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
 
+-- Import teste
 import Modelos.Tabuleiro
+
 import qualified UI.UtilsUI as Utils
 
 {- Falta trocar os dummies  por valores reais passados como argumento -}
@@ -8,7 +10,7 @@ import qualified UI.UtilsUI as Utils
 -- Tela Principal da HUD 
 
 -- Argumento pode ser uma tupla com alguns valores a serem substituídos pelos dummies
--- Receber os dois estados do jogo (jogador e bot)
+-- Receber os estado atual do jogo (Jogo)
 
 mainScreen :: Tabela -> Tabela -> IO()
 mainScreen tabJog tabBot = do
@@ -119,7 +121,7 @@ mostraInventario = do
 
     putStrLn ("Moedas: " ++ show moedas)
 
--- Refatorar
+-- Refatorar (criar pequenas funções)
 imprimiTabelas :: Tabela -> Tabela -> Int -> IO() 
 imprimiTabelas tabJog tabBot x = if x >= 12
     then do

@@ -3,20 +3,26 @@ module Modelos.Jogo (Jogo (..), iniciarJogador, iniciarMercado, iniciarTabela) w
 import Modelos.Jogador
 import Modelos.Mercado
 import Modelos.Tabuleiro
+import Modelos.Bot
 
 data Jogo = Jogo {
     jogador :: Jogador,
+    bot :: Bot,
     mercado :: Mercado,
-    tabela :: Tabela
 }
+
+
+inicializarJogo :: String -> Jogo
+inicializarJogo nomeJogador = Jogo (iniciarJogador nomeJogador geraTabela) (iniciarBot geraTabela) iniciarMercado 
 
 -- Funções auxiliares de inicialização
 
-iniciarJogador :: String -> Jogador
-iniciarJogador nome = Jogador nome 0 30 0 0 0
+iniciarJogador :: String -> Tabela -> Jogador
+iniciarJogador nome tabelaJogador = Jogador nome 0 tabelaJogador 30 0 0 0
+
+iniciarBot :: Tabela -> Bot
+iniciarBot tabelaBot = Bot tabelaBot
 
 iniciarMercado :: Mercado
 iniciarMercado = Mercado 250 400 350
 
-iniciarTabela :: Tabela
-iniciarTabela = geraTabela 
