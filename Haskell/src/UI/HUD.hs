@@ -1,15 +1,12 @@
 module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
-
--- Import teste
-import Modelos.Tabuleiro
-
+    
 import qualified UI.UtilsUI as Utils
+import Modelos.Tabuleiro
 
 {- Falta trocar os dummies  por valores reais passados como argumento -}
 
 -- Tela Principal da HUD 
 
--- Argumento pode ser uma tupla com alguns valores a serem substituídos pelos dummies
 -- Receber os estado atual do jogo (Jogo)
 
 mainScreen :: Tabela -> Tabela -> IO()

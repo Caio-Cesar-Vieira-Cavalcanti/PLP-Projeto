@@ -12,7 +12,7 @@ data Coordenada = Coordenada
   { mascara :: Char
   , elemEspecial :: Char
   , acertou :: Bool
-  } deriving (Show)
+  } deriving Show
 
 
 instance CoordenadaClass Coordenada where

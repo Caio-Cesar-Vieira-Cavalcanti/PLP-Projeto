@@ -8,9 +8,8 @@ import Modelos.Bot
 data Jogo = Jogo {
     jogador :: Jogador,
     bot :: Bot,
-    mercado :: Mercado,
-}
-
+    mercado :: Mercado
+} deriving Show
 
 inicializarJogo :: String -> Jogo
 inicializarJogo nomeJogador = Jogo (iniciarJogador nomeJogador geraTabela) (iniciarBot geraTabela) iniciarMercado 

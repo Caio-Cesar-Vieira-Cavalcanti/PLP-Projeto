@@ -18,16 +18,17 @@ iniciarMenu = do
 
 processarOpcao :: String -> IO ()
 processarOpcao "1" = do
+  -- Executar a lógica de inicialização do jogo
   clearScreen
   Menu.novoJogo
   nomeJogador <- getLine
-  putStrLn nomeJogador -- TESTE
-  --iniciarJogo nomeJogador -- REVISAR O ERRO (atualizar o retorno da função para IO())
-  -- Executar a lógica de inicialização do jogo
+  iniciarJogo nomeJogador
 processarOpcao "2" = do
+  -- Executar a lógica de carregamento do jogo, num determinado estado
   clearScreen
   Menu.carregarJogo
-  -- Executar a lógica de carregamento do jogo, num determinado estado
+  let slot = escolhaSave -- Função para verificar o slot inserido pelo jogador, confirmação de sobrescrita, e opçõa inválida
+  carregarJogo slot
 processarOpcao "3" = do
   clearScreen
   Menu.historiaJogo
@@ -56,6 +57,8 @@ processarOpcao _ = do
   processarOpcao opcao
   
   
+-- Funções auxiliares
+
 subMenu :: IO ()
 subMenu = do
     Menu.opcoesMenu
@@ -70,3 +73,9 @@ processarSubOpcao = do
         _ -> do
             putStr UtilsUI.voltarMenu
             processarSubOpcao
+
+-- Incompleto - precisa tratar depois para Int puro
+escolhaSave :: IO Int
+escolhaSave = do
+  putStrLn "-"
+  1

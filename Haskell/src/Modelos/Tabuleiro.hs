@@ -1,5 +1,5 @@
-module Modelos.Tabuleiro where
-    
+module Modelos.Tabuleiro (Tabela, geraTabela, geraTabelaStr) where
+
 import Modelos.Coordenada
 
 type Tabela = [[Coordenada]]
@@ -8,12 +8,12 @@ geraTabela :: Tabela
 geraTabela = [[Coordenada 'X' ' ' False | _ <- [1..12]] | _ <- [1..12]]
 
 geraTabelaStr :: Tabela -> [[String]]
-geraTabelaStr tabela = colocaLetrasNumeros [[(getMascara c : " ") | c <- linha] | linha <- tabela]
+geraTabelaStr tabela = colocaLetrasNumeros [[getMascara c : " " | c <- linha] | linha <- tabela]
 
 -- Funções auxiliares
-    
+
 colocaLetrasNumeros :: [[String]] -> [[String]]
-colocaLetrasNumeros listaSemNumeros = [["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "]] ++ [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros [1..12] ]
+colocaLetrasNumeros listaSemNumeros = ["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "] : [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros [1..12] ]
 
 
 {-
