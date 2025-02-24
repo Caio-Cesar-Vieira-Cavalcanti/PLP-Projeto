@@ -2,30 +2,21 @@ module Modelos.Tabuleiro where
     
 import Modelos.Coordenada
 
-type Tabela = [[String]]
+type Tabela = [[Coordenada]]
 
 geraTabela :: Tabela
-geraTabela = geraTabelaAux [["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "]]
+geraTabela = [[Coordenada 'X' ' ' False | _ <- [1..12]] | _ <- [1..12]]
+
+geraTabelaStr :: Tabela -> [[String]]
+geraTabelaStr tabela = colocaLetrasNumeros [[(getMascara c : " ") | c <- linha] | linha <- tabela]
+
+-- Funções auxiliares
+    
+colocaLetrasNumeros :: [[String]] -> [[String]]
+colocaLetrasNumeros listaSemNumeros = [["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "]] ++ [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros [1..12] ]
 
 
-geraTabelaAux :: Tabela -> Tabela
-geraTabelaAux tabela =
-    if length tabela >= 13
-        then head tabela : adicionaNumeroCadaLinha (tail tabela)
-        else geraTabelaAux (tabela ++ [geraLinhasComuns [1..12]])
-
-
-geraLinhasComuns :: [Int] -> [String]
-geraLinhasComuns [] = []
-geraLinhasComuns (a : as) = do
-    let coord = Coordenada 'X' ' ' False
-    (getMascara coord : " ") : geraLinhasComuns as
-
-
-adicionaNumeroCadaLinha :: Tabela -> Tabela
-adicionaNumeroCadaLinha listaSemNumeros = [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros [1..] ]
-
-
+{-
 atualizaCoordenada :: Tabela -> Int -> Int -> String -> Tabela
 atualizaCoordenada tab coluna linha novoValor = 
     [ if i == linha
@@ -40,3 +31,5 @@ atualizaCoordenada tab coluna linha novoValor =
 --     if acertou coord
 --         then representacao coord
 --         else "X"
+
+-}

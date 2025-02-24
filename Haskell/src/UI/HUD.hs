@@ -1,6 +1,6 @@
 module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
 
-import qualified Modelos.Tabuleiro as Jogo
+import Modelos.Tabuleiro
 import qualified UI.UtilsUI as Utils
 
 {- Falta trocar os dummies  por valores reais passados como argumento -}
@@ -8,15 +8,17 @@ import qualified UI.UtilsUI as Utils
 -- Tela Principal da HUD 
 
 -- Argumento pode ser uma tupla com alguns valores a serem substituídos pelos dummies
+-- Receber os dois estados do jogo (jogador e bot)
 
-mainScreen :: IO()
-mainScreen = do
+mainScreen :: Tabela -> Tabela -> IO()
+mainScreen tabJog tabBot = do
     let jogador = "Neymar"
     putStrLn ("Jogador: " ++ jogador)
     putStrLn ""
     putStrLn ""
 
-    imprimiTabelas 0
+    -- Imprimir as duas tabelas passando o contador 
+    imprimiTabelas tabJog tabBot 0
 
     putStrLn ""
     putStrLn ""
@@ -117,19 +119,28 @@ mostraInventario = do
 
     putStrLn ("Moedas: " ++ show moedas)
 
--- REVISAR 
-imprimiTabelas :: Int -> IO() 
-imprimiTabelas x = if x >= 12
+-- Refatorar
+imprimiTabelas :: Tabela -> Tabela -> Int -> IO() 
+imprimiTabelas tabJog tabBot x = if x >= 12
     then do
-        let elemTabela = unwords (Jogo.geraTabela !! x)
-        putStrLn (elemTabela ++ "                             " ++ elemTabela)
+        let tabJogStr = geraTabelaStr tabJog
+        let linhaTabelaJog = unwords (tabJogStr !! x)
+        let tabBotStr = geraTabelaStr tabJog
+        let linhaTabelaBot = unwords (tabBotStr !! x)
+        putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
     else do
         if x < 10 
             then do
-                let elemTabela = " " ++ unwords (Jogo.geraTabela !! x)
-                putStrLn (elemTabela ++ "                             " ++ elemTabela)
-                imprimiTabelas (x + 1)
+                let tabJogStr = geraTabelaStr tabJog
+                let linhaTabelaJog = " " ++ unwords (tabJogStr !! x)
+                let tabBotStr = geraTabelaStr tabJog
+                let linhaTabelaBot = " " ++ unwords (tabBotStr !! x)
+                putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
+                imprimiTabelas tabJog tabBot (x + 1)
             else do
-                let elemTabela = unwords (Jogo.geraTabela !! x)
-                putStrLn (elemTabela ++ "                             " ++ elemTabela)
-                imprimiTabelas (x + 1)
+                let tabJogStr = geraTabelaStr tabJog
+                let linhaTabelaJog = unwords (tabJogStr !! x)
+                let tabBotStr = geraTabelaStr tabJog
+                let linhaTabelaBot = unwords (tabBotStr !! x)
+                putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
+                imprimiTabelas tabJog tabBot (x + 1)
