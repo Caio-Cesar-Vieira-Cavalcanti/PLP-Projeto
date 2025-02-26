@@ -70,7 +70,8 @@ executable Projeto-PLP
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.17.2.1,
-    		      ansi-terminal
+    		      ansi-terminal,
+                  random
 
     -- Directories containing source files.
     hs-source-dirs:   app,
@@ -79,7 +80,7 @@ executable Projeto-PLP
     -- Base language which the package is written in.
     default-language: Haskell2010
 
-    others-modules: UI.Menu, 
+    other-modules: UI.Menu, 
     		UI.UtilsUI, 
 		    UI.HUD, 
 		    UI.TelasVitoriaDerrota,
@@ -88,5 +89,6 @@ executable Projeto-PLP
             Modelos.Jogo,
             Modelos.Coordenada,
             Modelos.Tabuleiro,
+            Modelos.Bot,
             Jogo.Iniciar,
             Jogo.MenuControlador

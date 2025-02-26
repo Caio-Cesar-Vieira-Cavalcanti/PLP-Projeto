@@ -9,10 +9,10 @@ class CoordenadaClass c where
 
 
 data Coordenada = Coordenada
-  { mascara :: Char,
-    elemEspecial :: Char,
-    acertou :: Bool
-  } deriving (Show)
+  { mascara :: Char
+  , elemEspecial :: Char
+  , acertou :: Bool
+  } deriving Show
 
 
 instance CoordenadaClass Coordenada where

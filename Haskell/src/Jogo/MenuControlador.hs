@@ -1,15 +1,15 @@
 module Jogo.MenuControlador (iniciarMenu) where
 
+import System.Console.ANSI (clearScreen)
 import qualified UI.Menu as Menu
 import qualified UI.UtilsUI as UtilsUI
-import System.Console.ANSI (clearScreen)
 import Jogo.Iniciar
 
 iniciarMenu :: IO ()
 iniciarMenu = do
   clearScreen 
   Menu.logoMenu
-  opcao <- getLine
+  opcaoEnter <- getLine
   clearScreen
 
   Menu.opcoesMenu
@@ -18,16 +18,20 @@ iniciarMenu = do
 
 processarOpcao :: String -> IO ()
 processarOpcao "1" = do
+  -- Executar a lógica de inicialização do jogo
   clearScreen
   Menu.novoJogo
   nomeJogador <- getLine
-  putStrLn nomeJogador -- TESTE
-  --iniciarJogo nomeJogador -- REVISAR O ERRO (atualizar o retorno da função para IO())
-  -- Executar a lógica de inicialização do jogo
+  iniciarJogo nomeJogador
 processarOpcao "2" = do
-  clearScreen
-  Menu.carregarJogo
   -- Executar a lógica de carregamento do jogo, num determinado estado
+  {- clearScreen
+  Menu.carregarJogo
+  slot <- getLine
+  verificaSlot slot -- Função para verificar o slot inserido pelo jogador, confirmação de sobrescrita, e opçõa inválida
+  carregarJogo slot
+  -}
+  putStrLn "teste"
 processarOpcao "3" = do
   clearScreen
   Menu.historiaJogo
@@ -56,6 +60,8 @@ processarOpcao _ = do
   processarOpcao opcao
   
   
+-- Funções auxiliares
+
 subMenu :: IO ()
 subMenu = do
     Menu.opcoesMenu
