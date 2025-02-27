@@ -1,8 +1,12 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Modelos.Bot (Bot (..), BotClass (..)) where
 
 import System.Random (randomRIO)
 import Modelos.Coordenada
 import Modelos.Tabuleiro
+import GHC.Generics (Generic)
+import Data.Aeson (ToJSON, FromJSON, encode, decode, eitherDecode)
 
 class BotClass b where
   getTabela :: b -> Tabela
@@ -15,10 +19,13 @@ data Bot = Bot
     bombasMedias :: Int,
     bombasGrandes :: Int
   }
-  deriving (Show)
+  deriving (Show, Generic)
 
 instance BotClass Bot where
   getTabela = tabela
+
+instance ToJSON Bot
+instance FromJSON Bot
 
 -- getJogada = {
 -- Transforma coordenada randômica (dentre as ainda não acertadas) em acertada e retorna a tupla (x,y)

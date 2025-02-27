@@ -1,6 +1,11 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Modelos.Jogador (Jogador(..), JogadorClass(..)) where
 
 import Modelos.Tabuleiro
+import GHC.Generics (Generic)
+import Data.Aeson (ToJSON, FromJSON, encode, decode, eitherDecode)
+
 -- Jogador
 
 class JogadorClass j where
@@ -28,7 +33,7 @@ data Jogador = Jogador
     , bombasMedias :: Int
     , bombasGrandes :: Int
     , droneVisualizador :: Int
-    } deriving Show
+    } deriving (Show, Generic)
 
 instance JogadorClass Jogador where
     getNome = nome
@@ -49,3 +54,6 @@ instance JogadorClass Jogador where
         jogador { bombasGrandes = novasBombasGrandes }
     setDroneVisualizador jogador novoDrone =
         jogador { droneVisualizador = novoDrone }
+
+instance ToJSON Jogador
+instance FromJSON Jogador
