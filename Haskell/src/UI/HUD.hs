@@ -2,6 +2,8 @@ module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
     
 import qualified UI.UtilsUI as Utils
 import Modelos.Tabuleiro
+import Modelos.Coordenada
+
 
 {- Falta trocar os dummies  por valores reais passados como argumento -}
 
@@ -124,7 +126,7 @@ imprimiTabelas tabJog tabBot x = if x >= 12
     then do
         let tabJogStr = geraTabelaStr tabJog
         let linhaTabelaJog = unwords (tabJogStr !! x)
-        let tabBotStr = geraTabelaStr tabJog
+        let tabBotStr = geraTabelaStr tabBot
         let linhaTabelaBot = unwords (tabBotStr !! x)
         putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
     else do
@@ -132,14 +134,14 @@ imprimiTabelas tabJog tabBot x = if x >= 12
             then do
                 let tabJogStr = geraTabelaStr tabJog
                 let linhaTabelaJog = " " ++ unwords (tabJogStr !! x)
-                let tabBotStr = geraTabelaStr tabJog
+                let tabBotStr = geraTabelaStr tabBot
                 let linhaTabelaBot = " " ++ unwords (tabBotStr !! x)
                 putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
                 imprimiTabelas tabJog tabBot (x + 1)
             else do
                 let tabJogStr = geraTabelaStr tabJog
                 let linhaTabelaJog = unwords (tabJogStr !! x)
-                let tabBotStr = geraTabelaStr tabJog
+                let tabBotStr = geraTabelaStr tabBot
                 let linhaTabelaBot = unwords (tabBotStr !! x)
                 putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
                 imprimiTabelas tabJog tabBot (x + 1)
