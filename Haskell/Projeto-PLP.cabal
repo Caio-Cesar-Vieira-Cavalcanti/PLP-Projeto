@@ -76,7 +76,10 @@ executable Projeto-PLP
                   bytestring,
                   containers,
                   directory,
-                  filepath
+                  filepath,
+                  time,
+                  timezone-olson,
+                  timezone-series
 
     -- Directories containing source files.
     hs-source-dirs:   app,

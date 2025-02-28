@@ -90,6 +90,36 @@
   (major1) == 1 && (major2) <  2 || \
   (major1) == 1 && (major2) == 2 && (minor) <= 1)
 #endif /* MIN_VERSION_random */
+/* package time-1.12.2 */
+#ifndef VERSION_time
+#define VERSION_time "1.12.2"
+#endif /* VERSION_time */
+#ifndef MIN_VERSION_time
+#define MIN_VERSION_time(major1,major2,minor) (\
+  (major1) <  1 || \
+  (major1) == 1 && (major2) <  12 || \
+  (major1) == 1 && (major2) == 12 && (minor) <= 2)
+#endif /* MIN_VERSION_time */
+/* package timezone-olson-0.2.1 */
+#ifndef VERSION_timezone_olson
+#define VERSION_timezone_olson "0.2.1"
+#endif /* VERSION_timezone_olson */
+#ifndef MIN_VERSION_timezone_olson
+#define MIN_VERSION_timezone_olson(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  2 || \
+  (major1) == 0 && (major2) == 2 && (minor) <= 1)
+#endif /* MIN_VERSION_timezone_olson */
+/* package timezone-series-0.1.13 */
+#ifndef VERSION_timezone_series
+#define VERSION_timezone_series "0.1.13"
+#endif /* VERSION_timezone_series */
+#ifndef MIN_VERSION_timezone_series
+#define MIN_VERSION_timezone_series(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  1 || \
+  (major1) == 0 && (major2) == 1 && (minor) <= 13)
+#endif /* MIN_VERSION_timezone_series */
 
 /* tool gcc-13 */
 #ifndef TOOL_VERSION_gcc

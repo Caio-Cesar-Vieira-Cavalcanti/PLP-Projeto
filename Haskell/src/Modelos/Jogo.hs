@@ -11,11 +11,14 @@ import Data.Aeson (ToJSON, FromJSON, encode, decode, eitherDecode)
 import qualified Data.ByteString.Lazy as B
 import System.Directory (createDirectoryIfMissing)
 import System.FilePath(takeDirectory)
+import Data.Time (getCurrentTime, UTCTime, utcToLocalTime, LocalTime)
+import Data.Time.LocalTime(hoursToTimeZone)
 
 data Jogo = Jogo {
     jogador :: Jogador,
     bot :: Bot,
-    mercado :: Mercado
+    mercado :: Mercado,
+    dataJogo :: LocalTime
 } deriving (Show, Generic)
 
 -- Permite Conversão para JSON
@@ -29,7 +32,7 @@ instance FromJSON Jogo
 salvarJogo :: FilePath -> Jogo -> IO ()
 salvarJogo caminho jogo = do
     let diretorio = takeDirectory caminho
-    createDirectoryIfMissing True diretorio  -- Garante que o diretório exista
+    createDirectoryIfMissing True diretorio  
     B.writeFile caminho (encode jogo)
 
 carregarJogo :: FilePath -> IO (Maybe Jogo)
@@ -39,8 +42,12 @@ carregarJogo caminho = do
 
 -- Função de inicialização
 
-inicializarJogo :: String -> Jogo
-inicializarJogo nomeJogador = Jogo (iniciarJogador nomeJogador geraTabela) (iniciarBot geraTabela) iniciarMercado 
+inicializarJogo :: String -> IO Jogo
+inicializarJogo nomeJogador = do
+    utcTime <- getCurrentTime
+    let zonaBrasilia = hoursToTimeZone (-3)  
+    let agora = utcToLocalTime zonaBrasilia utcTime
+    return $ Jogo (iniciarJogador nomeJogador geraTabela) (iniciarBot geraTabela) iniciarMercado agora
 
 -- Funções auxiliares de inicialização
 
@@ -53,18 +60,3 @@ iniciarBot tabelaBot = Bot tabelaBot 30 3 1
 
 iniciarMercado :: Mercado
 iniciarMercado = Mercado 250 400 350
-
-main :: IO ()
-main = do 
-    let caminho = "src/BD/save2.json"
-
-    -- Salvar o jogo
-    let jogo = inicializarJogo "Tiquinho"
-    salvarJogo caminho jogo
-    putStrLn "Jogo salvo com sucesso!"
-
-    -- Carregar o jogo
-    jogoCarregado <- carregarJogo caminho
-    case jogoCarregado of
-        Just j  -> print j
-        Nothing -> putStrLn "Erro ao carregar o jogo!"
