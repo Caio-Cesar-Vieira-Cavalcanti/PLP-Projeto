@@ -3,7 +3,9 @@ module Jogo.Iniciar (iniciarJogo) where
 import Modelos.Jogo
 
 iniciarJogo :: String -> IO ()
-iniciarJogo nomeJogador = loopJogo $ inicializarJogo nomeJogador
+iniciarJogo nomeJogador = do
+    jogo <- inicializarJogo nomeJogador  
+    loopJogo jogo  
 
 -- Carregamento de um jogo, recebendo o índice do estado que o jogador deseja jogar
 {-

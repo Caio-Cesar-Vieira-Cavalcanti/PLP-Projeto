@@ -1,6 +1,10 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Modelos.Mercado (Mercado(..), MercadoClass(..)) where
 
 import Modelos.Jogador (Jogador(..), JogadorClass(..))
+import GHC.Generics (Generic)
+import Data.Aeson (ToJSON, FromJSON, encode, decode, eitherDecode)
 
 -- Mercado
 
@@ -15,7 +19,7 @@ data Mercado = Mercado
     { precoBombasMedias :: Int
     , precoBombasGrandes :: Int
     , precoDroneVisualizador :: Int
-    } deriving Show
+    } deriving (Show, Generic)
 
 instance MercadoClass Mercado where
     getPrecoBM = precoBombasMedias
@@ -36,3 +40,6 @@ instance MercadoClass Mercado where
                 then setMoedas (setDroneVisualizador jogador (getDroneVisualizador jogador + 1)) (getMoedas jogador - getPrecoDV mercado)
                 else jogador
         naoExiste -> jogador  
+
+instance ToJSON Mercado
+instance FromJSON Mercado
