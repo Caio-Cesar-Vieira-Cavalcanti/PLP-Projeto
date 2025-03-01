@@ -1,18 +1,28 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Modelos.Jogo (Jogo (..), inicializarJogo) where
+module Modelos.Jogo (Jogo (..), JogoClass (..), inicializarJogo) where
 
 import Modelos.Jogador
 import Modelos.Mercado
 import Modelos.Tabuleiro
 import Modelos.Bot
+
 import GHC.Generics (Generic)
 import Data.Aeson (ToJSON, FromJSON, encode, decode, eitherDecode)
 import qualified Data.ByteString.Lazy as B
 import System.Directory (createDirectoryIfMissing)
 import System.FilePath(takeDirectory)
+
 import Data.Time (getCurrentTime, UTCTime, utcToLocalTime, LocalTime)
 import Data.Time.LocalTime(hoursToTimeZone)
+
+import System.Random(newStdGen, split)
+
+class JogoClass jogo where
+    getJogador :: jogo -> Jogador
+    getBot :: jogo -> Bot
+    getMercado :: jogo -> Mercado
+    getDataJogo :: jogo -> LocalTime
 
 data Jogo = Jogo {
     jogador :: Jogador,
@@ -20,6 +30,12 @@ data Jogo = Jogo {
     mercado :: Mercado,
     dataJogo :: LocalTime
 } deriving (Show, Generic)
+
+instance JogoClass Jogo where
+    getJogador = jogador
+    getBot = bot
+    getMercado = mercado
+    getDataJogo = dataJogo
 
 -- Permite Conversão para JSON
 
@@ -47,7 +63,14 @@ inicializarJogo nomeJogador = do
     utcTime <- getCurrentTime
     let zonaBrasilia = hoursToTimeZone (-3)  
     let agora = utcToLocalTime zonaBrasilia utcTime
-    return $ Jogo (iniciarJogador nomeJogador geraTabela) (iniciarBot geraTabela) iniciarMercado agora
+
+    gen <- newStdGen
+    let (genJogador, genBot) = split gen
+
+    let tabelaJogador = geraTabela genJogador
+    let tabelaBot = geraTabela genBot
+
+    return $ Jogo (iniciarJogador nomeJogador tabelaJogador) (iniciarBot tabelaBot) iniciarMercado agora
 
 -- Funções auxiliares de inicialização
 

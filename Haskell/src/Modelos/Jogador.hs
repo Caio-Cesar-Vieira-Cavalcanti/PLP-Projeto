@@ -3,15 +3,14 @@
 module Modelos.Jogador (Jogador(..), JogadorClass(..)) where
 
 import Modelos.Tabuleiro
+
 import GHC.Generics (Generic)
 import Data.Aeson (ToJSON, FromJSON, encode, decode, eitherDecode)
-
--- Jogador
 
 class JogadorClass j where
     getNome :: j -> String
     getMoedas :: j -> Int
-    getTabela :: j -> Tabela
+    getTabelaJog :: j -> Tabela
     setNome :: j -> String -> j
     setMoedas :: j -> Int -> j
 
@@ -38,7 +37,7 @@ data Jogador = Jogador
 instance JogadorClass Jogador where
     getNome = nome
     getMoedas = moedas
-    getTabela = tabela
+    getTabelaJog = tabela
     setNome jogador novoNome = jogador { nome = novoNome }
     setMoedas jogador novasMoedas = jogador { moedas = novasMoedas }
 

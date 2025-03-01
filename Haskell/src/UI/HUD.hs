@@ -1,9 +1,9 @@
 module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
     
 import qualified UI.UtilsUI as Utils
+
 import Modelos.Tabuleiro
 import Modelos.Coordenada
-
 
 {- Falta trocar os dummies  por valores reais passados como argumento -}
 
@@ -55,7 +55,7 @@ mainScreen tabJog tabBot = do
     putStrLn "{COLUNAS}{LINHA} -> Coordenada que deseja atacar; Exemplo: C3"
     putStrLn "'m' -> Acesso ao mercado"
     putStrLn "'s' -> Salvar o jogo no estado atual"
-    putStrLn "'quit' -> Sair do jogo sem salvar"
+    putStrLn "'q' -> Sair do jogo sem salvar"
     
     putStrLn ""
 
@@ -121,6 +121,7 @@ mostraInventario = do
     putStrLn ("Moedas: " ++ show moedas)
 
 -- Refatorar (criar pequenas funções)
+-- Evitar o uso de gerar a tabela em string para toda chamada recursiva
 imprimiTabelas :: Tabela -> Tabela -> Int -> IO() 
 imprimiTabelas tabJog tabBot x = if x >= 12
     then do
