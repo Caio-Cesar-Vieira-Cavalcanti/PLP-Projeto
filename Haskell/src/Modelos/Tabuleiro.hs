@@ -1,4 +1,4 @@
-module Modelos.Tabuleiro (Tabela, geraTabela, geraTabelaStr, atirouNaCoordenada, setElemEspecial) where
+module Modelos.Tabuleiro (Tabela, geraTabela, geraTabelaStr) where
 
 import Modelos.Coordenada
 
@@ -7,9 +7,10 @@ import System.Random (randomR, StdGen)
 type Tabela = [[Coordenada]]
 
 -- Gerar a tabela base e insere os espaços especiais (recebe um argumento da seed para a função de randomização)
+-- PROBLEMA: ESTÁ GERANDO A TABELA COM OS ESPAÇOS, MAS SEM INSERIR O CARACTERE CORRESPONDENTE DE CADA ESPAÇO
 geraTabela :: StdGen -> Tabela
 geraTabela gen = disporEspacos gen tabelaBase
-    where tabelaBase = [[Coordenada 'X' '-' False | _ <- [1..12]] | _ <- [1..12]]
+    where tabelaBase = [[Coordenada 'X' '-' False | _ <- ([1..12] :: [Int])] | _ <- ([1..12] :: [Int])]
 
 geraTabelaStr :: Tabela -> [[String]]
 geraTabelaStr tabela = colocaLetrasNumeros [[if getAcertou c then (getElemEspecial c) : " " else (getMascara c ) : " " | c <- linha] | linha <- tabela]
@@ -58,10 +59,22 @@ colocarGrupo char tamanho quantidade tabela gen =
     in colocarGrupo char tamanho (quantidade - 1) novaTabela gen3
 
 
+-- Funções de verificar as jogadas (sendo a Tabela um argumento)
+
+
+
+
+-- Funções de contagem dos espaços amigos e inimigos (Respeitando as partes nos inimigos - só contabiliza quando toda a parte/agrupamento dele for acertado por completo)
+
+
+
+
+
+
 -- Funções auxiliares
 
 colocaLetrasNumeros :: [[String]] -> [[String]]
-colocaLetrasNumeros listaSemNumeros = ["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "] : [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros [1..12] ]
+colocaLetrasNumeros listaSemNumeros = ["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "] : [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros ([1..12] :: [Int])]
 
 atirouNaCoordenada :: Tabela -> Int -> Int -> Tabela
 atirouNaCoordenada tabela c l = [[if i == l && j == c then Coordenada (getMascara x) (getElemEspecial x) True else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]

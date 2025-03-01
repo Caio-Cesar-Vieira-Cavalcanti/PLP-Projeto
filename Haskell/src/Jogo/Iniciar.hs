@@ -4,11 +4,6 @@ import Modelos.Jogo
 
 import UI.HUD
 
--- Importações testes (vão ser removidas em breve)
-import Modelos.Tabuleiro
-import Modelos.Jogador
-import Modelos.Bot
-
 import System.Console.ANSI (clearScreen)
 
 iniciarJogo :: String -> IO ()
@@ -25,10 +20,5 @@ carregarJogo slot = loopJogo $ pegaEstado slot -- Funçõa que retorna o estado 
 -- Lógica de loop do jogo com as funções de entrada e saída
 loopJogo :: Jogo -> IO ()
 loopJogo jogo = do
-    -- Limpando a tela a cada troca de turno
     clearScreen
-
-    -- TESTES
-    let tabelaJog = getTabelaJog $ getJogador jogo
-    let tabelaBot = getTabelaBot $ getBot jogo
-    mainScreen tabelaJog tabelaBot
+    mainScreen jogo
