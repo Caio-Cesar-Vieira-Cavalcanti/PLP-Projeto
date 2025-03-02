@@ -2,6 +2,10 @@ module Jogo.Iniciar (iniciarJogo) where
 
 import Modelos.Jogo
 
+import UI.HUD
+
+import System.Console.ANSI (clearScreen)
+
 iniciarJogo :: String -> IO ()
 iniciarJogo nomeJogador = do
     jogo <- inicializarJogo nomeJogador  
@@ -15,4 +19,6 @@ carregarJogo slot = loopJogo $ pegaEstado slot -- Funçõa que retorna o estado 
 
 -- Lógica de loop do jogo com as funções de entrada e saída
 loopJogo :: Jogo -> IO ()
-loopJogo jogo = putStr "-"
+loopJogo jogo = do
+    clearScreen
+    mainScreen jogo

@@ -1,9 +1,11 @@
 module Jogo.MenuControlador (iniciarMenu) where
 
-import System.Console.ANSI (clearScreen)
 import qualified UI.Menu as Menu
 import qualified UI.UtilsUI as UtilsUI
+
 import Jogo.Iniciar
+
+import System.Console.ANSI (clearScreen)
 
 iniciarMenu :: IO ()
 iniciarMenu = do
@@ -28,7 +30,7 @@ processarOpcao "2" = do
   {- clearScreen
   Menu.carregarJogo
   slot <- getLine
-  verificaSlot slot -- Função para verificar o slot inserido pelo jogador, confirmação de sobrescrita, e opçõa inválida
+  verificaSlot slot -- Função para verificar o slot inserido pelo jogador - opçõa inválida
   carregarJogo slot
   -}
   putStrLn "teste"

@@ -139,8 +139,18 @@ regras =
     ++ "todos os inimigos) primeiro que o jogador, leva a vitória. Com o adicional, de que a máquina sofrerá do desafio dos espaços especiais, que se atingido todos, "
     ++ "o jogador é automaticamente o vitorioso da partida.\n\n"
     ++ "-> O jogo contará com sistema de salvamento dos estados da partida, com 3 slots disponíveis para escritura dos estados, e do sistema de Mercado "
-    ++ "para comprar determinados itens, fomentando o seu arsenal, e ajudando-o a vencer a guerra.\n\n"
-    ++ "{REVISAR}\n\n"
+    ++ "para comprar determinados itens, fomentando o seu arsenal, e ajudando-o a vencer a guerra, mas claro, respeitando a quantidade de moedas do jogador e o preço "
+    ++ "dos itens, que variam de acordo com sua utilidade e impacto nas jogadas.\n\n"
+    ++ "-> O jogador começará com uma quantidade de bombas pequenas limitadas, e poderá realizar compras de outros tipos de bombas pelo mercado.\n"
+    ++ "Abaixo tem descrito o impacto de cada bomba no tabuleiro 12x12 do jogo:\n"
+    ++ "\t--> Pequena => 1 quadrado | Média => 5 quadrados (formato de +) | Grande => 9 quadrados (formato de *)\n\n"
+    ++ "-> Para cada espaço inimigo derrotado em sua completude (todas as partes que formam o mesmo sendo atingidas) o jogador ganha moedas na proporção do porte "
+    ++ "do inimigo, e é contabilizado no mostrador na HUD do jogo (mesma lógica serve para o Bot/Oponente).\n\n"
+    ++ "-> Para os inimigos, são divididos em Tanques (T - agrupados por 5 quadrados), Motorizados (M - agrupados por 3 quadrados) e Soldados inimigos (S - agrupados por 2 quadrados),"
+    ++ " além dos espaços amigos que não podem ser atingidos, como Civis (C - 1 quadrado), Escolas (E - 1 quadrado) e Hospitais (H - 1 quadrado).\n\n"
+    ++ "-> O jogador ainda contará com a sorte de acertar um Tesouro ($ - 1 quadrado), ganhando moedas pelo feito, ou o azar de acertar uma Mina Terrestre (# - 1 quadrado),"
+    ++ " que explode a uma raio em formato de cruz `+` e que pode atingir qualquer espaço dentro desse raio, ajudando ou prejudicando o jogador.\n\n"
+
 
 creditos :: String
 creditos =

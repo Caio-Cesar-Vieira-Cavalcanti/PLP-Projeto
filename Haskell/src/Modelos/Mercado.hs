@@ -3,6 +3,7 @@
 module Modelos.Mercado (Mercado(..), MercadoClass(..)) where
 
 import Modelos.Jogador (Jogador(..), JogadorClass(..))
+
 import GHC.Generics (Generic)
 import Data.Aeson (ToJSON, FromJSON, encode, decode, eitherDecode)
 
