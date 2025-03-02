@@ -83,18 +83,3 @@ iniciarBot tabelaBot = Bot tabelaBot 30 3 1
 
 iniciarMercado :: Mercado
 iniciarMercado = Mercado 250 400 350
-
-main :: IO ()
-main = do 
-    let caminho = "src/BD/save1.json"
-
-    -- Salvar o jogo
-    jogo <- inicializarJogo "Arrascaeta"
-    salvarJogo caminho jogo
-    putStrLn "Jogo salvo com sucesso!"
-
-    -- Carregar o jogo
-    jogoCarregado <- carregarSave caminho
-    case jogoCarregado of
-        Just j  -> print j
-        Nothing -> putStrLn "Erro ao carregar o jogo!"
