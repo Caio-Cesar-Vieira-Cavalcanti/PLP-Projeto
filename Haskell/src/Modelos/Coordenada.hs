@@ -10,6 +10,9 @@ class CoordenadaClass c where
   getElemEspecial :: c -> Char
   getAcertou :: c -> Bool
 
+  setElem :: c -> Char -> c
+  setAcertou :: c -> c
+
 
 data Coordenada = Coordenada
   { mascara :: Char
@@ -22,6 +25,9 @@ instance CoordenadaClass Coordenada where
     getMascara = mascara
     getElemEspecial = elemEspecial
     getAcertou = acertou
+
+    setElem coordenada elem = coordenada { elemEspecial = elem }
+    setAcertou coordenada = coordenada { acertou = True }
 
 instance ToJSON Coordenada
 instance FromJSON Coordenada

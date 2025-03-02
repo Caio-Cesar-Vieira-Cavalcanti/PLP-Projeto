@@ -7,7 +7,6 @@ import System.Random (randomR, StdGen)
 type Tabela = [[Coordenada]]
 
 -- Gerar a tabela base e insere os espaços especiais (recebe um argumento da seed para a função de randomização)
--- PROBLEMA: ESTÁ GERANDO A TABELA COM OS ESPAÇOS, MAS SEM INSERIR O CARACTERE CORRESPONDENTE DE CADA ESPAÇO
 geraTabela :: StdGen -> Tabela
 geraTabela gen = disporEspacos gen tabelaBase
     where tabelaBase = [[Coordenada 'X' '-' False | _ <- ([1..12] :: [Int])] | _ <- ([1..12] :: [Int])]
@@ -42,21 +41,25 @@ colocarElemento char n tabela gen =
 
 -- Coloca grupos contíguos de elementos na tabela
 colocarGrupo :: Char -> Int -> Int -> Tabela -> StdGen -> (Tabela, StdGen)
-colocarGrupo _ _ 0 tabela gen = (tabela, gen)
-colocarGrupo char tamanho quantidade tabela gen =
-    let (linha, gen1) = randomR (0, 11) gen
-        (coluna, gen2) = randomR (0, 11) gen1
-        (horizontal, gen3) = randomR (True, False) gen2
+colocarGrupo char tamanho quantidade tabela gen
+    | quantidade == 0 = (tabela, gen)
+    | otherwise =
+        let (linha, gen1) = randomR (0, 11) gen
+            (coluna, gen2) = randomR (0, 11) gen1
+            (horizontal, gen3) = randomR (True, False) gen2
 
-        podeColocar = verificarEspacoLivre tabela linha coluna tamanho horizontal
+            podeColocar = verificarEspacoLivre tabela linha coluna tamanho horizontal
 
-        novaTabela = if podeColocar
-                        then foldl (\tab i -> if horizontal
-                                            then setElemEspecial tab (coluna + i) linha char
-                                            else setElemEspecial tab coluna (linha + i) char)
-                                tabela [0..tamanho - 1]
-                        else tabela
-    in colocarGrupo char tamanho (quantidade - 1) novaTabela gen3
+        in  if podeColocar
+                then let novaTabela = foldl (\tab i ->
+                            if horizontal
+                            then setElemEspecial tab (coluna + i) linha char
+                            else setElemEspecial tab coluna (linha + i) char
+                            ) tabela [0..tamanho - 1]
+                    in colocarGrupo char tamanho (quantidade - 1) novaTabela gen3
+            -- Garante que se não estiver com espaço disponível, realiza outra chamada da função
+            else colocarGrupo char tamanho quantidade tabela gen3
+
 
 
 -- Funções de verificar as jogadas (sendo a Tabela um argumento)
@@ -77,15 +80,20 @@ colocaLetrasNumeros :: [[String]] -> [[String]]
 colocaLetrasNumeros listaSemNumeros = ["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "] : [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros ([1..12] :: [Int])]
 
 atirouNaCoordenada :: Tabela -> Int -> Int -> Tabela
-atirouNaCoordenada tabela c l = [[if i == l && j == c then Coordenada (getMascara x) (getElemEspecial x) True else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
+atirouNaCoordenada tabela c l = [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
 
 setElemEspecial :: Tabela -> Int -> Int -> Char -> Tabela
-setElemEspecial tabela c l novoElemEspecial = [[if i == l && j == c then Coordenada (getMascara x) novoElemEspecial False else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
+setElemEspecial tabela c l novoElemEspecial = [[if i == l && j == c then setElem x novoElemEspecial else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
 
 -- Verifica o espaço livre para a inserção de um grupo de elementos
 verificarEspacoLivre :: Tabela -> Int -> Int -> Int -> Bool -> Bool
 verificarEspacoLivre tabela linha coluna tamanho horizontal =
-    if horizontal
-        then all (\i -> (coluna + i) <= 11 && getElemEspecial ((tabela !! linha) !! (coluna + i)) == '-') [0..tamanho - 1]
-        else all (\i -> (linha + i) <= 11 && getElemEspecial ((tabela !! (linha + i)) !! coluna) == '-') [0..tamanho - 1]
+    let espacosLivres = if horizontal
+            then [(linha, coluna + i) | i <- [0..tamanho - 1], (coluna + i) <= 11]
+            else [(linha + i, coluna) | i <- [0..tamanho - 1], (linha + i) <= 11]
+        -- Verifica se todos os espaços estão válido para inserir um grupo de elementos
+        espacosValidos = all (\(l, c) -> getElemEspecial (tabela !! l !! c) == '-') espacosLivres
 
+    in  if length espacosLivres < tamanho
+        then False
+        else espacosValidos
