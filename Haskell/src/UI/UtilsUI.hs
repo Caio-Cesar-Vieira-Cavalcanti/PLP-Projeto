@@ -1,9 +1,10 @@
 module UI.UtilsUI where
 
-import System.Directory (doesDirectoryExist, listDirectory)
-import Data.List (sort)
 import Modelos.Jogo (carregarSave, Jogo(..)) 
 import Modelos.Jogador(getNome, Jogador(..))
+
+import System.Directory (doesDirectoryExist, listDirectory)
+import Data.List (sort)
 import Data.Time.Format (defaultTimeLocale, formatTime)
 import Data.Maybe (fromMaybe)
 import Data.Char (isDigit)
