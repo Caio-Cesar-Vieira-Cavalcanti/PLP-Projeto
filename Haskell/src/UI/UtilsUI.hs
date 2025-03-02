@@ -2,7 +2,7 @@ module UI.UtilsUI where
 
 import System.Directory (doesDirectoryExist, listDirectory)
 import Data.List (sort)
-import Modelos.Jogo (carregarJogo, Jogo(..)) 
+import Modelos.Jogo (carregarSave, Jogo(..)) 
 import Modelos.Jogador(getNome, Jogador(..))
 import Data.Time.Format (defaultTimeLocale, formatTime)
 import Data.Maybe (fromMaybe)
@@ -43,7 +43,7 @@ defaultSlots =
 
 formatarSave :: FilePath -> IO String
 formatarSave arquivo = do
-    jogoSalvo <- carregarJogo $ "src/BD/" ++ arquivo
+    jogoSalvo <- carregarSave $ "src/BD/" ++ arquivo
     let slotNum = filter isDigit arquivo  
     case jogoSalvo of
         Just jogo -> do

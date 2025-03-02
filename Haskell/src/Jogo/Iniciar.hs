@@ -19,7 +19,7 @@ iniciarJogo nomeJogador = do
 -- Carregamento de um jogo, recebendo o índice do estado que o jogador deseja jogar
 carregarJogo :: FilePath -> IO ()
 carregarJogo caminho = do
-    jogoCarregado <- Modelos.Jogo.carregarJogo caminho
+    jogoCarregado <- carregarSave caminho
     case jogoCarregado of
         Just jogo -> loopJogo jogo
         Nothing   -> putStrLn "Erro: Não foi possível carregar o jogo." 

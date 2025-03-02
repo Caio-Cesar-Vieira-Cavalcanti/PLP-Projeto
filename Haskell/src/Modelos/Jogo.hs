@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Modelos.Jogo (Jogo (..), JogoClass (..), inicializarJogo, carregarJogo) where
+module Modelos.Jogo (Jogo (..), JogoClass (..), inicializarJogo, carregarSave) where
 
 import Modelos.Jogador
 import Modelos.Mercado
@@ -51,8 +51,8 @@ salvarJogo caminho jogo = do
     createDirectoryIfMissing True diretorio  
     B.writeFile caminho (encode jogo)
 
-carregarJogo :: FilePath -> IO (Maybe Jogo)
-carregarJogo caminho = do
+carregarSave :: FilePath -> IO (Maybe Jogo)
+carregarSave caminho = do
     conteudo <- B.readFile caminho
     return (decode conteudo)
 
@@ -94,7 +94,7 @@ main = do
     putStrLn "Jogo salvo com sucesso!"
 
     -- Carregar o jogo
-    jogoCarregado <- carregarJogo caminho
+    jogoCarregado <- carregarSave caminho
     case jogoCarregado of
         Just j  -> print j
         Nothing -> putStrLn "Erro ao carregar o jogo!"
