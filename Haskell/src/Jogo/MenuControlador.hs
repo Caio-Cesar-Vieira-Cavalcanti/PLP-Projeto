@@ -27,13 +27,18 @@ processarOpcao "1" = do
   iniciarJogo nomeJogador
 processarOpcao "2" = do
   -- Executar a lógica de carregamento do jogo, num determinado estado
-  {- clearScreen
+  clearScreen
   Menu.carregarJogo
   slot <- getLine
-  verificaSlot slot -- Função para verificar o slot inserido pelo jogador - opçõa inválida
-  carregarJogo slot
-  -}
-  putStrLn "teste"
+  case slot of 
+    _ | slot `elem` ["1", "2", "3"] -> do
+      clearScreen 
+      Jogo.Iniciar.carregarJogo slot
+    _ | slot `elem` ["V", "v"] -> do
+      iniciarMenu
+    _ -> do
+      clearScreen
+      processarOpcao "2"
 processarOpcao "3" = do
   clearScreen
   Menu.historiaJogo
@@ -60,7 +65,6 @@ processarOpcao _ = do
   putStrLn UtilsUI.opcaoInvalida
   opcao <- getLine
   processarOpcao opcao
-  
   
 -- Funções auxiliares
 
