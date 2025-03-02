@@ -45,13 +45,8 @@ novoJogo = do
 
 carregarJogo :: IO ()
 carregarJogo = do
-  putStr
-    ( unlines
-        [ "Escolha um slot para carregar o estado do jogo:",
-          ""
-        ]
-        ++ UtilsUI.saveStates
-    )
+    estados <- UtilsUI.saveStates
+    putStr $ unlines ["Escolha um slot para carregar o estado do jogo:", ""] ++ estados
 
 historiaJogo :: IO ()
 historiaJogo = do

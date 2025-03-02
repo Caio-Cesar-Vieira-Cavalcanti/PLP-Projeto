@@ -67,7 +67,8 @@ saveJogoScreen :: IO ()
 saveJogoScreen = do
     putStrLn "Escolha um slot para salvar:"
     putStrLn ""
-    putStr Utils.saveStates
+    estados <- Utils.saveStates
+    putStr estados
 
 -- Tela Mercado 
 

@@ -17,10 +17,12 @@ iniciarJogo nomeJogador = do
     loopJogo jogo  
 
 -- Carregamento de um jogo, recebendo o índice do estado que o jogador deseja jogar
-{-
-carregarJogo :: String -> IO ()
-carregarJogo slot = loopJogo $ pegaEstado slot -- Funçõa que retorna o estado de jogo do DB a partir de um slot
--}
+carregarJogo :: FilePath -> IO ()
+carregarJogo caminho = do
+    jogoCarregado <- Modelos.Jogo.carregarJogo caminho
+    case jogoCarregado of
+        Just jogo -> loopJogo jogo
+        Nothing   -> putStrLn "Erro: Não foi possível carregar o jogo." 
 
 -- Lógica de loop do jogo com as funções de entrada e saída
 loopJogo :: Jogo -> IO ()
