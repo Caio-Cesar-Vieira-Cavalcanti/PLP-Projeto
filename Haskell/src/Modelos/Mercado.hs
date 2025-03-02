@@ -28,15 +28,15 @@ instance MercadoClass Mercado where
     getPrecoDV = precoDroneVisualizador
 
     comprarItem jogador mercado item = case item of
-        "bombaMedia" -> 
+        "1" -> 
             if getMoedas jogador >= getPrecoBM mercado
                 then setMoedas (setBombasMedias jogador (getBombasMedias jogador + 1)) (getMoedas jogador - getPrecoBM mercado)
                 else jogador
-        "bombaGrande" -> 
+        "2" -> 
             if getMoedas jogador >= getPrecoBG mercado
                 then setMoedas (setBombasGrandes jogador (getBombasGrandes jogador + 1)) (getMoedas jogador - getPrecoBG mercado)
                 else jogador
-        "drone" -> 
+        "3" -> 
             if getMoedas jogador >= getPrecoDV mercado
                 then setMoedas (setDroneVisualizador jogador (getDroneVisualizador jogador + 1)) (getMoedas jogador - getPrecoDV mercado)
                 else jogador
