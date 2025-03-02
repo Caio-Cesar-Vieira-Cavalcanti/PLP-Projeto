@@ -2,9 +2,10 @@ module Jogo.MenuControlador (iniciarMenu) where
 
 import qualified UI.Menu as Menu
 import qualified UI.UtilsUI as UtilsUI
-
-import Jogo.Iniciar
-
+import Modelos.Jogo
+import UI.HUD
+import UI.UtilsUI
+import Modelos.Mercado (comprarItem)
 import System.Console.ANSI (clearScreen)
 
 iniciarMenu :: IO ()
@@ -33,7 +34,7 @@ processarOpcao "2" = do
   case slot of 
     _ | slot `elem` ["1", "2", "3"] -> do
       clearScreen 
-      Jogo.Iniciar.carregarJogo slot
+      carregarJogo slot
     _ | slot `elem` ["V", "v"] -> do
       iniciarMenu
     _ -> do
@@ -82,3 +83,85 @@ processarSubOpcao = do
         _ -> do
             putStr UtilsUI.voltarMenu
             processarSubOpcao
+
+iniciarJogo :: String -> IO ()
+iniciarJogo nomeJogador = do
+    jogo <- inicializarJogo nomeJogador  
+    loopJogo jogo  
+
+-- Carregamento de um jogo, recebendo o índice do estado que o jogador deseja jogar
+carregarJogo :: FilePath -> IO ()
+carregarJogo numero = do
+    let caminho = "src/BD/save" ++ numero ++ ".json"
+    jogoCarregado <- carregarSave caminho
+    case jogoCarregado of
+        Just jogo -> loopJogo jogo
+        Nothing   -> putStrLn "Erro: Não foi possível carregar o jogo." 
+
+
+
+-- Lógica de loop do jogo com as funções de entrada e saída
+
+loopJogo :: Jogo -> IO ()
+loopJogo jogo = do
+    clearScreen
+    mainScreen jogo
+    opcao <- getLine
+    processarOpcaoLoop opcao jogo
+
+processarOpcaoLoop :: String -> Jogo -> IO ()
+processarOpcaoLoop "1" jogo = do
+  -- To Do
+  loopJogo jogo
+processarOpcaoLoop "2" jogo = do
+  -- To Do
+  loopJogo jogo
+processarOpcaoLoop "3" jogo = do
+  -- To Do
+  loopJogo jogo
+processarOpcaoLoop "4" jogo = do
+  -- To Do
+  loopJogo jogo
+processarOpcaoLoop "m" jogo = do
+  clearScreen
+  UI.HUD.mercadoScreen jogo
+  item <- getLine
+  let jogador = getJogador jogo
+  let mercado = getMercado jogo
+  let novoJogador = Modelos.Mercado.comprarItem jogador mercado item
+  let novoJogo = setJogador novoJogador jogo  
+  clearScreen
+  loopJogo novoJogo
+processarOpcaoLoop "s" jogo = do
+  clearScreen
+  UI.HUD.saveJogoScreen
+  slot <- getLine
+  let caminho = "src/BD/save" ++ slot ++ ".json"
+  if slot `elem` ["1", "2", "3"]
+    then do
+      clearScreen
+      putStrLn UtilsUI.confirmacao
+      confirmacaoSalvamento caminho jogo slot
+    else do
+      clearScreen
+      putStrLn UI.UtilsUI.opcaoInvalida
+      loopJogo jogo
+processarOpcaoLoop "q" _ = do
+  clearScreen
+  iniciarMenu  
+processarOpcaoLoop _ jogo = do
+  putStrLn UI.UtilsUI.opcaoInvalida
+  opcao <- getLine
+  processarOpcaoLoop opcao jogo
+
+confirmacaoSalvamento :: FilePath -> Jogo -> String -> IO ()
+confirmacaoSalvamento caminho jogo slot = do
+  opcao <- getLine
+  case opcao of  
+    op | op `elem` ["S", "s"] -> do
+      clearScreen
+      Modelos.Jogo.salvarJogo caminho jogo
+      carregarJogo slot  
+    _ -> do
+      clearScreen
+      loopJogo jogo

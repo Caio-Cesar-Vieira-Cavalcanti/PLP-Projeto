@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Modelos.Jogo (Jogo (..), JogoClass (..), inicializarJogo, carregarSave) where
+module Modelos.Jogo (Jogo (..), JogoClass (..), inicializarJogo, carregarSave, salvarJogo, setJogador) where
 
 import Modelos.Jogador
 import Modelos.Mercado
@@ -42,6 +42,11 @@ instance JogoClass Jogo where
 instance ToJSON Jogo
 instance FromJSON Jogo
 
+-- Função para mudar o Jogo quando houver alteração no Jogador
+
+setJogador :: Jogador -> Jogo -> Jogo
+setJogador novoJogador jogo = jogo { jogador = novoJogador }
+
 -- Função para salvar e carregar o jogo com um JSON
 -- O FilePath tem o formato "src/BD/save{numero}.json"
 
@@ -49,7 +54,11 @@ salvarJogo :: FilePath -> Jogo -> IO ()
 salvarJogo caminho jogo = do
     let diretorio = takeDirectory caminho
     createDirectoryIfMissing True diretorio  
-    B.writeFile caminho (encode jogo)
+    utcTime <- getCurrentTime
+    let zonaBrasilia = hoursToTimeZone (-3)
+    let agora = utcToLocalTime zonaBrasilia utcTime
+    let jogoAtualizado = jogo { dataJogo = agora }
+    B.writeFile caminho (encode jogoAtualizado)
 
 carregarSave :: FilePath -> IO (Maybe Jogo)
 carregarSave caminho = do
