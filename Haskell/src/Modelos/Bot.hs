@@ -18,6 +18,7 @@ class BotClass b where
   getTabelaBot :: Bot -> Tabela 
   getJogada :: Bot -> IO [(Int, Int)]
 
+
 data Bot = Bot
   { 
     tabela :: Tabela,
@@ -59,6 +60,7 @@ bombaGrande (x, y) = filter indiceValido [(i, j) | i <- [(x-1)..(x+1)], j <- [(y
 
 indiceValido :: (Int,Int) -> Bool
 indiceValido (x, y) = (x >= 0) && (x <= 11) && (y >= 0) && (y <= 11)
+
 
 instance ToJSON Bot
 instance FromJSON Bot

@@ -1,47 +1,67 @@
 module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
     
 import qualified UI.UtilsUI as Utils
+
+import Modelos.Jogo
+
+import Modelos.Jogador
+import Modelos.Bot
+import Modelos.Mercado
 import Modelos.Tabuleiro
+
 
 {- Falta trocar os dummies  por valores reais passados como argumento -}
 
 -- Tela Principal da HUD 
+-- Recebe o estado atual do jogo (Jogo)
 
--- Receber os estado atual do jogo (Jogo)
+mainScreen :: Jogo -> IO()
+mainScreen jogoAtual = do
+    -- Extraindo Jogador e Bot do estado de Jogo
+    let jogadorAtual = getJogador jogoAtual
+    let botAtual = getBot jogoAtual
 
-mainScreen :: Tabela -> Tabela -> IO()
-mainScreen tabJog tabBot = do
-    let jogador = "Neymar"
-    putStrLn ("Jogador: " ++ jogador)
+    let tabelaJogador = getTabelaJogador jogadorAtual
+    let tabelaBot = getTabelaBot botAtual
+
+    let nomeJogador = getNome jogadorAtual
+
+    putStr ("Jogador: " ++ nomeJogador)
+    putStr ("                                                      ")
+    putStr ("Oponente: Imperador de Prologia")
+
     putStrLn ""
     putStrLn ""
 
-    -- Imprimir as duas tabelas passando o contador 
-    imprimiTabelas tabJog tabBot 0
+    imprimiTabelas tabelaJogador tabelaBot 0
 
     putStrLn ""
     putStrLn ""
 
-    let inimigosDerrotados = 4
-    let inimigosTotais = 10
+    -- Criar uma função para contabilizar os derrotados em Tabuleiro.hs
+    let inimigosDerrotadosJogador = 1
+    let inimigosDerrotadosBot = 1
 
-    putStrLn ("Inimigos: " ++ show inimigosDerrotados ++ "/" ++ show inimigosTotais)
+    putStr ("Inimigos: " ++ show inimigosDerrotadosJogador ++ "/6")
+    putStr ("                                                       ")
+    putStr ("Inimigos do Oponente: " ++ show inimigosDerrotadosBot ++ "/6")
 
-
-    let espacosAtingidos = 3
-    let espacosTotais = 12
-
-    putStrLn ("Espaços especiais: " ++ show espacosAtingidos ++ "/" ++ show espacosTotais)
-
-
-    let minasOuroAtingidas = 2
-    let minasOuroTotais = 5
-
-    putStrLn ("Tesouro: " ++ show minasOuroAtingidas ++ "/" ++ show minasOuroTotais)
-    
     putStrLn ""
 
-    mostraInventario
+
+    -- Criar uma função para contabilizar os derrotados em Tabuleiro.hs
+    let espacosAmigosAtingidosJogador = 1
+    let espacosAmigosAtingidosBot = 1
+
+    putStr ("Espaços Amigos: " ++ show espacosAmigosAtingidosJogador ++ "/3")
+    putStr ("                                                 ")
+    putStr ("Espaços Amigos do Oponente: " ++ show espacosAmigosAtingidosBot ++ "/3")
+
+    putStrLn ""
+    putStrLn ""
+    putStrLn ""
+
+    mostraInventario jogadorAtual
     
     putStrLn ""
 
@@ -51,26 +71,29 @@ mainScreen tabJog tabBot = do
     putStrLn "'3' -> Usar bombas grandes"
     putStrLn "'4' -> Usar o drone visualizador de áreas"
     putStrLn "{COLUNAS}{LINHA} -> Coordenada que deseja atacar; Exemplo: C3"
+    putStrLn ""
     putStrLn "'m' -> Acesso ao mercado"
     putStrLn "'s' -> Salvar o jogo no estado atual"
-    putStrLn "'quit' -> Sair do jogo sem salvar"
+    putStrLn "'q' -> Sair do jogo sem salvar"
     
     putStrLn ""
 
-    putStrLn "> Digite a opção ou coordenadas:"
+    putStr "> Digite a opção: "
 
 -- Tela Salvar Jogo
 
+-- Deve receber o estado Jogo, para guardar
 saveJogoScreen :: IO ()
 saveJogoScreen = do
     putStrLn "Escolha um slot para salvar:"
     putStrLn ""
-    putStr Utils.saveStates
+    estados <- Utils.saveStates
+    putStr estados
 
 -- Tela Mercado 
 
-mercadoScreen :: IO ()
-mercadoScreen = do
+mercadoScreen :: Jogo -> IO ()
+mercadoScreen jogoAtual = do
 
     putStrLn "  __  __                             _        "
     putStrLn " |  \x5C/  |  ___  _ __  ___  __ _   __| |  ___  "
@@ -80,7 +103,9 @@ mercadoScreen = do
 
     putStrLn ""
 
-    mostraInventario
+    let jogadorAtual = getJogador jogoAtual
+
+    mostraInventario jogadorAtual
     
     putStrLn ""
 
@@ -88,43 +113,56 @@ mercadoScreen = do
     
     putStrLn ""
 
-    putStrLn "'1' -> Comprar bombas médias               ($250)"
-    putStrLn "'2' -> Comprar bombas grandes              ($400)"
-    putStrLn "'3' -> Comprar drone visualizador de áreas ($350)"
+    let mercadoAtual = getMercado jogoAtual
+    let precoBM = getPrecoBM mercadoAtual
+    let precoBG = getPrecoBG mercadoAtual
+    let precoDV = getPrecoDV mercadoAtual
+
+    putStrLn ("'1' -> Comprar bombas médias               ($" ++ show precoBM ++ ")")
+    putStrLn ("'2' -> Comprar bombas grandes              ($" ++ show precoBG ++ ")")
+    putStrLn ("'3' -> Comprar drone visualizador de áreas ($" ++ show precoDV ++ ")")
 
     putStrLn ""
 
-    putStr "> Digite o item ou 'v' para voltar:"
+    putStr "> Digite o item ou 'v' para voltar: "
 
 -- Funções utilitárias
 
-mostraInventario :: IO ()
-mostraInventario = do
+mostraInventario :: Jogador -> IO ()
+mostraInventario jogadorAtual = do
     putStrLn "Inventário:"
     
-    let bombasPequenas = 3
-    let bombasMedias = 1
-    let bombasGrandes = 0
+    let bombasP = getBombasPequenas jogadorAtual
+    let bombasM = getBombasMedias jogadorAtual
+    let bombasG = getBombasGrandes jogadorAtual
 
-    putStrLn ("Bombas pequenas: " ++ show bombasPequenas ++ " | Bombas médias: " ++ show bombasMedias ++ " | Bombas grandes: " ++ show bombasGrandes)
+    putStrLn ("Bombas pequenas: " ++ show bombasP ++ " | Bombas médias: " ++ show bombasM ++ " | Bombas grandes: " ++ show bombasG)
 
-    let drones = 2
+    let dronesVisualizador = getDroneVisualizador jogadorAtual
 
-    putStrLn ("Drone visualizador de áreas: " ++ show drones)
+    putStrLn ("Drone visualizador de áreas: " ++ show dronesVisualizador)
 
     putStrLn ""
     
-    let moedas = 25
+    let moedasJogador = getMoedas jogadorAtual
 
-    putStrLn ("Moedas: " ++ show moedas)
+    putStrLn ("Moedas: " ++ show moedasJogador)
+
+
+
+
+
+
+
 
 -- Refatorar (criar pequenas funções)
+-- Evitar o uso de gerar a tabela em string para toda chamada recursiva
 imprimiTabelas :: Tabela -> Tabela -> Int -> IO() 
 imprimiTabelas tabJog tabBot x = if x >= 12
     then do
         let tabJogStr = geraTabelaStr tabJog
         let linhaTabelaJog = unwords (tabJogStr !! x)
-        let tabBotStr = geraTabelaStr tabJog
+        let tabBotStr = geraTabelaStr tabBot
         let linhaTabelaBot = unwords (tabBotStr !! x)
         putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
     else do
@@ -132,14 +170,14 @@ imprimiTabelas tabJog tabBot x = if x >= 12
             then do
                 let tabJogStr = geraTabelaStr tabJog
                 let linhaTabelaJog = " " ++ unwords (tabJogStr !! x)
-                let tabBotStr = geraTabelaStr tabJog
+                let tabBotStr = geraTabelaStr tabBot
                 let linhaTabelaBot = " " ++ unwords (tabBotStr !! x)
                 putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
                 imprimiTabelas tabJog tabBot (x + 1)
             else do
                 let tabJogStr = geraTabelaStr tabJog
                 let linhaTabelaJog = unwords (tabJogStr !! x)
-                let tabBotStr = geraTabelaStr tabJog
+                let tabBotStr = geraTabelaStr tabBot
                 let linhaTabelaBot = unwords (tabBotStr !! x)
                 putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
                 imprimiTabelas tabJog tabBot (x + 1)

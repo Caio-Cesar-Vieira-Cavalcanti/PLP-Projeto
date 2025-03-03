@@ -3,10 +3,10 @@ module UI.TelasVitoriaDerrota (winScreen,loseScreen) where
 import qualified UI.UtilsUI as UtilsUI 
 
 winScreen:: String -> IO()
-winScreen nome = do
+winScreen nomeJogador = do
     putStrLn "*                                                        *"
     putStrLn ""
-    putStrLn ("              Parabéns "++ nome ++", Você venceu a       ")
+    putStrLn ("              Parabéns "++ nomeJogador ++", Você venceu a       ")
     putStrLn "                  Guerra dos Paradigmas                   "
     putStrLn "            HaskellLand agradece seu heroísmo!            "
     putStrLn ""
@@ -14,12 +14,12 @@ winScreen nome = do
     putStrLn UtilsUI.voltarMenu
 
 loseScreen:: String -> IO()
-loseScreen motivo = do
+loseScreen motivoDerrota = do
     putStrLn "*                                                        *"
     putStrLn ""
     putStrLn "                        GAME OVER!                        "
     putStrLn ""
-    putStrLn ("          - Motivo da derrota: " ++ motivo)                    
+    putStrLn ("          - Motivo da derrota: " ++ motivoDerrota)                    
     putStrLn ""
     putStrLn "*                                                        *"
-    putStr UtilsUI.voltarMenu
+    putStrLn UtilsUI.voltarMenu
