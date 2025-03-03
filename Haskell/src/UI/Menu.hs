@@ -40,7 +40,7 @@ novoJogo = do
           "",
           ""
         ]
-        ++ "> Digite o seu nome (ou 'v' para voltar ao menu): "
+        ++ "> Digite o seu nome: "
     )
 
 carregarJogo :: IO ()

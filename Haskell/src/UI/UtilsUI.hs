@@ -17,6 +17,9 @@ import Data.Char (isDigit)
 opcaoInvalida :: String
 opcaoInvalida = "> Opção inválida, digite novamente: "
 
+opcaoInvalidaVoltar :: String
+opcaoInvalidaVoltar = "> Opção inválida, digite 'v' para voltar: "
+
 confirmacao :: String
 confirmacao = "> Tem certeza? [S/N]: "
 
@@ -29,13 +32,13 @@ saveStates = do
     let pastaBD = "src/BD"
     existe <- doesDirectoryExist pastaBD
     if not existe
-        then return $ unlines (defaultSlots ++ ["", "> Digite 'v' para voltar: "])
+        then return $ init $ unlines (defaultSlots ++ ["", "> Digite o slot ou 'v' para voltar ao menu: "])
         else do
             arquivos <- listDirectory pastaBD
             let arquivosOrdenados = sort arquivos
             saveSlots <- mapM formatarSave arquivosOrdenados
             let slotsFinal = corrigirOrdemSlots saveSlots
-            return $ unlines (slotsFinal ++ ["", "> Digite o slot ou 'v' para voltar: "])
+            return $ init $ unlines (slotsFinal ++ ["", "> Digite o slot ou 'v' para voltar ao menu: "])
 
 -- Lista padrão de slots vazios
 defaultSlots :: [String]

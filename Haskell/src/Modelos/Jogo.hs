@@ -86,7 +86,6 @@ inicializarJogo nomeJogador = do
 iniciarJogador :: String -> Tabela -> Jogador
 iniciarJogador nomeJogador tabelaJogador = Jogador nomeJogador 0 tabelaJogador 30 0 0 0
 
--- Revisar as quantidades de cada bomba
 iniciarBot :: Tabela -> Bot
 iniciarBot tabelaBot = Bot tabelaBot 30 3 1 0
 
