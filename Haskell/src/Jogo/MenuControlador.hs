@@ -114,9 +114,9 @@ loopJogo jogo = do
 processarOpcaoLoop :: String -> Jogo -> IO ()
 processarOpcaoLoop "1" jogo = do
   putStr "> Digite a coluna que deseja atacar: "
-  coluna <- getLine
+  coluna <- inputColuna
   putStr "> Digite a linha que deseja atacar: "
-  linha <- readLn :: IO Int
+  linha <- inputLinha
   let novaTabelaJog = atirouNaCoordenada (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
   loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog } }
 processarOpcaoLoop "2" jogo = do
@@ -179,3 +179,21 @@ getIndexColuna listaLetras str i =
   if listaLetras !! i == str 
     then i
     else getIndexColuna listaLetras str (i + 1)
+
+inputColuna :: IO String
+inputColuna = do
+  coluna <- getLine
+  if coluna `elem` ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+    then return coluna
+    else do
+      putStr opcaoInvalida
+      inputColuna
+
+inputLinha :: IO Int
+inputLinha = do
+  linha <- readLn :: IO Int
+  if linha >= 1 && linha <= 12
+    then return linha
+    else do 
+      putStr opcaoInvalida
+      inputLinha
