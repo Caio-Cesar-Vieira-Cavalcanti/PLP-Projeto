@@ -7,6 +7,8 @@ import UI.HUD
 import UI.UtilsUI
 import Modelos.Mercado (comprarItem)
 import System.Console.ANSI (clearScreen)
+import Modelos.Tabuleiro as Tabuleiro
+import Modelos.Jogador as Jogador
 
 iniciarMenu :: IO ()
 iniciarMenu = do
@@ -111,8 +113,12 @@ loopJogo jogo = do
 
 processarOpcaoLoop :: String -> Jogo -> IO ()
 processarOpcaoLoop "1" jogo = do
-  -- To Do
-  loopJogo jogo
+  putStr "> Digite a coluna que deseja atacar: "
+  coluna <- getLine
+  putStr "> Digite a linha que deseja atacar: "
+  linha <- readLn :: IO Int
+  let novaTabelaJog = atirouNaCoordenada (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
+  loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog } }
 processarOpcaoLoop "2" jogo = do
   -- To Do
   loopJogo jogo
@@ -165,3 +171,11 @@ confirmacaoSalvamento caminho jogo slot = do
     _ -> do
       clearScreen
       loopJogo jogo
+
+-- é necessário tratar caso o jogador digite um caractere invalido na coluna
+-- to fazendo primeiro pensando que ele vai acertar
+getIndexColuna :: [String] -> String -> Int -> Int 
+getIndexColuna listaLetras str i =
+  if listaLetras !! i == str 
+    then i
+    else getIndexColuna listaLetras str (i + 1)

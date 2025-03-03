@@ -1,4 +1,4 @@
-module Modelos.Tabuleiro (Tabela, geraTabela, geraTabelaStr) where
+module Modelos.Tabuleiro (Tabela, geraTabela, geraTabelaStr, atirouNaCoordenada) where
 
 import Modelos.Coordenada
 
