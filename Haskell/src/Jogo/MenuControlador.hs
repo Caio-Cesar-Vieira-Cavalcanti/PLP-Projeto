@@ -119,23 +119,47 @@ processarOpcaoLoop "1" jogo =
       if checaSeGastouTodasBombas jogo
         then 
           VitoriaDerrota.loseScreen "Você gastou todo seu arsenal de bombas sem êxito."
-        else do
-          putStrLn "Bombas pequenas esgotadas. Use outra bomba."
+        else
           loopJogo jogo
     else do
-    putStr "> Digite a coluna que deseja atacar: "
-    coluna <- inputColuna
-    putStr "> Digite a linha que deseja atacar: "
-    linha <- inputLinha
-    let novaTabelaJog = atirouNaCoordenada (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
-    loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasPequenas = bombasPequenas (jogador jogo) - 1  } }
+      putStr "> Digite a coluna que deseja atacar: "
+      coluna <- inputColuna
+      putStr "> Digite a linha que deseja atacar: "
+      linha <- inputLinha
+      let novaTabelaJog = atirouNaCoordenada (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
+      loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasPequenas = bombasPequenas (jogador jogo) - 1  } }
 
-processarOpcaoLoop "2" jogo = do
-  -- To Do
-  loopJogo jogo
+processarOpcaoLoop "2" jogo = 
+  if bombasMedias (jogador jogo) < 1 
+    then 
+      if checaSeGastouTodasBombas jogo
+        then 
+          VitoriaDerrota.loseScreen "Você gastou todo seu arsenal de bombas sem êxito."
+        else
+          loopJogo jogo
+    else do
+      putStr "> Digite a coluna que deseja atacar: "
+      coluna <- inputColuna
+      putStr "> Digite a linha que deseja atacar: "
+      linha <- inputLinha
+      let novaTabelaJog = tiroBombaMedia (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
+      loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasMedias = bombasMedias (jogador jogo) - 1  } }
+
 processarOpcaoLoop "3" jogo = do
-  -- To Do
-  loopJogo jogo
+  if bombasGrandes (jogador jogo) < 1 
+    then 
+      if checaSeGastouTodasBombas jogo
+        then 
+          VitoriaDerrota.loseScreen "Você gastou todo seu arsenal de bombas sem êxito."
+        else 
+          loopJogo jogo
+    else do
+      putStr "> Digite a coluna que deseja atacar: "
+      coluna <- inputColuna
+      putStr "> Digite a linha que deseja atacar: "
+      linha <- inputLinha
+      let novaTabelaJog = tiroBombaGrande (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
+      loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasGrandes = bombasGrandes (jogador jogo) - 1  } }
 processarOpcaoLoop "4" jogo = do
   -- To Do
   loopJogo jogo
@@ -183,8 +207,6 @@ confirmacaoSalvamento caminho jogo slot = do
       clearScreen
       loopJogo jogo
 
--- é necessário tratar caso o jogador digite um caractere invalido na coluna
--- to fazendo primeiro pensando que ele vai acertar
 getIndexColuna :: [String] -> String -> Int -> Int 
 getIndexColuna listaLetras str i =
   if listaLetras !! i == str 
@@ -211,3 +233,4 @@ inputLinha = do
 
 checaSeGastouTodasBombas :: Jogo -> Bool 
 checaSeGastouTodasBombas jogo = bombasPequenas (jogador jogo) == 0 && bombasMedias (jogador jogo) == 0 && bombasGrandes (jogador jogo) == 0
+
