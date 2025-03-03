@@ -8,6 +8,9 @@ import Modelos.Jogo
 import Modelos.Mercado (comprarItem)
 
 import System.Console.ANSI (clearScreen)
+import Modelos.Tabuleiro as Tabuleiro
+import Modelos.Jogador as Jogador
+import UI.TelasVitoriaDerrota as VitoriaDerrota
 
 iniciarMenu :: IO ()
 iniciarMenu = do
@@ -114,15 +117,53 @@ loopJogo jogo = do
 
 
 processarOpcaoLoop :: String -> Jogo -> IO ()
-processarOpcaoLoop "1" jogo = do
-  -- To Do
-  loopJogo jogo
-processarOpcaoLoop "2" jogo = do
-  -- To Do
-  loopJogo jogo
+processarOpcaoLoop "1" jogo = 
+  if bombasPequenas (jogador jogo) < 1 
+    then 
+      if checaSeGastouTodasBombas jogo
+        then 
+          VitoriaDerrota.loseScreen "Você gastou todo seu arsenal de bombas sem êxito."
+        else
+          loopJogo jogo
+    else do
+      putStr "> Digite a coluna que deseja atacar: "
+      coluna <- inputColuna
+      putStr "> Digite a linha que deseja atacar: "
+      linha <- inputLinha
+      let novaTabelaJog = atirouNaCoordenada (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
+      loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasPequenas = bombasPequenas (jogador jogo) - 1  } }
+
+processarOpcaoLoop "2" jogo = 
+  if bombasMedias (jogador jogo) < 1 
+    then 
+      if checaSeGastouTodasBombas jogo
+        then 
+          VitoriaDerrota.loseScreen "Você gastou todo seu arsenal de bombas sem êxito."
+        else
+          loopJogo jogo
+    else do
+      putStr "> Digite a coluna que deseja atacar: "
+      coluna <- inputColuna
+      putStr "> Digite a linha que deseja atacar: "
+      linha <- inputLinha
+      let novaTabelaJog = tiroBombaMedia (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
+      loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasMedias = bombasMedias (jogador jogo) - 1  } }
+
 processarOpcaoLoop "3" jogo = do
-  -- To Do
-  loopJogo jogo
+  if bombasGrandes (jogador jogo) < 1 
+    then 
+      if checaSeGastouTodasBombas jogo
+        then 
+          VitoriaDerrota.loseScreen "Você gastou todo seu arsenal de bombas sem êxito."
+        else 
+          loopJogo jogo
+    else do
+      putStr "> Digite a coluna que deseja atacar: "
+      coluna <- inputColuna
+      putStr "> Digite a linha que deseja atacar: "
+      linha <- inputLinha
+      let novaTabelaJog = tiroBombaGrande (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
+      loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasGrandes = bombasGrandes (jogador jogo) - 1  } }
 processarOpcaoLoop "4" jogo = do
   -- To Do
   loopJogo jogo
@@ -169,3 +210,30 @@ confirmacaoSalvamento caminho jogo slot = do
     _ -> do
       clearScreen
       loopJogo jogo
+
+getIndexColuna :: [String] -> String -> Int -> Int 
+getIndexColuna listaLetras str i =
+  if listaLetras !! i == str 
+    then i
+    else getIndexColuna listaLetras str (i + 1)
+
+inputColuna :: IO String
+inputColuna = do
+  coluna <- getLine
+  if coluna `elem` ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+    then return coluna
+    else do
+      putStr UtilsUI.opcaoInvalida
+      inputColuna
+
+inputLinha :: IO Int
+inputLinha = do
+  linha <- readLn :: IO Int
+  if linha >= 1 && linha <= 12
+    then return linha
+    else do 
+      putStr UtilsUI.opcaoInvalida
+      inputLinha
+
+checaSeGastouTodasBombas :: Jogo -> Bool 
+checaSeGastouTodasBombas jogo = bombasPequenas (jogador jogo) == 0 && bombasMedias (jogador jogo) == 0 && bombasGrandes (jogador jogo) == 0
