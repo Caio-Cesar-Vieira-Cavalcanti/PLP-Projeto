@@ -78,7 +78,7 @@ mainScreen jogoAtual = do
     
     putStrLn ""
 
-    putStr "> Digite a opção ou coordenadas: "
+    putStr "> Digite a opção: "
 
 -- Tela Salvar Jogo
 

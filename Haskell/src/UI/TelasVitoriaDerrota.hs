@@ -22,4 +22,4 @@ loseScreen motivoDerrota = do
     putStrLn ("          - Motivo da derrota: " ++ motivoDerrota)                    
     putStrLn ""
     putStrLn "*                                                        *"
-    putStr UtilsUI.voltarMenu
+    putStrLn UtilsUI.voltarMenu

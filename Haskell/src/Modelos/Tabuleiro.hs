@@ -1,4 +1,4 @@
-module Modelos.Tabuleiro (Tabela, geraTabela, geraTabelaStr) where
+module Modelos.Tabuleiro (Tabela, geraTabela, geraTabelaStr, atirouNaCoordenada, tiroBombaMedia, tiroBombaGrande) where
 
 import Modelos.Coordenada
 
@@ -80,7 +80,10 @@ colocaLetrasNumeros :: [[String]] -> [[String]]
 colocaLetrasNumeros listaSemNumeros = ["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "] : [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros ([1..12] :: [Int])]
 
 atirouNaCoordenada :: Tabela -> Int -> Int -> Tabela
-atirouNaCoordenada tabela c l = [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
+atirouNaCoordenada tabela c l = 
+    if c >= 0 && c <= 12 && l >= 0 && l <= 12
+        then [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
+        else tabela
 
 setElemEspecial :: Tabela -> Int -> Int -> Char -> Tabela
 setElemEspecial tabela c l novoElemEspecial = [[if i == l && j == c then setElem x novoElemEspecial else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
@@ -97,3 +100,19 @@ verificarEspacoLivre tabela linha coluna tamanho horizontal =
     in  if length espacosLivres < tamanho
         then False
         else espacosValidos
+
+tiroBombaMedia :: Tabela -> Int -> Int -> Tabela
+tiroBombaMedia tabela c l = do
+    let tabela1 = atirouNaCoordenada tabela c l
+    let tabela2 = atirouNaCoordenada tabela1 (c - 1) l
+    let tabela3 = atirouNaCoordenada tabela2 (c + 1) l
+    let tabela4 = atirouNaCoordenada tabela3 c (l - 1)
+    atirouNaCoordenada tabela4 c (l + 1)
+
+tiroBombaGrande :: Tabela -> Int -> Int -> Tabela
+tiroBombaGrande tabela c l = do
+    let tabela1 = tiroBombaMedia tabela c l
+    let tabela2 = atirouNaCoordenada tabela1 (c - 1) (l - 1)
+    let tabela3 = atirouNaCoordenada tabela2 (c - 1) (l + 1)
+    let tabela4 = atirouNaCoordenada tabela3 (c + 1) (l - 1)
+    atirouNaCoordenada tabela4 (c + 1) (l + 1)
