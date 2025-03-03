@@ -39,11 +39,23 @@ contabilizarAmigos tabela =
 colocaLetrasNumeros :: [[String]] -> [[String]]
 colocaLetrasNumeros listaSemNumeros = ["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "] : [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros ([1..12] :: [Int])]
 
-atirouNaCoordenada :: Tabela -> Int -> Int -> Tabela
-atirouNaCoordenada tabela c l = 
-    if c >= 0 && c <= 12 && l >= 0 && l <= 12
-        then [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
-        else tabela
+-- Moedas ganhas com base no acerto
+pontuacaoElemento :: Char -> Int
+pontuacaoElemento 'S' = 25
+pontuacaoElemento 'M' = 33
+pontuacaoElemento 'T' = 40
+pontuacaoElemento '$' = 250
+pontuacaoElemento _ = 0  
+
+atirouNaCoordenada :: Tabela -> Int -> Int -> (Tabela, Int)
+atirouNaCoordenada tabela c l =
+    if c >= 0 && c <= 11 && l >= 0 && l <= 11
+        then 
+            let elemento = getElemEspecial (tabela !! l !! c)
+                tabelaAtualizada = [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
+                moedas = pontuacaoElemento elemento
+            in (tabelaAtualizada, moedas)
+        else (tabela, 0)
 
 setElemEspecial :: Tabela -> Int -> Int -> Char -> Tabela
 setElemEspecial tabela c l novoElemEspecial = [[if i == l && j == c then setElem x novoElemEspecial else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
@@ -68,21 +80,23 @@ temGrupoAdjacente tabela linha coluna char =
         posicoesAdjacentes = filter dentroDoTab [(linha + dl, coluna + dc) | (dl, dc) <- direcoes]
     in any (\(l, c) -> getElemEspecial (tabela !! l !! c) == char) posicoesAdjacentes
 
-tiroBombaMedia :: Tabela -> Int -> Int -> Tabela
-tiroBombaMedia tabela c l = do
-    let tabela1 = atirouNaCoordenada tabela c l
-    let tabela2 = atirouNaCoordenada tabela1 (c - 1) l
-    let tabela3 = atirouNaCoordenada tabela2 (c + 1) l
-    let tabela4 = atirouNaCoordenada tabela3 c (l - 1)
-    atirouNaCoordenada tabela4 c (l + 1)
+tiroBombaMedia :: Tabela -> Int -> Int -> (Tabela, Int)
+tiroBombaMedia tabela c l =
+    let (tabela1, novasMoedas1) = atirouNaCoordenada tabela c l
+        (tabela2, novasMoedas2) = atirouNaCoordenada tabela1 (c - 1) l
+        (tabela3, novasMoedas3) = atirouNaCoordenada tabela2 (c + 1) l
+        (tabela4, novasMoedas4) = atirouNaCoordenada tabela3 c (l - 1)
+        (tabelaFinal, novasMoedas5) = atirouNaCoordenada tabela4 c (l + 1)
+    in (tabelaFinal, novasMoedas1 + novasMoedas2 + novasMoedas3 + novasMoedas4 + novasMoedas5)
 
-tiroBombaGrande :: Tabela -> Int -> Int -> Tabela
-tiroBombaGrande tabela c l = do
-    let tabela1 = tiroBombaMedia tabela c l
-    let tabela2 = atirouNaCoordenada tabela1 (c - 1) (l - 1)
-    let tabela3 = atirouNaCoordenada tabela2 (c - 1) (l + 1)
-    let tabela4 = atirouNaCoordenada tabela3 (c + 1) (l - 1)
-    atirouNaCoordenada tabela4 (c + 1) (l + 1)
+tiroBombaGrande :: Tabela -> Int -> Int -> (Tabela, Int)
+tiroBombaGrande tabela c l =
+    let (tabela1, novasMoedas1) = tiroBombaMedia tabela c l
+        (tabela2, novasMoedas2) = atirouNaCoordenada tabela1 (c - 1) (l - 1)
+        (tabela3, novasMoedas3) = atirouNaCoordenada tabela2 (c - 1) (l + 1)
+        (tabela4, novasMoedas4) = atirouNaCoordenada tabela3 (c + 1) (l - 1)
+        (tabelaFinal, novasMoedas5) = atirouNaCoordenada tabela4 (c + 1) (l + 1)
+    in (tabelaFinal, novasMoedas1 + novasMoedas2 + novasMoedas3 + novasMoedas4 + novasMoedas5)
 
 -- Verifica se um grupo está completamente acertado
 ehGrupoValido :: Tabela -> Char -> Int -> (Int, Int) -> Bool

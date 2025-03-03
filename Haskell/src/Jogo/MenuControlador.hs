@@ -115,19 +115,50 @@ loopJogo jogo = do
 
 processarOpcaoLoop :: String -> Jogo -> IO ()
 processarOpcaoLoop "1" jogo = do
-    (coluna, linha) <- inputCoordenada
-    let novaTabelaJog = atirouNaCoordenada (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
-    loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasPequenas = bombasPequenas (jogador jogo) - 1  } }
-
+    if getBombasPequenas (getJogador jogo) <= 0
+    then loopJogo jogo
+    else do
+        (coluna, linha) <- inputCoordenada
+        let (novaTabelaJog, novasMoedas) = 
+                atirouNaCoordenada (tabela (jogador jogo)) 
+                    (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
+                    (linha - 1)
+        loopJogo jogo { jogador = (jogador jogo) 
+            { tabela = novaTabelaJog
+            , bombasPequenas = bombasPequenas (jogador jogo) - 1  
+            , moedas = getMoedas (jogador jogo) + novasMoedas  
+            } 
+        }
 processarOpcaoLoop "2" jogo = do
-    (coluna, linha) <- inputCoordenada
-    let novaTabelaJog = tiroBombaMedia (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
-    loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasMedias = bombasMedias (jogador jogo) - 1  } }
-
+    if getBombasMedias (getJogador jogo) <= 0
+    then loopJogo jogo
+    else do
+        (coluna, linha) <- inputCoordenada
+        let (novaTabelaJog, novasMoedas) = 
+                tiroBombaMedia (tabela (jogador jogo)) 
+                    (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
+                    (linha - 1)
+        loopJogo jogo { jogador = (jogador jogo) 
+            { tabela = novaTabelaJog
+            , bombasMedias = bombasMedias (jogador jogo) - 1  
+            , moedas = getMoedas (jogador jogo) + novasMoedas  
+            } 
+        }
 processarOpcaoLoop "3" jogo = do
-    (coluna, linha) <- inputCoordenada
-    let novaTabelaJog = tiroBombaGrande (tabela (jogador jogo)) (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) (linha - 1)
-    loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, bombasGrandes = bombasGrandes (jogador jogo) - 1  } }
+    if getBombasGrandes (getJogador jogo) <= 0
+    then loopJogo jogo
+    else do
+        (coluna, linha) <- inputCoordenada
+        let (novaTabelaJog, novasMoedas) = 
+                tiroBombaGrande (tabela (jogador jogo)) 
+                    (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
+                    (linha - 1)
+        loopJogo jogo { jogador = (jogador jogo) 
+            { tabela = novaTabelaJog
+            , bombasGrandes = bombasGrandes (jogador jogo) - 1  
+            , moedas = getMoedas (jogador jogo) + novasMoedas  
+            } 
+        }
 processarOpcaoLoop "4" jogo = do
   -- To Do DRONE VISUALIZADOR
   loopJogo jogo
@@ -206,8 +237,11 @@ inputCoordenada = do
             putStrLn UtilsUI.opcaoInvalida
             inputCoordenada
 
+
 validarCoordenada :: String -> Bool
-validarCoordenada [c, l] = c `elem` ['A'..'L'] && read [l] `elem` [1..12]
+validarCoordenada (c:ls) =
+    c `elem` ['A'..'L'] && all isDigit ls && let l = read ls in l `elem` [1..12]
+validarCoordenada _ = False  
 
 checaSeGastouTodasBombas :: Jogo -> Bool 
 checaSeGastouTodasBombas jogo = getBombasPequenas (jogador) == 0 && getBombasMedias (jogador) == 0 && getBombasGrandes (jogador) == 0 
