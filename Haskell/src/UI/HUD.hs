@@ -33,9 +33,8 @@ mainScreen jogoAtual = do
     putStrLn ""
     putStrLn ""
 
-    -- Criar uma função para contabilizar os derrotados em Tabuleiro.hs
-    let inimigosDerrotadosJogador = 1
-    let inimigosDerrotadosBot = 1
+    let inimigosDerrotadosJogador = contabilizarInimigos tabelaJogador
+    let inimigosDerrotadosBot = contabilizarInimigos tabelaBot
 
     putStr ("Inimigos: " ++ show inimigosDerrotadosJogador ++ "/6")
     putStr ("                                                       ")
@@ -43,10 +42,8 @@ mainScreen jogoAtual = do
 
     putStrLn ""
 
-
-    -- Criar uma função para contabilizar os derrotados em Tabuleiro.hs
-    let espacosAmigosAtingidosJogador = 1
-    let espacosAmigosAtingidosBot = 1
+    let espacosAmigosAtingidosJogador = contabilizarAmigos tabelaJogador
+    let espacosAmigosAtingidosBot = contabilizarAmigos tabelaBot
 
     putStr ("Espaços Amigos: " ++ show espacosAmigosAtingidosJogador ++ "/3")
     putStr ("                                                 ")
