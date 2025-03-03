@@ -3,21 +3,15 @@ module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
 import qualified UI.UtilsUI as Utils
 
 import Modelos.Jogo
-
 import Modelos.Jogador
 import Modelos.Bot
 import Modelos.Mercado
 import Modelos.Tabuleiro
 
-
-{- Falta trocar os dummies  por valores reais passados como argumento -}
-
 -- Tela Principal da HUD 
--- Recebe o estado atual do jogo (Jogo)
 
 mainScreen :: Jogo -> IO()
 mainScreen jogoAtual = do
-    -- Extraindo Jogador e Bot do estado de Jogo
     let jogadorAtual = getJogador jogoAtual
     let botAtual = getBot jogoAtual
 
@@ -33,14 +27,14 @@ mainScreen jogoAtual = do
     putStrLn ""
     putStrLn ""
 
-    imprimiTabelas tabelaJogador tabelaBot 0
+    -- Imprimir as duas tabelas (Jogador e do Bot)
+    imprimiTabelas tabelaJogador tabelaBot
 
     putStrLn ""
     putStrLn ""
 
-    -- Criar uma função para contabilizar os derrotados em Tabuleiro.hs
-    let inimigosDerrotadosJogador = 1
-    let inimigosDerrotadosBot = 1
+    let inimigosDerrotadosJogador = contabilizarInimigos tabelaJogador
+    let inimigosDerrotadosBot = contabilizarInimigos tabelaBot
 
     putStr ("Inimigos: " ++ show inimigosDerrotadosJogador ++ "/6")
     putStr ("                                                       ")
@@ -48,10 +42,8 @@ mainScreen jogoAtual = do
 
     putStrLn ""
 
-
-    -- Criar uma função para contabilizar os derrotados em Tabuleiro.hs
-    let espacosAmigosAtingidosJogador = 1
-    let espacosAmigosAtingidosBot = 1
+    let espacosAmigosAtingidosJogador = contabilizarAmigos tabelaJogador
+    let espacosAmigosAtingidosBot = contabilizarAmigos tabelaBot
 
     putStr ("Espaços Amigos: " ++ show espacosAmigosAtingidosJogador ++ "/3")
     putStr ("                                                 ")
@@ -61,6 +53,7 @@ mainScreen jogoAtual = do
     putStrLn ""
     putStrLn ""
 
+    -- Imprimir o inventário do Jogador
     mostraInventario jogadorAtual
     
     putStrLn ""
@@ -80,15 +73,16 @@ mainScreen jogoAtual = do
 
     putStr "> Digite a opção: "
 
+
 -- Tela Salvar Jogo
 
--- Deve receber o estado Jogo, para guardar
 saveJogoScreen :: IO ()
 saveJogoScreen = do
     putStrLn "Escolha um slot para salvar:"
     putStrLn ""
     estados <- Utils.saveStates
     putStr estados
+
 
 -- Tela Mercado 
 
@@ -148,36 +142,21 @@ mostraInventario jogadorAtual = do
 
     putStrLn ("Moedas: " ++ show moedasJogador)
 
+imprimiTabelas :: Tabela -> Tabela -> IO() 
+imprimiTabelas tabJog tabBot = 
+    let tabJogStr = geraTabelaStr tabJog
+        tabBotStr = geraTabelaStr tabBot
+    in imprimirLinhas tabJogStr tabBotStr 0
 
+imprimirLinhas :: [[String]] -> [[String]] -> Int -> IO()
+imprimirLinhas tabJogStr tabBotStr x = do
+    let linhaJog = formatarLinhas (tabJogStr !! x) x
+    let linhaBot = formatarLinhas (tabBotStr !! x) x
+    putStrLn (linhaJog ++ "                             " ++ linhaBot)
+    if x < 12 then imprimirLinhas tabJogStr tabBotStr (x + 1)
+    else return ()
 
-
-
-
-
-
--- Refatorar (criar pequenas funções)
--- Evitar o uso de gerar a tabela em string para toda chamada recursiva
-imprimiTabelas :: Tabela -> Tabela -> Int -> IO() 
-imprimiTabelas tabJog tabBot x = if x >= 12
-    then do
-        let tabJogStr = geraTabelaStr tabJog
-        let linhaTabelaJog = unwords (tabJogStr !! x)
-        let tabBotStr = geraTabelaStr tabBot
-        let linhaTabelaBot = unwords (tabBotStr !! x)
-        putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
-    else do
-        if x < 10 
-            then do
-                let tabJogStr = geraTabelaStr tabJog
-                let linhaTabelaJog = " " ++ unwords (tabJogStr !! x)
-                let tabBotStr = geraTabelaStr tabBot
-                let linhaTabelaBot = " " ++ unwords (tabBotStr !! x)
-                putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
-                imprimiTabelas tabJog tabBot (x + 1)
-            else do
-                let tabJogStr = geraTabelaStr tabJog
-                let linhaTabelaJog = unwords (tabJogStr !! x)
-                let tabBotStr = geraTabelaStr tabBot
-                let linhaTabelaBot = unwords (tabBotStr !! x)
-                putStrLn (linhaTabelaJog ++ "                             " ++ linhaTabelaBot)
-                imprimiTabelas tabJog tabBot (x + 1)
+formatarLinhas :: [String] -> Int -> String
+formatarLinhas linha x
+    | x < 10    = " " ++ unwords linha
+    | otherwise = unwords linha

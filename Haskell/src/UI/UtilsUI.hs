@@ -1,6 +1,10 @@
 module UI.UtilsUI where
 
+import Modelos.Jogo (carregarSave, Jogo(..)) 
+import Modelos.Jogador(getNome, Jogador(..))
+
 import System.Directory (doesDirectoryExist, listDirectory)
+
 import Data.List (sort, find)
 import Modelos.Jogo (carregarSave, Jogo(..)) 
 import Modelos.Jogador(getNome, Jogador(..))

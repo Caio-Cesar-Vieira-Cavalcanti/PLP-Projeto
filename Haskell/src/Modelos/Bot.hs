@@ -15,8 +15,8 @@ m = 5; -- Quantas jogadas para uma bomba média
 n = 10; -- Quantas jogadas para uma bomba grande
 
 class BotClass b where
-  getTabelaBot :: Bot -> Tabela 
-  getJogada :: Bot -> IO [(Int, Int)]
+  getTabelaBot :: b -> Tabela 
+  --getJogada :: Bot -> IO [(Int, Int)]
 
 
 data Bot = Bot
@@ -31,7 +31,7 @@ data Bot = Bot
 
 instance BotClass Bot where
   getTabelaBot = tabela
-  getJogada bot = do
+  {-getJogada bot = do
       let tabelaAtual = getTabelaBot bot
           jogadas = jogadasFeitas bot
           coordenadasNaoAcertadas = [(x, y) | y <- [0..11], x <- [0..11], not (getAcertou ((tabelaAtual !! y) !! x))]
@@ -61,6 +61,6 @@ bombaGrande (x, y) = filter indiceValido [(i, j) | i <- [(x-1)..(x+1)], j <- [(y
 indiceValido :: (Int,Int) -> Bool
 indiceValido (x, y) = (x >= 0) && (x <= 11) && (y >= 0) && (y <= 11)
 
-
+-}
 instance ToJSON Bot
 instance FromJSON Bot

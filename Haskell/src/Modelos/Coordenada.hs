@@ -26,7 +26,7 @@ instance CoordenadaClass Coordenada where
     getElemEspecial = elemEspecial
     getAcertou = acertou
 
-    setElem coordenada elem = coordenada { elemEspecial = elem }
+    setElem coordenada elemento = coordenada { elemEspecial = elemento }
     setAcertou coordenada = coordenada { acertou = True }
 
 instance ToJSON Coordenada

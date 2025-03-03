@@ -2,10 +2,11 @@ module Jogo.MenuControlador (iniciarMenu) where
 
 import qualified UI.Menu as Menu
 import qualified UI.UtilsUI as UtilsUI
+import qualified UI.HUD as HUD
+ 
 import Modelos.Jogo
-import UI.HUD
-import UI.UtilsUI
 import Modelos.Mercado (comprarItem)
+
 import System.Console.ANSI (clearScreen)
 import Modelos.Tabuleiro as Tabuleiro
 import Modelos.Jogador as Jogador
@@ -24,13 +25,11 @@ iniciarMenu = do
 
 processarOpcao :: String -> IO ()
 processarOpcao "1" = do
-  -- Executar a lógica de inicialização do jogo
   clearScreen
   Menu.novoJogo
   nomeJogador <- getLine
   iniciarJogo nomeJogador
 processarOpcao "2" = do
-  -- Executar a lógica de carregamento do jogo, num determinado estado
   clearScreen
   Menu.carregarJogo
   slot <- getLine
@@ -87,6 +86,7 @@ processarSubOpcao = do
             putStr UtilsUI.voltarMenu
             processarSubOpcao
 
+
 iniciarJogo :: String -> IO ()
 iniciarJogo nomeJogador = do
     jogo <- inicializarJogo nomeJogador  
@@ -108,9 +108,13 @@ carregarJogo numero = do
 loopJogo :: Jogo -> IO ()
 loopJogo jogo = do
     clearScreen
-    mainScreen jogo
+    HUD.mainScreen jogo
     opcao <- getLine
     processarOpcaoLoop opcao jogo
+    -- Bot joga
+    -- loop
+
+
 
 processarOpcaoLoop :: String -> Jogo -> IO ()
 processarOpcaoLoop "1" jogo = 
@@ -165,7 +169,7 @@ processarOpcaoLoop "4" jogo = do
   loopJogo jogo
 processarOpcaoLoop "m" jogo = do
   clearScreen
-  UI.HUD.mercadoScreen jogo
+  HUD.mercadoScreen jogo
   item <- getLine
   let jogador = getJogador jogo
   let mercado = getMercado jogo
@@ -175,7 +179,7 @@ processarOpcaoLoop "m" jogo = do
   loopJogo novoJogo
 processarOpcaoLoop "s" jogo = do
   clearScreen
-  UI.HUD.saveJogoScreen
+  HUD.saveJogoScreen
   slot <- getLine
   let caminho = "src/BD/save" ++ slot ++ ".json"
   if slot `elem` ["1", "2", "3"]
@@ -185,13 +189,13 @@ processarOpcaoLoop "s" jogo = do
       confirmacaoSalvamento caminho jogo slot
     else do
       clearScreen
-      putStrLn UI.UtilsUI.opcaoInvalida
+      putStrLn UtilsUI.opcaoInvalida
       loopJogo jogo
 processarOpcaoLoop "q" _ = do
   clearScreen
   iniciarMenu  
 processarOpcaoLoop _ jogo = do
-  putStrLn UI.UtilsUI.opcaoInvalida
+  putStrLn UtilsUI.opcaoInvalida
   opcao <- getLine
   processarOpcaoLoop opcao jogo
 
@@ -219,7 +223,7 @@ inputColuna = do
   if coluna `elem` ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
     then return coluna
     else do
-      putStr opcaoInvalida
+      putStr UtilsUI.opcaoInvalida
       inputColuna
 
 inputLinha :: IO Int
@@ -228,9 +232,8 @@ inputLinha = do
   if linha >= 1 && linha <= 12
     then return linha
     else do 
-      putStr opcaoInvalida
+      putStr UtilsUI.opcaoInvalida
       inputLinha
 
 checaSeGastouTodasBombas :: Jogo -> Bool 
 checaSeGastouTodasBombas jogo = bombasPequenas (jogador jogo) == 0 && bombasMedias (jogador jogo) == 0 && bombasGrandes (jogador jogo) == 0
-

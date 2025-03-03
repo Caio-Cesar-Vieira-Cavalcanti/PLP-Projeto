@@ -88,7 +88,7 @@ iniciarJogador nomeJogador tabelaJogador = Jogador nomeJogador 0 tabelaJogador 3
 
 -- Revisar as quantidades de cada bomba
 iniciarBot :: Tabela -> Bot
-iniciarBot tabelaBot = Bot tabelaBot 30 3 1
+iniciarBot tabelaBot = Bot tabelaBot 30 3 1 0
 
 iniciarMercado :: Mercado
 iniciarMercado = Mercado 250 400 350
