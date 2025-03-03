@@ -1,7 +1,7 @@
 module UI.UtilsUI where
 
 import System.Directory (doesDirectoryExist, listDirectory)
-import Data.List (sort)
+import Data.List (sort, find)
 import Modelos.Jogo (carregarSave, Jogo(..)) 
 import Modelos.Jogador(getNome, Jogador(..))
 import Data.Time.Format (defaultTimeLocale, formatTime)
@@ -19,6 +19,7 @@ confirmacao = "> Tem certeza? [S/N]: "
 voltarMenu :: String
 voltarMenu = "> Digite 'v' para voltar ao menu: "
 
+-- Salva os estados do Jogo
 saveStates :: IO String
 saveStates = do
     let pastaBD = "src/BD"
@@ -27,13 +28,12 @@ saveStates = do
         then return $ unlines (defaultSlots ++ ["", "> Digite 'v' para voltar: "])
         else do
             arquivos <- listDirectory pastaBD
-            let arquivosOrdenados = take 3 $ sort arquivos  
+            let arquivosOrdenados = sort arquivos
             saveSlots <- mapM formatarSave arquivosOrdenados
-            let slotsCompletos = completarSlots saveSlots
-            return $ unlines (slotsCompletos ++ ["", "> Digite o slot ou 'v' para voltar: "])
+            let slotsFinal = corrigirOrdemSlots saveSlots
+            return $ unlines (slotsFinal ++ ["", "> Digite o slot ou 'v' para voltar: "])
 
--- Funções auxiliares para a construção da exibição dos slots de salvamento
-
+-- Lista padrão de slots vazios
 defaultSlots :: [String]
 defaultSlots =
     [ "[1]. Slot 1 - Vazio"
@@ -41,19 +41,21 @@ defaultSlots =
     , "[3]. Slot 3 - Vazio"
     ]
 
-formatarSave :: FilePath -> IO String
+formatarSave :: FilePath -> IO (Int, String)
 formatarSave arquivo = do
     jogoSalvo <- carregarSave $ "src/BD/" ++ arquivo
-    let slotNum = filter isDigit arquivo  
+    let slotNumStr = filter isDigit arquivo
+    let slotNum = if null slotNumStr then 0 else read slotNumStr :: Int 
     case jogoSalvo of
         Just jogo -> do
             let nomeJogador = getNome (jogador jogo)
             let dataJogoFormatada = formatTime defaultTimeLocale "%d/%m/%Y %H:%M" (dataJogo jogo)
-            return $ "[" ++ slotNum ++ "]. " ++ nomeJogador ++ " - Jogo salvo em " ++ dataJogoFormatada
-        Nothing -> return $ "[" ++ slotNum ++ "]. Slot " ++ slotNum ++ " - Vazio"
+            return (slotNum, "[" ++ show slotNum ++ "]. " ++ nomeJogador ++ " - Jogo salvo em " ++ dataJogoFormatada)
+        Nothing -> return (slotNum, "[" ++ show slotNum ++ "]. Slot " ++ show slotNum ++ " - Vazio")
 
-completarSlots :: [String] -> [String]
-completarSlots saves = 
-    let preenchidos = length saves
-        faltantes = drop preenchidos defaultSlots
-    in saves ++ faltantes
+-- Corrige a ordem dos slots e preenche os vazios corretamente
+corrigirOrdemSlots :: [(Int, String)] -> [String]
+corrigirOrdemSlots saves =
+    [ findOrDefault 1, findOrDefault 2, findOrDefault 3 ]
+  where
+    findOrDefault n = maybe (defaultSlots !! (n - 1)) snd (find ((== n) . fst) saves)
