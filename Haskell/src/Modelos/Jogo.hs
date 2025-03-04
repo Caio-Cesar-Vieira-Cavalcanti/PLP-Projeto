@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Modelos.Jogo (Jogo (..), JogoClass (..), inicializarJogo, carregarSave, salvarJogo, setJogador) where
+module Modelos.Jogo (Jogo (..), JogoClass (..), inicializarJogo, carregarSave, salvarJogo, setJogador, setBot) where
 
 import Modelos.Jogador
 import Modelos.Mercado
@@ -46,6 +46,9 @@ instance FromJSON Jogo
 
 setJogador :: Jogador -> Jogo -> Jogo
 setJogador novoJogador jogo = jogo { jogador = novoJogador }
+
+setBot :: Bot -> Jogo -> Jogo
+setBot novoBot jogo = jogo { bot = novoBot }
 
 -- Função para salvar e carregar o jogo com um JSON
 -- O FilePath tem o formato "src/BD/save{numero}.json"

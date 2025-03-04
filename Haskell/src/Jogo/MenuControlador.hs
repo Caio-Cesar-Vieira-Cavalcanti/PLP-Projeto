@@ -111,7 +111,6 @@ loopJogo jogo = do
       else do
         opcao <- getLine
         processarOpcaoLoop opcao jogo
-    -- Bot joga (to-do do bot)
     --- Verifica se o bot ganhou ou perdeu
     -- loopJogo - Passando o novo estado de jogo
 
@@ -125,11 +124,12 @@ processarOpcaoLoop "1" jogo = do
                 atirouNaCoordenada (tabela (jogador jogo)) 
                     (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
                     (linha - 1)
+        r <- randomRIO(0,143)
         let jogoAtualizado = jogo { jogador = (jogador jogo) 
             { tabela = novaTabelaJog
             , bombasPequenas = bombasPequenas (jogador jogo) - 1  
             , moedas = getMoedas (jogador jogo) + novasMoedas  
-            } 
+            }, bot = (jogar (bot jogo) r)
         }
         loopJogo jogoAtualizado
 processarOpcaoLoop "2" jogo = do
@@ -141,11 +141,12 @@ processarOpcaoLoop "2" jogo = do
                 tiroBombaMedia (tabela (jogador jogo)) 
                     (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
                     (linha - 1)
+        r <- randomRIO(0,143)
         let jogoAtualizado = jogo { jogador = (jogador jogo) 
             { tabela = novaTabelaJog
             , bombasMedias = bombasMedias (jogador jogo) - 1  
             , moedas = getMoedas (jogador jogo) + novasMoedas  
-            } 
+            }, bot = (jogar (bot jogo) r)
         }
         loopJogo jogoAtualizado
 processarOpcaoLoop "3" jogo = do
@@ -157,11 +158,12 @@ processarOpcaoLoop "3" jogo = do
                 tiroBombaGrande (tabela (jogador jogo)) 
                     (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
                     (linha - 1)
+        r <- randomRIO(0,143)
         let jogoAtualizado = jogo { jogador = (jogador jogo) 
             { tabela = novaTabelaJog
             , bombasGrandes = bombasGrandes (jogador jogo) - 1  
             , moedas = getMoedas (jogador jogo) + novasMoedas  
-            }
+            }, bot = (jogar (bot jogo) r)
         }
         loopJogo jogoAtualizado
 processarOpcaoLoop "4" jogo = do
