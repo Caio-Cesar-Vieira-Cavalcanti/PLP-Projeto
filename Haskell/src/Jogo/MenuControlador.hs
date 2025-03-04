@@ -120,59 +120,82 @@ loopJogo jogo = do
 
 processarOpcaoLoop :: String -> Jogo -> IO ()
 processarOpcaoLoop "1" jogo = do
-    if getBombasPequenas (getJogador jogo) <= 0
-    then loopJogo jogo
-    else do
-        (coluna, linha) <- inputCoordenada
-        let (novaTabelaJog, novasMoedas) = 
-                atirouNaCoordenada (tabela (jogador jogo)) 
-                    (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
-                    (linha - 1)
-        r <- randomRIO(0,143)
-        let jogoAtualizado = jogo { jogador = (jogador jogo) 
-            { tabela = novaTabelaJog
-            , bombasPequenas = bombasPequenas (jogador jogo) - 1  
-            , moedas = getMoedas (jogador jogo) + novasMoedas  
-            }, bot = (jogar (bot jogo) r)
-        }
-        loopJogo jogoAtualizado
+    let tabelaPosDrone = desfazVisualizacaoDrone (tabela (jogador jogo))
+    if tabelaPosDrone /= tabela (jogador jogo)
+      then 
+        processarOpcaoLoop "1" (jogo { jogador = (jogador jogo) { tabela = tabelaPosDrone } })
+      else
+        if getBombasPequenas (getJogador jogo) <= 0
+          then 
+            loopJogo jogo
+          else do
+              (coluna, linha) <- inputCoordenada
+              let (novaTabelaJog, novasMoedas) = 
+                      atirouNaCoordenada (tabela (jogador jogo)) 
+                          (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
+                          (linha - 1)
+              r <- randomRIO(0,143)
+              let jogoAtualizado = jogo { jogador = (jogador jogo) 
+                  { tabela = novaTabelaJog
+                  , bombasPequenas = bombasPequenas (jogador jogo) - 1  
+                  , moedas = getMoedas (jogador jogo) + novasMoedas  
+                  }, bot = (jogar (bot jogo) r)
+              }
+              loopJogo jogoAtualizado
 processarOpcaoLoop "2" jogo = do
-    if getBombasMedias (getJogador jogo) <= 0
-    then loopJogo jogo
-    else do
-        (coluna, linha) <- inputCoordenada
-        let (novaTabelaJog, novasMoedas) = 
-                tiroBombaMedia (tabela (jogador jogo)) 
-                    (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
-                    (linha - 1)
-        r <- randomRIO(0,143)
-        let jogoAtualizado = jogo { jogador = (jogador jogo) 
-            { tabela = novaTabelaJog
-            , bombasMedias = bombasMedias (jogador jogo) - 1  
-            , moedas = getMoedas (jogador jogo) + novasMoedas  
-            }, bot = (jogar (bot jogo) r)
-        }
-        loopJogo jogoAtualizado
+  let tabelaPosDrone = desfazVisualizacaoDrone (tabela (jogador jogo))
+  if tabelaPosDrone /= tabela (jogador jogo)
+    then 
+      processarOpcaoLoop "2" (jogo { jogador = (jogador jogo) { tabela = tabelaPosDrone } })
+    else
+      if getBombasMedias (getJogador jogo) <= 0
+        then 
+          loopJogo jogo
+        else do
+            (coluna, linha) <- inputCoordenada
+            let (novaTabelaJog, novasMoedas) = 
+                    tiroBombaMedia (tabela (jogador jogo)) 
+                        (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
+                        (linha - 1)
+            r <- randomRIO(0,143)
+            let jogoAtualizado = jogo { jogador = (jogador jogo) 
+                { tabela = novaTabelaJog
+                , bombasMedias = bombasMedias (jogador jogo) - 1  
+                , moedas = getMoedas (jogador jogo) + novasMoedas  
+                }, bot = (jogar (bot jogo) r)
+            }
+            loopJogo jogoAtualizado
 processarOpcaoLoop "3" jogo = do
-    if getBombasGrandes (getJogador jogo) <= 0
-    then loopJogo jogo
-    else do
-        (coluna, linha) <- inputCoordenada
-        let (novaTabelaJog, novasMoedas) = 
-                tiroBombaGrande (tabela (jogador jogo)) 
-                    (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
-                    (linha - 1)
-        r <- randomRIO(0,143)
-        let jogoAtualizado = jogo { jogador = (jogador jogo) 
-            { tabela = novaTabelaJog
-            , bombasGrandes = bombasGrandes (jogador jogo) - 1  
-            , moedas = getMoedas (jogador jogo) + novasMoedas  
-            }, bot = (jogar (bot jogo) r)
-        }
-        loopJogo jogoAtualizado
+    let tabelaPosDrone = desfazVisualizacaoDrone (tabela (jogador jogo))
+    if tabelaPosDrone /= tabela (jogador jogo)
+      then 
+        processarOpcaoLoop "3" (jogo { jogador = (jogador jogo) { tabela = tabelaPosDrone } })
+      else
+        if getBombasGrandes (getJogador jogo) <= 0
+          then 
+            loopJogo jogo
+          else do
+              (coluna, linha) <- inputCoordenada
+              let (novaTabelaJog, novasMoedas) = 
+                      tiroBombaGrande (tabela (jogador jogo)) 
+                          (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
+                          (linha - 1)
+              r <- randomRIO(0,143)
+              let jogoAtualizado = jogo { jogador = (jogador jogo) 
+                  { tabela = novaTabelaJog
+                  , bombasGrandes = bombasGrandes (jogador jogo) - 1  
+                  , moedas = getMoedas (jogador jogo) + novasMoedas  
+                  }, bot = (jogar (bot jogo) r)
+              }
+              loopJogo jogoAtualizado
 processarOpcaoLoop "4" jogo = do
-  -- To Do DRONE VISUALIZADOR
-  loopJogo jogo
+  (coluna, linha) <- inputCoordenada
+  let novaTabelaJog = 
+        drone (tabela (jogador jogo)) 
+          (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
+          (linha - 1)
+  loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, droneVisualizador = droneVisualizador (jogador jogo) - 1 } }
+
 processarOpcaoLoop "m" jogo = do
   clearScreen
   HUD.mercadoScreen jogo
