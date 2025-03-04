@@ -87,7 +87,7 @@ inicializarJogo nomeJogador = do
 -- Funções auxiliares de inicialização
 
 iniciarJogador :: String -> Tabela -> Jogador
-iniciarJogador nomeJogador tabelaJogador = Jogador nomeJogador 0 tabelaJogador 55 2 1 1
+iniciarJogador nomeJogador tabelaJogador = Jogador nomeJogador 0 tabelaJogador 55 2 1 0
 
 iniciarBot :: Tabela -> Bot
 iniciarBot tabelaBot = getDefaultBot tabelaBot
