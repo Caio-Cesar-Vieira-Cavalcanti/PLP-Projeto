@@ -111,7 +111,7 @@ loopJogo jogo = do
       else do
         opcao <- getLine
         processarOpcaoLoop opcao jogo
-    -- Bot joga (to-do do bot)
+    -- Bot joga (to-do do bot)  
     --- Verifica se o bot ganhou ou perdeu
     -- loopJogo - Passando o novo estado de jogo
 
