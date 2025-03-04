@@ -1,5 +1,5 @@
 module Modelos.Tabuleiro (Tabela, geraTabela, geraTabelaStr, contabilizarInimigos, contabilizarAmigos,
-                            atirouNaCoordenada, tiroBombaMedia, tiroBombaGrande) where
+                            atirouNaCoordenada, tiroBombaMedia, tiroBombaGrande, drone, desfazVisualizacaoDrone) where
 
 import Modelos.Coordenada
 
@@ -52,8 +52,7 @@ atirouNaCoordenada tabela c l =
     if c >= 0 && c <= 11 && l >= 0 && l <= 11
         then if checaSeAcertouMina (tabela !! l !! c)
             then do
-                let elemento = getElemEspecial (tabela !! l !! c)
-                    tabelaAtualizada = [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
+                let tabelaAtualizada = [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
                 atirouNaMina tabelaAtualizada c l
             else
                 let elemento = getElemEspecial (tabela !! l !! c)
@@ -178,3 +177,31 @@ atirouNaMina tabela c l =
 
 checaSeAcertouMina :: Coordenada -> Bool
 checaSeAcertouMina coord = elemEspecial coord == '#'
+
+drone :: Tabela -> Int -> Int -> Tabela
+drone tabela c l = do
+    let tabela1 = visualizacaoDrone tabela c l
+        tabela2 = visualizacaoDrone tabela1 (c - 1) l
+        tabela3 = visualizacaoDrone tabela2 (c + 1) l
+        tabela4 = visualizacaoDrone tabela3 c (l - 1)
+        tabela5 = visualizacaoDrone tabela4 c (l + 1)
+        tabela6 = visualizacaoDrone tabela5 (c - 1) (l - 1)
+        tabela7 = visualizacaoDrone tabela6 (c - 1) (l + 1)
+        tabela8 = visualizacaoDrone tabela7 (c + 1) (l - 1)
+    visualizacaoDrone tabela8 (c + 1) (l + 1)
+
+visualizacaoDrone :: Tabela -> Int -> Int -> Tabela
+visualizacaoDrone tabela c l =
+    if c >= 0 && c <= 11 && l >= 0 && l <= 11
+        then
+            [[if i == l && j == c then mascaraViraInterrogacao x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
+        else tabela
+
+mascaraViraInterrogacao :: Coordenada -> Coordenada
+mascaraViraInterrogacao coord = 
+    if (elemEspecial coord) /= '-'
+        then coord { mascara = '?' }
+        else coord { mascara = '-' }
+
+desfazVisualizacaoDrone :: Tabela -> Tabela
+desfazVisualizacaoDrone tabela = [[if mascara c /= 'X' then c { mascara = 'X' } else c | c <- linha] | linha <- tabela]
