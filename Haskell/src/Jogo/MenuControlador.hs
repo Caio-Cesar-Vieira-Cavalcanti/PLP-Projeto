@@ -105,13 +105,15 @@ loopJogo :: Jogo -> IO ()
 loopJogo jogo = do
     clearScreen
     HUD.mainScreen jogo
-    opcao <- getLine
-    processarOpcaoLoop opcao jogo
-    -- Verifica se o jogador ganhou ou perdeu
+    gameOver <- verificaVitoriaDerrotaPlayer jogo
+    if gameOver
+      then return ()
+      else do
+        opcao <- getLine
+        processarOpcaoLoop opcao jogo
     -- Bot joga (to-do do bot)
     --- Verifica se o bot ganhou ou perdeu
     -- loopJogo - Passando o novo estado de jogo
-
 
 processarOpcaoLoop :: String -> Jogo -> IO ()
 processarOpcaoLoop "1" jogo = do
@@ -123,12 +125,13 @@ processarOpcaoLoop "1" jogo = do
                 atirouNaCoordenada (tabela (jogador jogo)) 
                     (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
                     (linha - 1)
-        loopJogo jogo { jogador = (jogador jogo) 
+        let jogoAtualizado = jogo { jogador = (jogador jogo) 
             { tabela = novaTabelaJog
             , bombasPequenas = bombasPequenas (jogador jogo) - 1  
             , moedas = getMoedas (jogador jogo) + novasMoedas  
             } 
         }
+        loopJogo jogoAtualizado
 processarOpcaoLoop "2" jogo = do
     if getBombasMedias (getJogador jogo) <= 0
     then loopJogo jogo
@@ -138,12 +141,13 @@ processarOpcaoLoop "2" jogo = do
                 tiroBombaMedia (tabela (jogador jogo)) 
                     (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
                     (linha - 1)
-        loopJogo jogo { jogador = (jogador jogo) 
+        let jogoAtualizado = jogo { jogador = (jogador jogo) 
             { tabela = novaTabelaJog
             , bombasMedias = bombasMedias (jogador jogo) - 1  
             , moedas = getMoedas (jogador jogo) + novasMoedas  
             } 
         }
+        loopJogo jogoAtualizado
 processarOpcaoLoop "3" jogo = do
     if getBombasGrandes (getJogador jogo) <= 0
     then loopJogo jogo
@@ -153,12 +157,13 @@ processarOpcaoLoop "3" jogo = do
                 tiroBombaGrande (tabela (jogador jogo)) 
                     (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
                     (linha - 1)
-        loopJogo jogo { jogador = (jogador jogo) 
+        let jogoAtualizado = jogo { jogador = (jogador jogo) 
             { tabela = novaTabelaJog
             , bombasGrandes = bombasGrandes (jogador jogo) - 1  
             , moedas = getMoedas (jogador jogo) + novasMoedas  
-            } 
+            }
         }
+        loopJogo jogoAtualizado
 processarOpcaoLoop "4" jogo = do
   -- To Do DRONE VISUALIZADOR
   loopJogo jogo
@@ -242,6 +247,38 @@ validarCoordenada :: String -> Bool
 validarCoordenada (c:ls) =
     c `elem` ['A'..'L'] && all isDigit ls && let l = read ls in l `elem` [1..12]
 validarCoordenada _ = False  
+
+verificaVitoriaDerrotaPlayer :: Jogo -> IO Bool
+verificaVitoriaDerrotaPlayer jogo = do
+  if checaSePlayerMatouTodosAmigos jogo
+    then do
+      clearScreen
+      VitoriaDerrota.loseScreen "Você atingiu todos os espaços amigos."
+      return True  
+  else if checaSePlayerMatouTodosInimigos jogo
+    then do
+      let nomeJogador = getNome (getJogador jogo)
+      clearScreen
+      VitoriaDerrota.winScreen nomeJogador
+      return True  
+  else if checaSeGastouTodasBombas jogo
+    then do
+      clearScreen
+      VitoriaDerrota.loseScreen "Falta de Recursos - Você não tem bombas."
+      return True  
+  else return False  
+
+checaSePlayerMatouTodosAmigos :: Jogo -> Bool
+checaSePlayerMatouTodosAmigos jogo = contabilizarAmigos tabelaJogador == 3
+  where
+    jogador = getJogador jogo
+    tabelaJogador = tabela (jogador)  
+
+checaSePlayerMatouTodosInimigos :: Jogo -> Bool
+checaSePlayerMatouTodosInimigos jogo = contabilizarInimigos tabelaJogador == 6
+  where
+    jogador = getJogador jogo
+    tabelaJogador = tabela (jogador)  
 
 checaSeGastouTodasBombas :: Jogo -> Bool 
 checaSeGastouTodasBombas jogo = getBombasPequenas (jogador) == 0 && getBombasMedias (jogador) == 0 && getBombasGrandes (jogador) == 0 
