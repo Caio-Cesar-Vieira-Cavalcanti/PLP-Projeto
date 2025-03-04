@@ -2,6 +2,8 @@ module UI.TelasVitoriaDerrota (winScreen,loseScreen) where
 
 import qualified UI.UtilsUI as UtilsUI 
 
+-- Tela de Vitória e Derrota
+
 winScreen :: String -> IO ()
 winScreen nomeJogador = do
     putStr $ init $ unlines 
@@ -9,7 +11,7 @@ winScreen nomeJogador = do
         , "                                                            "
         , "   Parabéns " ++ nomeJogador ++ ", Você venceu a Guerra dos Paradigmas!   "
         , "                                                            "
-        , "       HaskellLand agradece seu heroísmo!                   "
+        , "               HaskellLand agradece seu heroísmo!           "
         , "                                                            "
         , ""
         , ""

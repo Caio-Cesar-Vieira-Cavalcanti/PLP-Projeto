@@ -16,7 +16,7 @@ class BotClass b where
 
 data Bot = Bot
   {
-    getTabela :: Tabela,
+    tabelaBot :: Tabela,
     m, n :: Int, -- Quantas jogadas para bombas média e grande
     jogadasFeitas :: Int
   }
@@ -24,11 +24,11 @@ data Bot = Bot
 
 instance BotClass Bot where
   getDefaultBot t = Bot t 5 10 0 -- m = 5, n = 10, jogadasFeitas = 0
-  getTabelaBot = getTabela
-  jogar bot r = bot { getTabela = novaTabela, jogadasFeitas = jogadasFeitas bot + 1 }
+  getTabelaBot = tabelaBot
+  jogar bot r = bot { tabelaBot = novaTabela, jogadasFeitas = jogadasFeitas bot + 1 }
     where
       jogadas = getJogada bot r
-      novaTabela = foldl (\t (x,y) -> fst (atirouNaCoordenada t x y)) (getTabela bot) jogadas
+      novaTabela = foldl (\t (x,y) -> fst (atirouNaCoordenada t x y)) (tabelaBot bot) jogadas
 
   getJogada bot i =
     let tabelaAtual = getTabelaBot bot
@@ -43,11 +43,11 @@ instance BotClass Bot where
                     then bombaMedia jogadaAleatoria
                     else [jogadaAleatoria]
 
--- Função privada para aplicar bomba no padrão "+"
+-- Função para aplicar bomba no padrão "+"
 bombaMedia :: (Int, Int) -> [(Int, Int)]
 bombaMedia (x, y) = filter indiceValido [ (x-1, y), (x, y), (x+1, y), (x, y-1), (x, y+1)]
 
--- Função privada para aplicar bomba no padrão "*"
+-- Função para aplicar bomba no padrão "*"
 bombaGrande :: (Int, Int) -> [(Int, Int)]
 bombaGrande (x, y) = filter indiceValido [(i, j) | i <- [(x-1)..(x+1)], j <- [(y-1)..(y+1)]]
 

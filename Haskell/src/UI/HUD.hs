@@ -59,11 +59,11 @@ mainScreen jogoAtual = do
     putStrLn ""
 
     putStrLn "Atalhos: "
-    putStrLn "'1' -> Usar bombas pequenas"
-    putStrLn "'2' -> Usar bombas médias"
-    putStrLn "'3' -> Usar bombas grandes"
+    putStrLn "'1' -> Usar bomba pequena"
+    putStrLn "'2' -> Usar bomba média"
+    putStrLn "'3' -> Usar bomba grande"
     putStrLn "'4' -> Usar o drone visualizador de áreas"
-    putStrLn "{COLUNAS}{LINHA} -> Coordenada que deseja atacar; Exemplo: C3"
+    putStrLn "{COLUNA}{LINHA} -> Coordenada que deseja atacar; Exemplo: C3"
     putStrLn ""
     putStrLn "'m' -> Acesso ao mercado"
     putStrLn "'s' -> Salvar o jogo no estado atual"
@@ -120,7 +120,7 @@ mercadoScreen jogoAtual = do
 
     putStr "> Digite o item ou 'v' para voltar: "
 
--- Funções utilitárias
+-- Funções auxiliares do HUD
 
 mostraInventario :: Jogador -> IO ()
 mostraInventario jogadorAtual = do

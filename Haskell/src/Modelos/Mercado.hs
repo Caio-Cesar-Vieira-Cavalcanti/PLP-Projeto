@@ -7,8 +7,6 @@ import Modelos.Jogador (Jogador(..), JogadorClass(..))
 import GHC.Generics (Generic)
 import Data.Aeson (ToJSON, FromJSON, encode, decode, eitherDecode)
 
--- Mercado
-
 class MercadoClass m where 
     getPrecoBM :: m -> Int
     getPrecoBG :: m -> Int

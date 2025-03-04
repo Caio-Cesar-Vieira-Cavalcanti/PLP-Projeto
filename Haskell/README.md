@@ -1,4 +1,4 @@
-# ByteFront - A guerra dos paradigmas
+# ByteFront - A Guerra dos Paradigmas
 
 ![Haskell](https://img.shields.io/badge/Haskell-5e5086?style=for-the-badge&logo=haskell&logoColor=white)
 
@@ -32,7 +32,7 @@ Para instalar as dependências e configurar o jogo, siga os seguintes passos:
 
 ## Compilando o Jogo
 
-Para compilar o jogo, execute:
+Para compilar o jogo, execute (Certifique-se que está no diretório `\Haskell`):
 
 ```bash
 cabal build

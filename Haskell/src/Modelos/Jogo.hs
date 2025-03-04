@@ -37,8 +37,6 @@ instance JogoClass Jogo where
     getMercado = mercado
     getDataJogo = dataJogo
 
--- Permite Conversão para JSON
-
 instance ToJSON Jogo
 instance FromJSON Jogo
 
@@ -68,7 +66,7 @@ carregarSave caminho = do
     conteudo <- B.readFile caminho
     return (decode conteudo)
 
--- Função de inicialização
+-- Função de inicialização do jogo
 
 inicializarJogo :: String -> IO Jogo
 inicializarJogo nomeJogador = do

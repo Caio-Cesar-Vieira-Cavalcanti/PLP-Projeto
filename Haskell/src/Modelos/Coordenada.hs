@@ -13,13 +13,11 @@ class CoordenadaClass c where
   setElem :: c -> Char -> c
   setAcertou :: c -> c
 
-
 data Coordenada = Coordenada
   { mascara :: Char
   , elemEspecial :: Char
   , acertou :: Bool
   } deriving (Show, Generic, Eq)
-
 
 instance CoordenadaClass Coordenada where
     getMascara = mascara

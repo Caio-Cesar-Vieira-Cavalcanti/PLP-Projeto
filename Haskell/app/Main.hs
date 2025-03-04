@@ -8,5 +8,3 @@ main :: IO ()
 main = do
     hSetBuffering stdout NoBuffering
     Jogo.iniciarMenu
-
-

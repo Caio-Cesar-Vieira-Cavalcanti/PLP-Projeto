@@ -16,7 +16,7 @@ verificaVitoriaDerrotaPlayer jogo = do
   if checaSePlayerMatouTodosAmigos jogo
     then do
       clearScreen
-      VitoriaDerrota.loseScreen "Você atingiu todos os espaços amigos."
+      VitoriaDerrota.loseScreen "Perda de Sanidade - Você atingiu todos os espaços amigos."
       return True  
   else if checaSePlayerMatouTodosInimigos jogo
     then do
@@ -40,6 +40,8 @@ verificaVitoriaDerrotaPlayer jogo = do
         return True
   else return False  
     where nomeJogador = getNome (getJogador jogo)
+
+-- Funções auxiliares
 
 checaSePlayerMatouTodosAmigos :: Jogo -> Bool
 checaSePlayerMatouTodosAmigos jogo = contabilizarAmigos tabelaJogador == 3

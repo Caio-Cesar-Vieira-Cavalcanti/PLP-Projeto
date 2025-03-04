@@ -3,7 +3,6 @@ module Jogo.MenuControlador (iniciarMenu) where
 import qualified UI.Menu as Menu
 import qualified UI.UtilsUI as UtilsUI
 import qualified UI.HUD as HUD
-import UI.TelasVitoriaDerrota as VitoriaDerrota
  
 import Modelos.Jogo
 import Modelos.Bot
@@ -68,7 +67,7 @@ processarOpcao _ = do
   opcao <- getLine
   processarOpcao opcao
   
--- Funções auxiliares
+-- Funções auxiliares MENU
 
 subMenu :: IO ()
 subMenu = do
@@ -88,7 +87,6 @@ processarSubOpcao = do
             putStr UtilsUI.voltarMenu
             processarSubOpcao
 
-
 -- =========================================================================JOGO================================================================================
 
 iniciarJogo :: String -> IO ()
@@ -104,7 +102,6 @@ carregarJogo numero = do
         Just jogo -> loopJogo jogo
         Nothing   -> putStrLn "Erro: Não foi possível carregar o jogo." 
 
-
 loopJogo :: Jogo -> IO ()
 loopJogo jogo = do
     clearScreen
@@ -116,7 +113,6 @@ loopJogo jogo = do
       else do
         opcao <- getLine
         processarOpcaoLoop opcao jogo
-
 
 processarOpcaoLoop :: String -> Jogo -> IO ()
 processarOpcaoLoop "1" jogo = do
@@ -142,6 +138,7 @@ processarOpcaoLoop "1" jogo = do
                   }, bot = (jogar (bot jogo) r)
               }
               loopJogo jogoAtualizado
+
 processarOpcaoLoop "2" jogo = do
   let tabelaPosDrone = desfazVisualizacaoDrone (tabela (jogador jogo))
   if tabelaPosDrone /= tabela (jogador jogo)
@@ -165,6 +162,7 @@ processarOpcaoLoop "2" jogo = do
                 }, bot = (jogar (bot jogo) r)
             }
             loopJogo jogoAtualizado
+
 processarOpcaoLoop "3" jogo = do
     let tabelaPosDrone = desfazVisualizacaoDrone (tabela (jogador jogo))
     if tabelaPosDrone /= tabela (jogador jogo)
@@ -188,13 +186,17 @@ processarOpcaoLoop "3" jogo = do
                   }, bot = (jogar (bot jogo) r)
               }
               loopJogo jogoAtualizado
+
 processarOpcaoLoop "4" jogo = do
-  (coluna, linha) <- inputCoordenada
-  let novaTabelaJog = 
-        drone (tabela (jogador jogo)) 
-          (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
-          (linha - 1)
-  loopJogo jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, droneVisualizador = droneVisualizador (jogador jogo) - 1 } }
+  if getDroneVisualizador (getJogador jogo) <= 0 then loopJogo jogo
+  else do
+    (coluna, linha) <- inputCoordenada
+    let novaTabelaJog = 
+          drone (tabela (jogador jogo)) 
+            (getIndexColuna ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"] coluna 0) 
+            (linha - 1)
+    let jogoAtualizado = jogo { jogador = (jogador jogo) { tabela = novaTabelaJog, droneVisualizador = droneVisualizador (jogador jogo) - 1 } }
+    loopJogo jogoAtualizado
 
 processarOpcaoLoop "m" jogo = do
   clearScreen
@@ -208,6 +210,7 @@ processarOpcaoLoop "m" jogo = do
       let novoJogo = setJogador novoJogador jogo  
       loopJogo novoJogo
     else processarSubOpcaoLoop jogo item
+
 processarOpcaoLoop "s" jogo = do
   clearScreen
   HUD.saveJogoScreen
@@ -227,12 +230,13 @@ processarOpcaoLoop "q" jogo = do
         putStr "> Digite a opção: "
         opcao <- getLine
         processarOpcaoLoop opcao jogo
+
 processarOpcaoLoop _ jogo = do
   putStr UtilsUI.opcaoInvalida
   opcao <- getLine
   processarOpcaoLoop opcao jogo
 
--- Funções auxiliares para a lógica do jogo e do loop
+-- Funções auxiliares JOGO
 
 processarSubOpcaoLoop :: Jogo -> String -> IO ()
 processarSubOpcaoLoop jogo opcao
@@ -241,7 +245,6 @@ processarSubOpcaoLoop jogo opcao
                 putStr UtilsUI.opcaoInvalidaVoltar
                 opcaoNovamente <- getLine
                 processarSubOpcaoLoop jogo opcaoNovamente 
-
 
 confirmacaoSalvamento :: FilePath -> Jogo -> String -> IO ()
 confirmacaoSalvamento caminho jogo slot = do
@@ -270,7 +273,6 @@ inputCoordenada = do
         else do
             putStrLn UtilsUI.opcaoInvalida
             inputCoordenada
-
 
 validarCoordenada :: String -> Bool
 validarCoordenada (c:ls) =

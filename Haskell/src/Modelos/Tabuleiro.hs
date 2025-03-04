@@ -16,14 +16,12 @@ geraTabela gen = disporEspacos gen tabelaBase
 geraTabelaStr :: Tabela -> [[String]]
 geraTabelaStr tabela = colocaLetrasNumeros [[if getAcertou c then (getElemEspecial c) : " " else (getMascara c ) : " " | c <- linha] | linha <- tabela]
 
-
 -- Funções de contagem dos espaços amigos e inimigos (Respeitando as partes nos inimigos - só contabiliza quando toda a parte/agrupamento dele for acertado por completo)
 contabilizarInimigos :: Tabela -> Int
 contabilizarInimigos tabela =
     let gruposInimigos = [('S', 2), ('M', 3), ('T', 5)]
         contarGrupo (char, tamanho) = length [1 | linha <- [0..11], coluna <- [0..11], ehGrupoValido tabela char tamanho (linha, coluna)]
     in sum (map contarGrupo gruposInimigos)
-
 
 contabilizarAmigos :: Tabela -> Int
 contabilizarAmigos tabela = 
@@ -33,8 +31,7 @@ contabilizarAmigos tabela =
     in sum (map verificarAmigo amigos)
 
 
-
--- Funções auxiliares
+-- Funções auxiliares do tabuleiro
 
 colocaLetrasNumeros :: [[String]] -> [[String]]
 colocaLetrasNumeros listaSemNumeros = ["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "] : [ (show i ++ " ") : x | (x, i) <- zip listaSemNumeros ([1..12] :: [Int])]
@@ -121,7 +118,6 @@ ehGrupoValido tabela char tamanho (linha, coluna) =
     in grupoHorizontal || grupoVertical
 
 -- Funções de dispor os espaços (inimigos e amigos) na tabela 
-
 -- Dispor todos os espaços especiais na tabela
 -- A função `fst` pega o primeiro elemento de uma tupla
 -- A função `foldl` é uma função de acumulação ou de redução, que processa os elementos da *esquerda* para a *direita*
@@ -135,8 +131,6 @@ disporEspacos gen tabela =
         elementos = [('C', 1, 1), ('E', 1, 1), ('H', 1, 1), ('$' , 2, 1),
                     ('#', 2, 1), ('S', 3, 2), ('M', 2, 3), ('T', 1, 5)]
 
-
--- Coloca elementos individuais aleatoriamente na tabela
 colocarElemento :: Char -> Int -> Tabela -> StdGen -> (Tabela, StdGen)
 colocarElemento _ 0 tabela gen = (tabela, gen)
 colocarElemento char n tabela gen =
@@ -146,8 +140,6 @@ colocarElemento char n tabela gen =
         then colocarElemento char (n - 1) (setElemEspecial tabela coluna linha char) gen2
         else colocarElemento char n tabela gen2 
 
-
--- Coloca grupos contíguos de elementos na tabela
 colocarGrupo :: Char -> Int -> Int -> Tabela -> StdGen -> (Tabela, StdGen)
 colocarGrupo char tamanho quantidade tabela gen
     | quantidade == 0 = (tabela, gen)
