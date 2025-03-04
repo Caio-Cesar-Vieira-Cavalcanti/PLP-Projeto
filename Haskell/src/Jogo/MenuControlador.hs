@@ -114,7 +114,6 @@ loopJogo jogo = do
         opcao <- getLine
         processarOpcaoLoop opcao jogo
     --- Verifica se o bot ganhou ou perdeu
-    -- loopJogo - Passando o novo estado de jogo
 
 processarOpcaoLoop :: String -> Jogo -> IO ()
 processarOpcaoLoop "1" jogo = do
@@ -252,6 +251,8 @@ validarCoordenada (c:ls) =
     c `elem` ['A'..'L'] && all isDigit ls && let l = read ls in l `elem` [1..12]
 validarCoordenada _ = False  
 
+-- Funções para checar as condições de fim do jogo
+
 verificaVitoriaDerrotaPlayer :: Jogo -> IO Bool
 verificaVitoriaDerrotaPlayer jogo = do
   if checaSePlayerMatouTodosAmigos jogo
@@ -261,7 +262,6 @@ verificaVitoriaDerrotaPlayer jogo = do
       return True  
   else if checaSePlayerMatouTodosInimigos jogo
     then do
-      let nomeJogador = getNome (getJogador jogo)
       clearScreen
       VitoriaDerrota.winScreen nomeJogador
       return True  
@@ -269,8 +269,19 @@ verificaVitoriaDerrotaPlayer jogo = do
     then do
       clearScreen
       VitoriaDerrota.loseScreen "Falta de Recursos - Você não tem bombas."
-      return True  
+      return True 
+  else if checaSeBotMatouTodosAmigos jogo
+      then do
+        clearScreen
+        VitoriaDerrota.winScreen nomeJogador
+        return True
+  else if checaSeBotMatouTodosInimigos jogo
+      then do
+        clearScreen
+        VitoriaDerrota.loseScreen "O Imperador de Prologia derrotou o seu exército."
+        return True
   else return False  
+    where nomeJogador = getNome (getJogador jogo)
 
 checaSePlayerMatouTodosAmigos :: Jogo -> Bool
 checaSePlayerMatouTodosAmigos jogo = contabilizarAmigos tabelaJogador == 3
@@ -287,3 +298,15 @@ checaSePlayerMatouTodosInimigos jogo = contabilizarInimigos tabelaJogador == 6
 checaSeGastouTodasBombas :: Jogo -> Bool 
 checaSeGastouTodasBombas jogo = getBombasPequenas (jogador) == 0 && getBombasMedias (jogador) == 0 && getBombasGrandes (jogador) == 0 
   where jogador = getJogador jogo
+
+checaSeBotMatouTodosAmigos :: Jogo -> Bool
+checaSeBotMatouTodosAmigos jogo = contabilizarAmigos tabelaBot == 3
+  where
+    bot = getBot jogo
+    tabelaBot = getTabelaBot bot
+
+checaSeBotMatouTodosInimigos :: Jogo -> Bool
+checaSeBotMatouTodosInimigos jogo = contabilizarInimigos tabelaBot == 6
+  where 
+    bot = getBot jogo
+    tabelaBot = getTabelaBot bot
