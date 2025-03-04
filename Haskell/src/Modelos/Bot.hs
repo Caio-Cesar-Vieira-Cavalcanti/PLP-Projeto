@@ -28,7 +28,7 @@ instance BotClass Bot where
   jogar bot r = bot { getTabela = novaTabela, jogadasFeitas = jogadasFeitas bot + 1 }
     where
       jogadas = getJogada bot r
-      novaTabela = foldl (\t (x,y) -> atirouNaCoordenada t x y) (getTabela bot) jogadas
+      novaTabela = foldl (\t (x,y) -> fst (atirouNaCoordenada t x y)) (getTabela bot) jogadas
 
   getJogada bot i =
     let tabelaAtual = getTabelaBot bot

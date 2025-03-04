@@ -90,7 +90,7 @@ iniciarJogador :: String -> Tabela -> Jogador
 iniciarJogador nomeJogador tabelaJogador = Jogador nomeJogador 0 tabelaJogador 30 0 0 0
 
 iniciarBot :: Tabela -> Bot
-iniciarBot tabelaBot = Bot tabelaBot 30 3 1 0
+iniciarBot tabelaBot = getDefaultBot tabelaBot
 
 iniciarMercado :: Mercado
 iniciarMercado = Mercado 250 400 350

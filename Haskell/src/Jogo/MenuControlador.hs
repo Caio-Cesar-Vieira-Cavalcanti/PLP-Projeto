@@ -6,10 +6,12 @@ import qualified UI.HUD as HUD
 import UI.TelasVitoriaDerrota as VitoriaDerrota
  
 import Modelos.Jogo
+import Modelos.Bot
 import Modelos.Mercado (comprarItem)
 import Modelos.Tabuleiro as Tabuleiro
 import Modelos.Jogador as Jogador
 
+import System.Random(randomRIO)
 import System.Console.ANSI (clearScreen)
 import Data.Char(isDigit, toUpper)
 
