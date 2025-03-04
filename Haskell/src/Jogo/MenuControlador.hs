@@ -116,7 +116,7 @@ loopJogo jogo = do
       else do
         opcao <- getLine
         processarOpcaoLoop opcao jogo
-    --- Verifica se o bot ganhou ou perdeu
+
 
 processarOpcaoLoop :: String -> Jogo -> IO ()
 processarOpcaoLoop "1" jogo = do
