@@ -6,48 +6,42 @@ import Modelos.Coordenada
 import Modelos.Tabuleiro
 
 import GHC.Generics (Generic)
-import Data.Aeson (ToJSON, FromJSON, encode, decode, eitherDecode)
-
-import System.Random (randomRIO)
-
-m, n :: Int
-m = 5; -- Quantas jogadas para uma bomba média
-n = 10; -- Quantas jogadas para uma bomba grande
+import Data.Aeson (ToJSON, FromJSON)
 
 class BotClass b where
-  getTabelaBot :: b -> Tabela 
-  --getJogada :: Bot -> IO [(Int, Int)]
-
+  getDefaultBot :: Tabela -> b
+  getTabelaBot :: b -> Tabela
+  getJogada :: b -> Int -> [(Int, Int)]
+  jogar :: b -> Int -> b
 
 data Bot = Bot
-  { 
-    tabela :: Tabela,
-    bombasPequenas :: Int,
-    bombasMedias :: Int,
-    bombasGrandes :: Int,
-    jogadasFeitas :: Int -- Contador de jogadas
+  {
+    getTabela :: Tabela,
+    m, n :: Int, -- Quantas jogadas para bombas média e grande
+    jogadasFeitas :: Int
   }
   deriving (Show, Generic)
 
 instance BotClass Bot where
-  getTabelaBot = tabela
-  {-getJogada bot = do
-      let tabelaAtual = getTabelaBot bot
-          jogadas = jogadasFeitas bot
-          coordenadasNaoAcertadas = [(x, y) | y <- [0..11], x <- [0..11], not (getAcertou ((tabelaAtual !! y) !! x))]
-      
-      if null coordenadasNaoAcertadas
-          then return [(15, 15)] -- Retorna (15, 15) se não houver coordenadas disponíveis
-          else do
-              i <- randomRIO (0, length coordenadasNaoAcertadas - 1)
-              let jogadaAleatoria = coordenadasNaoAcertadas !! i
+  getDefaultBot t = Bot t 5 10 0 -- m = 5, n = 10, jogadasFeitas = 0
+  getTabelaBot = getTabela
+  jogar bot r = bot { getTabela = novaTabela, jogadasFeitas = jogadasFeitas bot + 1 }
+    where
+      jogadas = getJogada bot r
+      novaTabela = foldl (\t (x,y) -> fst (atirouNaCoordenada t x y)) (getTabela bot) jogadas
 
-              -- Verifica a bombas especial a ser aplicada
-              if jogadas `mod` n == 0
-                  then return (bombaGrande jogadaAleatoria)
-              else if jogadas `mod` m == 0
-                  then return (bombaMedia jogadaAleatoria)
-              else return [jogadaAleatoria]
+  getJogada bot i =
+    let tabelaAtual = getTabelaBot bot
+        jogadas = jogadasFeitas bot
+        coordenadasNaoAcertadas = [(x, y) | y <- [0..11], x <- [0..11], not (getAcertou ((tabelaAtual !! y) !! x))]
+    in if null coordenadasNaoAcertadas
+        then []
+        else let jogadaAleatoria = coordenadasNaoAcertadas !! (i `mod` length coordenadasNaoAcertadas)
+             in if jogadas `mod` (n bot) == 0
+                then bombaGrande jogadaAleatoria
+                else if jogadas `mod` (m bot) == 0
+                    then bombaMedia jogadaAleatoria
+                    else [jogadaAleatoria]
 
 -- Função privada para aplicar bomba no padrão "+"
 bombaMedia :: (Int, Int) -> [(Int, Int)]
@@ -57,10 +51,8 @@ bombaMedia (x, y) = filter indiceValido [ (x-1, y), (x, y), (x+1, y), (x, y-1), 
 bombaGrande :: (Int, Int) -> [(Int, Int)]
 bombaGrande (x, y) = filter indiceValido [(i, j) | i <- [(x-1)..(x+1)], j <- [(y-1)..(y+1)]]
 
-
 indiceValido :: (Int,Int) -> Bool
 indiceValido (x, y) = (x >= 0) && (x <= 11) && (y >= 0) && (y <= 11)
 
--}
 instance ToJSON Bot
 instance FromJSON Bot

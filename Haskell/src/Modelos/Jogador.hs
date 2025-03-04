@@ -14,6 +14,7 @@ class JogadorClass j where
     
     setNome :: j -> String -> j
     setMoedas :: j -> Int -> j
+    setTabelaJogador :: j -> Tabela -> j
 
     getBombasPequenas :: j -> Int
     getBombasMedias :: j -> Int
@@ -41,6 +42,7 @@ instance JogadorClass Jogador where
     getTabelaJogador = tabela
     setNome jogador novoNome = jogador { nome = novoNome }
     setMoedas jogador novasMoedas = jogador { moedas = novasMoedas }
+    setTabelaJogador jogador novaTabela = jogador { tabela = novaTabela }
 
     getBombasPequenas = bombasPequenas
     getBombasMedias = bombasMedias

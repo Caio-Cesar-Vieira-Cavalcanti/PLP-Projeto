@@ -98,4 +98,5 @@ executable Projeto-PLP
             Modelos.Coordenada,
             Modelos.Tabuleiro,
             Modelos.Bot,
-            Jogo.MenuControlador
+            Jogo.MenuControlador,
+            Jogo.GameOver

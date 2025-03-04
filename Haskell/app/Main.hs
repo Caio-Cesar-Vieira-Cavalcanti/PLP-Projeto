@@ -1,6 +1,12 @@
 module Main where
 
+import Jogo.MenuControlador as Jogo
+
+import System.IO
+
 main :: IO ()
-main = putStrLn "Olá"
+main = do
+    hSetBuffering stdout NoBuffering
+    Jogo.iniciarMenu
 
 
