@@ -42,7 +42,7 @@ colocaLetrasNumeros listaSemNumeros = ["  ", "A ", "B ", "C ", "D ", "E ", "F ",
 -- Moedas ganhas com base no acerto
 pontuacaoElemento :: Char -> Int
 pontuacaoElemento 'S' = 25
-pontuacaoElemento 'M' = 33
+pontuacaoElemento 'M' = 34
 pontuacaoElemento 'T' = 40
 pontuacaoElemento '$' = 250
 pontuacaoElemento _ = 0  

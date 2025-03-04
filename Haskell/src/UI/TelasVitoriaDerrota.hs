@@ -4,7 +4,7 @@ import qualified UI.UtilsUI as UtilsUI
 
 winScreen :: String -> IO ()
 winScreen nomeJogador = do
-    putStr $ unlines 
+    putStr $ init $ unlines 
         [ "                                                            "
         , "                                                            "
         , "   Parabéns " ++ nomeJogador ++ ", Você venceu a Guerra dos Paradigmas!   "
@@ -18,7 +18,7 @@ winScreen nomeJogador = do
 
 loseScreen :: String -> IO ()
 loseScreen motivoDerrota = do
-    putStr $ unlines 
+    putStr $ init $ unlines 
         [ "                                                            "
         , "                                                            "
         , "                       GAME OVER!                           "
