@@ -54,8 +54,7 @@ atirouNaCoordenada tabela c l =
             then do
                 let elemento = getElemEspecial (tabela !! l !! c)
                     tabelaAtualizada = [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
-                    moedas = pontuacaoElemento elemento
-                atirouNaMina tabelaAtualizada c l moedas
+                atirouNaMina tabelaAtualizada c l
             else
                 let elemento = getElemEspecial (tabela !! l !! c)
                     tabelaAtualizada = [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
@@ -169,13 +168,13 @@ colocarGrupo char tamanho quantidade tabela gen
                     in colocarGrupo char tamanho (quantidade - 1) novaTabela gen3
             else colocarGrupo char tamanho quantidade tabela gen3
 
-atirouNaMina :: Tabela -> Int -> Int -> Int -> (Tabela, Int)
-atirouNaMina tabela c l moedas = 
+atirouNaMina :: Tabela -> Int -> Int -> (Tabela, Int)
+atirouNaMina tabela c l = 
     let (tabela2, novasMoedas2) = atirouNaCoordenada tabela (c - 1) l
         (tabela3, novasMoedas3) = atirouNaCoordenada tabela2 (c + 1) l
         (tabela4, novasMoedas4) = atirouNaCoordenada tabela3 c (l - 1)
         (tabelaFinal, novasMoedas5) = atirouNaCoordenada tabela4 c (l + 1)
-    in (tabelaFinal, moedas + novasMoedas2 + novasMoedas3 + novasMoedas4 + novasMoedas5)
+    in (tabelaFinal, novasMoedas2 + novasMoedas3 + novasMoedas4 + novasMoedas5)
 
 checaSeAcertouMina :: Coordenada -> Bool
 checaSeAcertouMina coord = elemEspecial coord == '#'
