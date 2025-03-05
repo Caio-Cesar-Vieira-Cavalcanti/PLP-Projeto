@@ -46,7 +46,7 @@ pontuacaoElemento _ = 0
 
 atirouNaCoordenada :: Tabela -> Int -> Int -> (Tabela, Int)
 atirouNaCoordenada tabela c l =
-    if c >= 0 && c <= 11 && l >= 0 && l <= 11
+    if (c >= 0 && c <= 11 && l >= 0 && l <= 11) && (not (acertou (tabela !! l !! c)))
         then if checaSeAcertouMina (tabela !! l !! c)
             then do
                 let tabelaAtualizada = [[if i == l && j == c then setAcertou x else x | (j, x) <- zip [0..] linha] | (i, linha) <- zip [0..] tabela]
