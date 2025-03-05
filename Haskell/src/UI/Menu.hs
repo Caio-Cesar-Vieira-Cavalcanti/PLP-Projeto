@@ -144,7 +144,7 @@ regras =
     ++ "-> Para os inimigos, são divididos em Tanques (T - agrupados por 5 quadrados), Motorizados (M - agrupados por 3 quadrados) e Soldados inimigos (S - agrupados por 2 quadrados),"
     ++ " além dos espaços amigos, como Civis (C - 1 quadrado), Escolas (E - 1 quadrado) e Hospitais (H - 1 quadrado), que devem ser evitados como alvo de cada jogada.\n\n"
     ++ "-> O jogador ainda contará com a sorte de acertar um Tesouro ($ - 1 quadrado), ganhando moedas pelo feito, ou o azar de acertar uma Mina Terrestre (# - 1 quadrado),"
-    ++ " que explode a uma raio em formato de '*' (semelhante a bomba grande) e que pode atingir qualquer espaço dentro desse raio, ajudando ou prejudicando o jogador.\n\n"
+    ++ " que explode a uma raio em formato de '+' (semelhante a bomba média) e que pode atingir qualquer espaço dentro desse raio, ajudando ou prejudicando o jogador.\n\n"
     ++ "-> Como extra, o jogo implementa um item que pode ajudar o jogador, se o mesmo o usar com sabedoria: Drone Visualizador - Quer saber como funciona? Então vamos "
     ++ "entrar nesta batalha AGORA!\n\n"
 
