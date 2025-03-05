@@ -20,7 +20,7 @@ name:               Projeto-PLP
 -- PVP summary:     +-+------- breaking API changes
 --                  | | +----- non-breaking API additions
 --                  | | | +--- code changes with no API change
-version:            0.1.0.0
+version:            1.0.0.0
 
 -- A short (one-line) description of the package.
 synopsis:
@@ -70,7 +70,16 @@ executable Projeto-PLP
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.17.2.1,
-    		      ansi-terminal
+    		      ansi-terminal,
+                  random,
+                  aeson,
+                  bytestring,
+                  containers,
+                  directory,
+                  filepath,
+                  time,
+                  timezone-olson,
+                  timezone-series
 
     -- Directories containing source files.
     hs-source-dirs:   app,
@@ -79,7 +88,15 @@ executable Projeto-PLP
     -- Base language which the package is written in.
     default-language: Haskell2010
 
-    others-modules: UI.Menu, 
-    		   UI.UtilsUI, 
-		   UI.HUD, 
-		   UI.TelasVitoriaDerrota
+    other-modules: UI.Menu, 
+    		UI.UtilsUI, 
+		    UI.HUD, 
+		    UI.TelasVitoriaDerrota,
+            Modelos.Jogador,
+            Modelos.Mercado,
+            Modelos.Jogo,
+            Modelos.Coordenada,
+            Modelos.Tabuleiro,
+            Modelos.Bot,
+            Jogo.MenuControlador,
+            Jogo.GameOver

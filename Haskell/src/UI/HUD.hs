@@ -1,70 +1,93 @@
-module Haskell.UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
+module UI.HUD (mainScreen, saveJogoScreen, mercadoScreen) where
+    
+import qualified UI.UtilsUI as Utils
+
+import Modelos.Jogo
+import Modelos.Jogador
+import Modelos.Bot
+import Modelos.Mercado
+import Modelos.Tabuleiro
 
 -- Tela Principal da HUD 
 
-mainScreen :: IO()
-mainScreen = do
-    let jogador = "Neymar"
-    putStrLn ("Jogador: " ++ jogador)
+mainScreen :: Jogo -> IO()
+mainScreen jogoAtual = do
+    let jogadorAtual = getJogador jogoAtual
+    let botAtual = getBot jogoAtual
+
+    let tabelaJogador = getTabelaJogador jogadorAtual
+    let tabelaBot = getTabelaBot botAtual
+
+    let nomeJogador = getNome jogadorAtual
+
+    putStr ("Jogador: " ++ nomeJogador)
+    putStr ("                                                      ")
+    putStr ("Oponente: Imperador de Prologia")
+
     putStrLn ""
     putStrLn ""
-    imprimiTabelas 0
+
+    -- Imprimir as duas tabelas (Jogador e do Bot)
+    imprimiTabelas tabelaJogador tabelaBot
+
     putStrLn ""
     putStrLn ""
-    let inimigosDerrotados = 4
-    let inimigosTotais = 10
-    putStrLn ("Inimigos: " ++ show inimigosDerrotados ++ "/" ++ show inimigosTotais)
 
+    let inimigosDerrotadosJogador = contabilizarInimigos tabelaJogador
+    let inimigosDerrotadosBot = contabilizarInimigos tabelaBot
 
-    let espacosAtingidos = 3
-    let espacosTotais = 12
-    putStrLn ("Espaços especiais: " ++ show espacosAtingidos ++ "/" ++ show espacosTotais)
+    putStr ("Inimigos: " ++ show inimigosDerrotadosJogador ++ "/6")
+    putStr ("                                                       ")
+    putStr ("Inimigos do Oponente: " ++ show inimigosDerrotadosBot ++ "/6")
 
-
-    let minasOuroAtingidas = 2
-    let minasOuroTotais = 5
-    putStrLn ("Minas de ouro: " ++ show minasOuroAtingidas ++ "/" ++ show minasOuroTotais)
-    
     putStrLn ""
 
-    mostraInventario
+    let espacosAmigosAtingidosJogador = contabilizarAmigos tabelaJogador
+    let espacosAmigosAtingidosBot = contabilizarAmigos tabelaBot
+
+    putStr ("Espaços Amigos: " ++ show espacosAmigosAtingidosJogador ++ "/3")
+    putStr ("                                                 ")
+    putStr ("Espaços Amigos do Oponente: " ++ show espacosAmigosAtingidosBot ++ "/3")
+
+    putStrLn ""
+    putStrLn ""
+    putStrLn ""
+
+    -- Imprimir o inventário do Jogador
+    mostraInventario jogadorAtual
     
     putStrLn ""
 
     putStrLn "Atalhos: "
-    putStrLn "'1' -> Usar bombas pequenas"
-    putStrLn "'2' -> Usar bombas médias"
-    putStrLn "'3' -> Usar bombas grandes"
-    putStrLn "{COLUNAS}{LINHA} -> Coordenada que deseja atacar; Exemplo: C3"
+    putStrLn "'1' -> Usar bomba pequena"
+    putStrLn "'2' -> Usar bomba média"
+    putStrLn "'3' -> Usar bomba grande"
     putStrLn "'4' -> Usar o drone visualizador de áreas"
+    putStrLn "{COLUNA}{LINHA} -> Coordenada que deseja atacar; Exemplo: C3"
+    putStrLn ""
     putStrLn "'m' -> Acesso ao mercado"
     putStrLn "'s' -> Salvar o jogo no estado atual"
-    putStrLn "'quit' -> Sair do jogo sem salvar"
+    putStrLn "'q' -> Sair do jogo sem salvar"
     
     putStrLn ""
 
-    putStrLn "> Digite a opção ou coordenadas:"
+    putStr "> Digite a opção: "
+
 
 -- Tela Salvar Jogo
 
 saveJogoScreen :: IO ()
 saveJogoScreen = do
     putStrLn "Escolha um slot para salvar:"
-    
     putStrLn ""
+    estados <- Utils.saveStates
+    putStr estados
 
-    putStrLn "[1] Slot 1 - Vazio"
-    putStrLn "{nome jog.} - Jogo Salvo em {data}"
-    putStrLn "{nome jog.} - Jogo Salvo em {data}"
-    
-    putStrLn ""
-
-    putStr "> Digite o slot ou 'v' para voltar: "
 
 -- Tela Mercado 
 
-mercadoScreen :: IO ()
-mercadoScreen = do
+mercadoScreen :: Jogo -> IO ()
+mercadoScreen jogoAtual = do
 
     putStrLn "  __  __                             _        "
     putStrLn " |  \x5C/  |  ___  _ __  ___  __ _   __| |  ___  "
@@ -74,7 +97,9 @@ mercadoScreen = do
 
     putStrLn ""
 
-    mostraInventario
+    let jogadorAtual = getJogador jogoAtual
+
+    mostraInventario jogadorAtual
     
     putStrLn ""
 
@@ -82,73 +107,56 @@ mercadoScreen = do
     
     putStrLn ""
 
-    putStrLn "'1' -> Comprar bombas pequenas             ({preço})"
-    putStrLn "'2' -> Comprar bombas médias               ({preço})"
-    putStrLn "'3' -> Comprar bombas grandes              ({preço})"
-    putStrLn "'4' -> Comprar drone visualizador de áreas ({preço})"
+    let mercadoAtual = getMercado jogoAtual
+    let precoBM = getPrecoBM mercadoAtual
+    let precoBG = getPrecoBG mercadoAtual
+    let precoDV = getPrecoDV mercadoAtual
+
+    putStrLn ("'1' -> Comprar bombas médias               ($" ++ show precoBM ++ ")")
+    putStrLn ("'2' -> Comprar bombas grandes              ($" ++ show precoBG ++ ")")
+    putStrLn ("'3' -> Comprar drone visualizador de áreas ($" ++ show precoDV ++ ")")
 
     putStrLn ""
 
-    putStr "> Digite o item ou 'v' para voltar:"
+    putStr "> Digite o item ou 'v' para voltar: "
 
--- Funções utilitárias
+-- Funções auxiliares do HUD
 
-mostraInventario :: IO ()
-mostraInventario = do
+mostraInventario :: Jogador -> IO ()
+mostraInventario jogadorAtual = do
     putStrLn "Inventário:"
     
-    let bombasPequenas = 3
-    let bombasMedias = 1
-    let bombasGrandes = 0
-    putStrLn ("Bombas pequenas: " ++ show bombasPequenas ++ " | Bombas médias: " ++ show bombasMedias ++ " | Bombas grandes: " ++ show bombasGrandes)
+    let bombasP = getBombasPequenas jogadorAtual
+    let bombasM = getBombasMedias jogadorAtual
+    let bombasG = getBombasGrandes jogadorAtual
 
-    let drones = 2
-    putStrLn ("Drone visualizador de áreas: " ++ show drones)
+    putStrLn ("Bombas pequenas: " ++ show bombasP ++ " | Bombas médias: " ++ show bombasM ++ " | Bombas grandes: " ++ show bombasG)
+
+    let dronesVisualizador = getDroneVisualizador jogadorAtual
+
+    putStrLn ("Drone visualizador de áreas: " ++ show dronesVisualizador)
 
     putStrLn ""
     
-    let moedas = 25
-    putStrLn ("Moedas: " ++ show moedas)
+    let moedasJogador = getMoedas jogadorAtual
 
+    putStrLn ("Moedas: " ++ show moedasJogador)
 
-imprimiTabelas :: Int -> IO() 
-imprimiTabelas x = if x >= 11
-    then do
-        let elemTabela = unwords (geraTabela !! x)
-        putStrLn (elemTabela ++ "                             " ++ elemTabela)
-    else do
-        if x < 10 
-            then do
-                let elemTabela = " " ++ unwords (geraTabela !! x)
-                putStrLn (elemTabela ++ "                             " ++ elemTabela)
-                imprimiTabelas (x + 1)
-            else do
-                let elemTabela = unwords (geraTabela !! x)
-                putStrLn (elemTabela ++ "                             " ++ elemTabela)
-                imprimiTabelas (x + 1)
+imprimiTabelas :: Tabela -> Tabela -> IO() 
+imprimiTabelas tabJog tabBot = 
+    let tabJogStr = geraTabelaStr tabJog
+        tabBotStr = geraTabelaStr tabBot
+    in imprimirLinhas tabJogStr tabBotStr 0
 
+imprimirLinhas :: [[String]] -> [[String]] -> Int -> IO()
+imprimirLinhas tabJogStr tabBotStr x = do
+    let linhaJog = formatarLinhas (tabJogStr !! x) x
+    let linhaBot = formatarLinhas (tabBotStr !! x) x
+    putStrLn (linhaJog ++ "                             " ++ linhaBot)
+    if x < 12 then imprimirLinhas tabJogStr tabBotStr (x + 1)
+    else return ()
 
-geraTabela :: [[String]]
-geraTabela = geraTabelaAux [["  ", "A ", "B ", "C ", "D ", "E ", "F ", "G ", "H ", "I ", "J ", "K ", "L "]]
--- geraTabela = geraTabelaAux ([[" "] ++ geraPrimeiraLinha ['A'..'L']])
-
-
-geraTabelaAux :: [[String]] -> [[String]]
-geraTabelaAux tabela = 
-    if length tabela >= 13
-        then [head tabela] ++ adicionaNumeroCadaLinha (tail tabela)
-        else geraTabelaAux (tabela ++ [geraLinhasComuns [1..12]])
-
-    
-
--- geraPrimeiraLinha :: [Char] -> [String]
--- geraPrimeiraLinha listaChar = [show x ++ " " | x <- listaChar]
-
-
-geraLinhasComuns :: [Int] -> [String]
-geraLinhasComuns [] = []
-geraLinhasComuns (a : as) = ["X "] ++ (geraLinhasComuns as)
-
-
-adicionaNumeroCadaLinha :: [[String]] -> [[String]]
-adicionaNumeroCadaLinha listaSemNumeros = [ [show i ++ " "] ++ x | (x, i) <- zip listaSemNumeros [1..] ]
+formatarLinhas :: [String] -> Int -> String
+formatarLinhas linha x
+    | x < 10    = " " ++ unwords linha
+    | otherwise = unwords linha

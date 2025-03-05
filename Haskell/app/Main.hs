@@ -1,7 +1,10 @@
 module Main where
 
-import System.Console.ANSI
+import Jogo.MenuControlador as Jogo
+
+import System.IO
 
 main :: IO ()
 main = do
-	putStrLn $ "\ESC[35mmagenta"
+    hSetBuffering stdout NoBuffering
+    Jogo.iniciarMenu

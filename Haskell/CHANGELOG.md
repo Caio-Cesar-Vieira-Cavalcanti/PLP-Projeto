@@ -1,5 +1,5 @@
-# Revision history for Projeto-PLP
+# Histórico de versões do jogo:
 
-## 0.1.0.0 -- YYYY-mm-dd
+## 1.0.0.0 -- 2025-03-04
 
-* First version. Released on an unsuspecting world.
+* Primeira versão, jogo funcional e seguindo todos os pontos mencionados na documentação do projeto.
