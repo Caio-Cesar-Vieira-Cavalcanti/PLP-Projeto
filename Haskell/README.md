@@ -18,6 +18,7 @@ Para instalar as dependências e configurar o jogo, siga os seguintes passos:
 
     ```bash
     git clone https://github.com/Caio-Cesar-Vieira-Cavalcanti/PLP-Projeto.git
+
     cd PLP-Projeto
     ```
 
@@ -25,6 +26,7 @@ Para instalar as dependências e configurar o jogo, siga os seguintes passos:
 
     ```bash
     cabal update
+    
     cabal install --only-dependencies
     ```
 
@@ -32,9 +34,11 @@ Para instalar as dependências e configurar o jogo, siga os seguintes passos:
 
 ## Compilando o Jogo
 
-Para compilar o jogo, execute (Certifique-se que está no diretório `\Haskell`):
+Para compilar o jogo, execute os comandos abaixo **em ordem** (Certifique-se que está no diretório `\Haskell`):
 
 ```bash
+cabal clean
+
 cabal build
 ```
 
