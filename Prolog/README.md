@@ -1,0 +1,1 @@
+# ByteFront - A Guerra dos Paradigmas
