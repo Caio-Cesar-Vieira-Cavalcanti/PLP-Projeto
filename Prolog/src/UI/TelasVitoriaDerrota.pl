@@ -1,5 +1,7 @@
 :- use_module('./UtilsUI').
 
+% REVISAR O USO DO HALT
+
 winScreen(NomeJogador) :-
     format('                                                            ~n', []),
     format('                                                            ~n', []),
