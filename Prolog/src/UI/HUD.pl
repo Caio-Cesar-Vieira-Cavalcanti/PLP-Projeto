@@ -1,10 +1,10 @@
 mainScreen(Nome) :-
-format('Jogador: ~w', [Nome]),
-nl,
-nl,
-mainTabela,
-nl,
-nl,
+format('Jogador: ~w', [Nome]), nl, nl,
+mainTabela, nl, nl,
+inimigosDestruidos(0), nl,
+espacosAmigosAtingidos(0), nl, nl,
+inventario(55, 2, 1, 0), nl, nl,
+moedas(0), nl, nl,
 writeln('Atalhos:'),
 writeln("'1' -> Usar bomba pequena"),
 writeln("'2' -> Usar bomba média"),
@@ -15,7 +15,6 @@ writeln(""),
 writeln("'m' -> Acesso ao mercado"),
 writeln("'s' -> Salvar o jogo no estado atual"),
 writeln("'q' -> Sair do jogo sem salvar").
-
 
 geraLinha(0, []) :- !.
 geraLinha(NumLinhas, ["X " | T2]) :-
@@ -57,3 +56,17 @@ geraTabela(12, 12, Tabela),
 adicionaNumeros(12, 1, Tabela, NewT),
 concatenaCabecalho(NewT, TabelaPronta),
 imprimiTabela(TabelaPronta).
+
+inimigosDestruidos(X) :-
+format('Inimigos: ~w/6', [X]).
+
+espacosAmigosAtingidos(X) :-
+format('Espaços Amigos: ~w/3', [X]).
+
+inventario(A, B, C, D) :-
+writeln('Inventário:'),
+format('Bombas pequenas: ~w | Bombas médias: ~w | Bombas grandes: ~w', [A, B, C]), nl,
+format('Drone visualizador de áreas: ~w', [D]).
+
+moedas(X) :-
+format('Moedas: ~w', [X]).
