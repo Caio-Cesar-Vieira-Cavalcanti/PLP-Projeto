@@ -1,4 +1,4 @@
-:- module(hud, [mainScreen/1, saveJogoScreen/0, mercadoScreen/0]).
+:- module(hud, [mainScreen/1, saveJogoScreen/0, mercadoScreen/0, adicionaNumeros/4, concatenaCabecalho/2, imprimiTabela/1]).
 
 :- use_module('./UtilsUI').
 
