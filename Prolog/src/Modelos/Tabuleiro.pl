@@ -1,3 +1,14 @@
+:- module(tabuleiro, [
+    geraCoordenada/1, geraLinha/2, geraTabuleiroInicial/3,
+    elemEspecialOuMascara/2,
+    geraTabuleiroString/2,
+    mapTabuleiroRecursivo/2, mapTabuleiro/4,
+    capturaElemAtirado/5,
+    atirouNaCoordenadaAux/6, atirouNaCoordenada/6,
+    mainAtirouNaCoordenada/5,
+    pontuacaoElemento/2
+]).
+
 :- use_module('./Coordenada').
 :- use_module('../UI/HUD').
 

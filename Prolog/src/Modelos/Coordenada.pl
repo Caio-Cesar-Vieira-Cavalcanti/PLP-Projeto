@@ -1,5 +1,7 @@
-:- module(coordenada, [getMascara/2, getElemEspecial/2,
-        getAcertou/2, setElem/3, setAcertou/2]).
+:- module(coordenada, [
+        getMascara/2, getElemEspecial/2, getAcertou/2, 
+        setElem/3, setAcertou/2
+]).
 
 :- dynamic coordenada/3.
 

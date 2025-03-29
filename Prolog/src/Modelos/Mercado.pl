@@ -1,6 +1,6 @@
 :- module(mercado, [
     getPrecoBM/2, getPrecoBG/2, getPrecoDV/2,
-    comprarItem/3
+    comprarItem/4
 ]).
 
 :- use_module('./Jogador.pl').
