@@ -6,7 +6,7 @@ opcaoInvalidaVoltar :- format('> Opcao invalida, digite "v" para voltar: ').
 
 confirmacao :- format('> Tem certeza? [S/N]: ').
 
-voltarMenu :- format('> Digite "v" para voltar ao menu: ~n').
+voltarMenu :- format('> Digite "v" para voltar ao menu: ').
 
 defaultSlots([
     '[1]. Slot 1 - Vazio',

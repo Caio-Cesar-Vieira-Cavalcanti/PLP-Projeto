@@ -1,13 +1,13 @@
-:- use_module('./UtilsUI').
+:- module(menu, [logoMenu/0, opcoesMenu/0, novoJogo/0, carregarJogo/0,
+                    historiaJogo/0, regrasJogo/0, creditosJogo/0]).
 
-% REVISAR O USO DO HALT
+:- use_module('./UtilsUI').
 
 % Tela do Menu
 
 logoMenu :-
     asciiArt,
-    format('             Pressione a tecla "Enter"~n~n~n'),
-    halt. 
+    format('             Pressione a tecla "Enter"~n~n~n').
 
 opcoesMenu :-
     asciiArt,
@@ -18,38 +18,32 @@ opcoesMenu :-
     format('             [5]. Créditos~n'),
     format('~n'),
     format('             [6]. Sair do Jogo~n~n'),
-    format('> Opção: '),
-    halt.
+    format('> Opção: ').
 
 novoJogo :-
     format('~n             CARREGANDO O NOVO JOGO...~n~n~n'),
-    format('> Digite o seu nome: '),
-    halt.
+    format('> Digite o seu nome: ').
 
 % Necessário revisão ao fazer BD
 carregarJogo :-
     % saveStates(SlotsFormatados),
-    format('Escolha um slot para carregar o estado do jogo:~n~n'),
+    format('Escolha um slot para carregar o estado do jogo:~n~n').
     % maplist(format('~s~n'), SlotsFormatados),
-    halt.
 
 historiaJogo :-
     historiaArt,
     historia,
-    voltarMenu,
-    halt.
+    voltarMenu.
 
 regrasJogo :-
     regrasArt,
     regras,
-    voltarMenu,
-    halt.
+    voltarMenu.
 
 creditosJogo :-
     creditosArt,
     creditos,
-    voltarMenu,
-    halt.
+    voltarMenu.
 
 % Funções auxiliares
 
