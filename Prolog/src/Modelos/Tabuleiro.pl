@@ -60,7 +60,13 @@ atirouNaCoordenadaAux(H, NewCoord, 0, C, NewCoordPertenceAEssaLinha, H2),
 I2 is I + 1,
 atirouNaCoordenada(T, NewCoord, I2, L, C, T2).
 
-mainAtirouNaCoordenada(MatrizCoord, L, C, NovaMatrizCoord) :-
+mainAtirouNaCoordenada(MatrizCoord, L, C, NovaMatrizCoord, MoedasGanhas) :-
 capturaElemAtirado(MatrizCoord, L, C, ElemEspecial, NewCoord),
 atirouNaCoordenada(MatrizCoord, NewCoord, 0, L, C, NovaMatrizCoord),
-format('ElemEspecial será usado quando for para retornar moedas. Evitar warning ~w', [ElemEspecial]).
+pontuacaoElemento(ElemEspecial, MoedasGanhas).
+
+pontuacaoElemento('S', 25) :- !.
+pontuacaoElemento('M', 34) :- !.
+pontuacaoElemento('T', 40) :- !.
+pontuacaoElemento('$', 250) :- !.
+pontuacaoElemento(_, 0).
