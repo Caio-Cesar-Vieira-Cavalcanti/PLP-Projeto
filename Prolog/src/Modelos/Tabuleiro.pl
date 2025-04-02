@@ -81,3 +81,24 @@ pontuacaoElemento('M', 34) :- !.
 pontuacaoElemento('T', 40) :- !.
 pontuacaoElemento('$', 250) :- !.
 pontuacaoElemento(_, 0).
+
+setElemEspecialAux([], _, _, _, _, []).
+setElemEspecialAux([H | T], NewElemEspecial, I, C, NewElemEspecialPertenceALinha, [H2 | T2]) :-
+(
+    NewElemEspecialPertenceALinha ->
+    (
+        I =:= C ->
+        setElem(H, NewElemEspecial, H2) ;
+        H2 = H
+    ) ;
+    H2 = H
+),
+I2 is I + 1,
+setElemEspecialAux(T, NewElemEspecial, I2, C, NewElemEspecialPertenceALinha, T2).
+
+setElemEspecial([], _, _, _, _, []).
+setElemEspecial([H | T], NewElemEspecial, I, L, C, [H2 | T2]) :-
+(I =:= L -> NewElemEspecialPertenceALinha = true ; NewElemEspecialPertenceALinha = false),
+setElemEspecialAux(H, NewElemEspecial, 0, C, NewElemEspecialPertenceALinha, H2),
+I2 is I + 1,
+setElemEspecial(T, NewElemEspecial, I2, L, C, T2).
