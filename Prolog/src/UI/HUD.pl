@@ -1,6 +1,7 @@
-:- module(hud, [mainScreen/1, saveJogoScreen/0, mercadoScreen/0, adicionaNumeros/4, concatenaCabecalho/2, imprimiTabela/1]).
+:- module(hud, [mainScreen/1, saveJogoScreen/0, mercadoScreen/0]).
 
 :- use_module('./UtilsUI').
+:- use_module('../Modelos/Tabuleiro').
 
 % REVISAR (falta imprimir a tabela do bot) - inserir as futuras importações e dados do jogo!
 % Inserir cortes
@@ -26,19 +27,6 @@ mainScreen(Nome) :-
     writeln('\'q\' -> Sair do jogo sem salvar').
 
 % Regras auxiliares para a tabela
-
-geraLinha(0, []) :- !.
-geraLinha(NumLinhas, ["X " | T2]) :-
-    NumLinhas2 is NumLinhas - 1,
-    geraLinha(NumLinhas2, T2).
-
-geraTabela(_, 0, []) :- !.
-geraTabela(NumLinhas, I, [L | T2]) :- 
-    I > 0,
-    geraLinha(NumLinhas, L),
-    I2 is I - 1,
-    geraTabela(NumLinhas, I2, T2).
-
 inteiroParaString(N, S3) :-
     atom_number(A, N), 
     atom_string(A, S),
@@ -62,11 +50,11 @@ imprimiTabela([H | T]) :-
     writeln(Str),
     imprimiTabela(T).
 
-% Regra principal da tabela
-
+% Regra principal da tabela 
 mainTabela :-
-    geraTabela(12, 12, Tabela),
-    adicionaNumeros(12, 1, Tabela, NewT),
+    geraTabuleiroDispor(TabelaDisposta),
+    geraTabuleiroString(TabelaDisposta, TabelaStr),
+    adicionaNumeros(12, 1, TabelaStr, NewT),
     concatenaCabecalho(NewT, TabelaPronta),
     imprimiTabela(TabelaPronta).
 
@@ -77,7 +65,6 @@ saveJogoScreen :-
     write(Estados).
 
 % Inventário
-
 inventario(A, B, C, D) :-
     writeln('Inventário:'),
     format('Bombas pequenas: ~w | Bombas médias: ~w | Bombas grandes: ~w', [A, B, C]), nl,
@@ -87,7 +74,6 @@ moedas(X) :-
     format('Moedas: ~w', [X]).
 
 % Mercado
-
 mercadoScreen :-
     logoMercado,
 
@@ -102,8 +88,9 @@ mercadoScreen :-
     format('\'3\' -> Comprar drone visualizador de áreas ($~d)~n', [350]),
     nl, write('> Digite o item ou \'v\' para voltar: ').
 
-% Regras auxiliares da HUD
 
+
+% Regras auxiliares da HUD
 inimigosDestruidos(X) :-
     format('Inimigos: ~w/6', [X]).
 
