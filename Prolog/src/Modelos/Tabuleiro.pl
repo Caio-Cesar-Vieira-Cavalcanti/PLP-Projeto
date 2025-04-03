@@ -7,16 +7,17 @@
 
 :- use_module('./Coordenada').
 
-% PROBLEMA (resultando em falso no chamado do geraTabuleiroDispor) - necessita de cortes
+% PROBLEMA (resultando em falso no chamado do geraTabuleiroDispor com disporEspacos) - necessita de cortes
 
 % Gera o tabuleiro base e dispões os elementos especiais
-geraTabuleiroDispor(TabelaPronta) :-
-    geraTabuleiroInicial(12, 12, TabelaInicial),
-    disporEspacos(TabelaInicial, TabelaPronta).
+geraTabuleiroDispor(TabelaInicial) :-
+    geraTabuleiroInicial(12, 12, TabelaInicial).
+    %disporEspacos(TabelaInicial, TabelaPronta).  % Com essa regra, o mainTabela retorna falso
 
 % Regras auxiliares da geração do tabuleiro e coordenada
+% * Para testar os elementos especiais dispostos, basta trocar para true
 geraCoordenada(Coord) :- 
-    Coord = coordenada("X", " ", false).
+    Coord = coordenada("X", "-", false).  
 
 geraLinha(0, []) :- !.
 geraLinha(NumLinhas, [Coord | T2]) :-
@@ -35,7 +36,7 @@ elemEspecialOuMascara(Coord, R) :-
     getAcertou(Coord, Acertou),
     getElemEspecial(Coord, ElemEspecial),
     getMascara(Coord, Mascara),
-    (Acertou -> string_concat(ElemEspecial, " ", R) ; string_concat(ElemEspecial, " ", R)). % Alterar de Mascara para ElemEspecial para testes
+    (Acertou -> string_concat(ElemEspecial, " ", R) ; string_concat(Mascara, " ", R)).
 
 geraTabuleiroString(Tabela, TabelaStr) :-
     mapTabuleiro(12, 12, Tabela, TabelaStr).

@@ -6,8 +6,6 @@
 % REVISAR (falta imprimir a tabela do bot) - inserir as futuras importações e dados do jogo!
 % Inserir cortes
 
-% REVISAR a regra mainTabela (retornando falso)
-
 % Regra principal da HUD
 
 mainScreen(Nome) :-
@@ -54,8 +52,8 @@ imprimiTabela([H | T]) :-
 
 % Regra principal da tabela 
 mainTabela :-
-    geraTabuleiroDispor(TabelaPronta),
-    geraTabuleiroString(TabelaPronta, TabelaStr),
+    geraTabuleiroDispor(TabelaDisposta),
+    geraTabuleiroString(TabelaDisposta, TabelaStr),
     adicionaNumeros(12, 1, TabelaStr, NewT),
     concatenaCabecalho(NewT, TabelaPronta),
     imprimiTabela(TabelaPronta).
