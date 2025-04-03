@@ -6,6 +6,8 @@
 ]).
 
 :- use_module('./Coordenada').
+% apagar esse use_module de HUD ao final do projeto, porque é só para testes locais em Tabuleiro.pl.
+:- use_module('../UI/HUD').
 
 % PROBLEMA (resultando em falso no chamado do geraTabuleiroDispor com disporEspacos) - necessita de cortes
 
@@ -17,7 +19,7 @@ geraTabuleiroDispor(TabelaInicial) :-
 % Regras auxiliares da geração do tabuleiro e coordenada
 % * Para testar os elementos especiais dispostos, basta trocar para true
 geraCoordenada(Coord) :- 
-    Coord = coordenada("X", "-", false).  
+    Coord = coordenada('X', '-', false).  
 
 geraLinha(0, []) :- !.
 geraLinha(NumLinhas, [Coord | T2]) :-
@@ -36,7 +38,7 @@ elemEspecialOuMascara(Coord, R) :-
     getAcertou(Coord, Acertou),
     getElemEspecial(Coord, ElemEspecial),
     getMascara(Coord, Mascara),
-    (Acertou -> string_concat(ElemEspecial, " ", R) ; string_concat(Mascara, " ", R)).
+    (Acertou -> string_concat(ElemEspecial, ' ', R) ; string_concat(Mascara, ' ', R)).
 
 geraTabuleiroString(Tabela, TabelaStr) :-
     mapTabuleiro(12, 12, Tabela, TabelaStr).
@@ -197,8 +199,44 @@ inserirElementos([(L, C) | T], Char, Tabela, NovaTabela) :-
 
 
 
+% Regras para bombas
+tiroBombaMedia(Tabela0, L, C, Tabela5, TotalMoedasGanhas) :-
+    C2 is C - 1,
+    C3 is C + 1,
+    L2 is L - 1,
+    L3 is L + 1,
+    mainAtirouNaCoordenada(Tabela0, L, C, Tabela1, MoedasGanhas1),
+    mainAtirouNaCoordenada(Tabela1, L, C2, Tabela2, MoedasGanhas2),
+    mainAtirouNaCoordenada(Tabela2, L, C3, Tabela3, MoedasGanhas3),
+    mainAtirouNaCoordenada(Tabela3, L2, C, Tabela4, MoedasGanhas4),
+    mainAtirouNaCoordenada(Tabela4, L3, C, Tabela5, MoedasGanhas5),
+    TotalMoedasGanhas is MoedasGanhas1 + MoedasGanhas2 + MoedasGanhas3 + MoedasGanhas4 + MoedasGanhas5.
 
+tiroBombaGrande(Tabela0, L, C, Tabela5, TotalMoedasGanhas) :-
+    C2 is C - 1,
+    C3 is C + 1,
+    L2 is L - 1,
+    L3 is L + 1,
+    tiroBombaMedia(Tabela0, L, C, Tabela1, MoedasGanhas1),
+    mainAtirouNaCoordenada(Tabela1, L2, C2, Tabela2, MoedasGanhas2),
+    mainAtirouNaCoordenada(Tabela2, L3, C2, Tabela3, MoedasGanhas3),
+    mainAtirouNaCoordenada(Tabela3, L2, C3, Tabela4, MoedasGanhas4),
+    mainAtirouNaCoordenada(Tabela4, L3, C3, Tabela5, MoedasGanhas5),
+    TotalMoedasGanhas is MoedasGanhas1 + MoedasGanhas2 + MoedasGanhas3 + MoedasGanhas4 + MoedasGanhas5.
 
+atirouNaMina(Tabela1, L, C, Tabela5, TotalMoedasGanhas) :-
+    C2 is C - 1,
+    C3 is C + 1,
+    L2 is L - 1,
+    L3 is L + 1,
+    mainAtirouNaCoordenada(Tabela1, L, C2, Tabela2, MoedasGanhas2),
+    mainAtirouNaCoordenada(Tabela2, L, C3, Tabela3, MoedasGanhas3),
+    mainAtirouNaCoordenada(Tabela3, L2, C, Tabela4, MoedasGanhas4),
+    mainAtirouNaCoordenada(Tabela4, L3, C, Tabela5, MoedasGanhas5),
+    TotalMoedasGanhas is MoedasGanhas2 + MoedasGanhas3 + MoedasGanhas4 + MoedasGanhas5.
 
+checaSeAcertouNaMina(Coord, MinaFoiAcertada) :-
+    getElemEspecial(Coord, ElemEspecial),
+    (ElemEspecial == '#' -> MinaFoiAcertada = true ; MinaFoiAcertada = false).
 
 % Regras para lógica do drone e mina (espaços especiais)
