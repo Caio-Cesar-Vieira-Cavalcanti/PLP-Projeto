@@ -68,7 +68,6 @@ atirouNaCoordenadaAux([H | T], NewCoord, I, C, NewCoordPertenceAEssaLinha, [H2 |
     I2 is I + 1,
     atirouNaCoordenadaAux(T, NewCoord, I2, C, NewCoordPertenceAEssaLinha, T2).
 
-% essa regra deverá ter um parâmetro a mais para retornar as moedas ganhas pela coordenada acertada, consequentemente, mainAtirouNaCoordenada tbm terá esse parâmetro a mais.
 atirouNaCoordenada([], _, _, _, _, []).
 atirouNaCoordenada([H | T], NewCoord, I, L, C, [H2 | T2]) :-
     (I =:= L -> NewCoordPertenceAEssaLinha = true ; NewCoordPertenceAEssaLinha = false),
