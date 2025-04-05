@@ -6,15 +6,14 @@
 ]).
 
 :- use_module('./Coordenada').
+
 % apagar esse use_module de HUD ao final do projeto, porque é só para testes locais em Tabuleiro.pl.
 :- use_module('../UI/HUD').
 
-% PROBLEMA (resultando em falso no chamado do geraTabuleiroDispor com disporEspacos) - necessita de cortes
-
 % Gera o tabuleiro base e dispões os elementos especiais
-geraTabuleiroDispor(TabelaInicial) :-
-    geraTabuleiroInicial(12, 12, TabelaInicial).
-    %disporEspacos(TabelaInicial, TabelaPronta).  % Com essa regra, o mainTabela retorna falso
+geraTabuleiroDispor(TabelaPronta) :-
+    geraTabuleiroInicial(12, 12, TabelaInicial),
+    mainDisporElem(TabelaInicial, TabelaPronta). 
 
 % Regras auxiliares da geração do tabuleiro e coordenada
 % * Para testar os elementos especiais dispostos, basta trocar para true
@@ -117,49 +116,60 @@ Verificando se todos os espaços reservados por um determinado tamanho são vál
 E se há algum grupo adjacente ou não.
 */
 verificarEspacoLivre(Tabela, Linha, Coluna, Tamanho, Horizontal, Char) :-
+    Tam2 is Tamanho-1,
     (Horizontal -> 
-        findall((L, C), (between(0, Tamanho-1, I), C is Coluna + I, C =< 11, L = Linha), EspacosLivres)
+        findall((L, C), (between(0, Tam2, I), C is Coluna + I, C =< 11, L = Linha), EspacosLivres)
     ;
-        findall((L, C), (between(0, Tamanho-1, I), L is Linha + I, L =< 11, C = Coluna), EspacosLivres)
+        findall((L, C), (between(0, Tam2, I), L is Linha + I, L =< 11, C = Coluna), EspacosLivres)
     ),
     length(EspacosLivres, Tamanho),
     todosValidos(Tabela, EspacosLivres),
     semGrupoAdjacente(Tabela, EspacosLivres, Char).
 
-todosValidos(_, []).
+todosValidos(_, []) :- !.
 todosValidos(Tabela, [(L, C) | T]) :-
     nth0(L, Tabela, Linha),
     nth0(C, Linha, Coord),
     getElemEspecial(Coord, '-'),
     todosValidos(Tabela, T).
 
-semGrupoAdjacente(_, [], _).
+semGrupoAdjacente(_, [], _) :- !.
 semGrupoAdjacente(Tabela, [(L, C) | T], Char) :-
-    \+ temGrupoAdjacente(Tabela, L, C, Char),
+    Direcoes = [(-1, 0), (1, 0), (0, -1), (0, 1)],
+    \+ temGrupoAdjacente(Tabela, L, C, Char, Direcoes),
     semGrupoAdjacente(Tabela, T, Char).
 
-temGrupoAdjacente(Tabela, Linha, Coluna, Char) :-
-    Direcoes = [(-1, 0), (1, 0), (0, -1), (0, 1)],
-    member((DL, DC), Direcoes),
+temGrupoAdjacente(_, _, _, _, []) :- fail. 
+temGrupoAdjacente(Tabela, Linha, Coluna, Char, [(DL, DC) | _]) :-
     L is Linha + DL,
     C is Coluna + DC,
-    L >= 0, L < 12, C >= 0, C < 12,
+    L >= 0, L < 12,
+    C >= 0, C < 12,
     nth0(L, Tabela, LinhaTab),
     nth0(C, LinhaTab, Coord),
-    getElemEspecial(Coord, Char).
+    getElemEspecial(Coord, OutroChar),
+    OutroChar == Char, !. 
+
+temGrupoAdjacente(Tabela, Linha, Coluna, Char, [_ | Resto]) :-
+    temGrupoAdjacente(Tabela, Linha, Coluna, Char, Resto).
+
+% Dispor os espaços ao tabuleiro, até encontrar um caso que for êxito para todos os espaços
+mainDisporElem(Tabela, NovaTabela) :-
+    (disporEspacos(Tabela, NovaTabela) -> !
+    ; mainDisporElem(Tabela, NovaTabela)).
 
 disporEspacos(Tabela, NovaTabela) :-
     Elementos = [('C', 1, 1), ('E', 1, 1), ('H', 1, 1), ('$', 2, 1),
                  ('#', 2, 1), ('S', 3, 2), ('M', 2, 3), ('T', 1, 5)],
     disporElementos(Elementos, Tabela, NovaTabela).
 
-disporElementos([], Tabela, Tabela).
+disporElementos([], Tabela, Tabela) :- !.
 disporElementos([(Char, Qtd, Tam) | T], Tabela, NovaTabela) :-
-    (Tam == 1 -> colocarElemento(Char, Qtd, Tabela, TabelaIntermedia)
+    (Tam =:= 1 -> colocarElemento(Char, Qtd, Tabela, TabelaIntermedia)
     ; colocarGrupo(Char, Tam, Qtd, Tabela, TabelaIntermedia)),
     disporElementos(T, TabelaIntermedia, NovaTabela).
 
-colocarElemento(_, 0, Tabela, Tabela).
+colocarElemento(_, 0, Tabela, Tabela) :- !.
 colocarElemento(Char, N, Tabela, NovaTabela) :-
     N > 0,
     random_between(0, 11, Linha),
@@ -167,11 +177,11 @@ colocarElemento(Char, N, Tabela, NovaTabela) :-
     nth0(Linha, Tabela, LinhaTab),
     nth0(Coluna, LinhaTab, Coord),
     getElemEspecial(Coord, '-'),
-    setElemEspecial(Tabela, Char, 0, Linha, Coluna, TabelaAtualizada), % ANALISAR
+    setElemEspecial(Tabela, Char, 0, Linha, Coluna, TabelaAtualizada),
     N1 is N - 1,
     colocarElemento(Char, N1, TabelaAtualizada, NovaTabela).
 
-colocarGrupo(_, _, 0, Tabela, Tabela).
+colocarGrupo(_, _, 0, Tabela, Tabela) :- !.
 colocarGrupo(Char, Tam, Qtd, Tabela, NovaTabela) :-
     random_between(0, 11, Linha),
     random_between(0, 11, Coluna),
@@ -182,16 +192,17 @@ colocarGrupo(Char, Tam, Qtd, Tabela, NovaTabela) :-
     colocarGrupo(Char, Tam, Qtd1, TabelaIntermedia, NovaTabela).
 
 inserirGrupo(Tabela, Linha, Coluna, Tam, Horizontal, Char, NovaTabela) :-
-    (Horizontal -> findall((Linha, C), (between(0, Tam-1, I), C is Coluna + I), Posicoes)
-    ; findall((L, Coluna), (between(0, Tam-1, I), L is Linha + I), Posicoes)),
+    Tam2 is Tam-1,
+    (Horizontal -> findall((Linha, C), (between(0, Tam2, I), C is Coluna + I), Posicoes)
+    ; findall((L, Coluna), (between(0, Tam2, I), L is Linha + I), Posicoes)),
     inserirElementos(Posicoes, Char, Tabela, NovaTabela).
 
-inserirElementos([], _, Tabela, Tabela).
+inserirElementos([], _, Tabela, Tabela) :- !.
 inserirElementos([(L, C) | T], Char, Tabela, NovaTabela) :-
     nth0(L, Tabela, LinhaTab),
     nth0(C, LinhaTab, Coord),
     getElemEspecial(Coord, '-'),
-    setElemEspecial(Tabela, Char, 0, L, C, TabelaAtualizada),  % ANALISAR
+    setElemEspecial(Tabela, Char, 0, L, C, TabelaAtualizada), 
     inserirElementos(T, Char, TabelaAtualizada, NovaTabela).
 
 % Regras para contabilização dos espaços amigos e inimigos
@@ -239,4 +250,4 @@ checaSeAcertouNaMina(Coord, MinaFoiAcertada) :-
     getElemEspecial(Coord, ElemEspecial),
     (ElemEspecial == '#' -> MinaFoiAcertada = true ; MinaFoiAcertada = false).
 
-% Regras para lógica do drone e mina (espaços especiais)
+% Regras para lógica do drone
