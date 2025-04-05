@@ -61,8 +61,8 @@ mainTabela :-
 % Tela salvar jogo
 saveJogoScreen :-
     writeln('Escolha um slot para salvar:'), nl,
-    save_states(Estados),
-    write(Estados).
+    saveStates(Estados),
+    write(Estados). 
 
 % Inventário
 inventario(A, B, C, D) :-
