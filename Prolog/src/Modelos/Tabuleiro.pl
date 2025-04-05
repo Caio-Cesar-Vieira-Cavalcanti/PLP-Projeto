@@ -6,10 +6,9 @@
 ]).
 
 :- use_module('./Coordenada').
+
 % apagar esse use_module de HUD ao final do projeto, porque é só para testes locais em Tabuleiro.pl.
 :- use_module('../UI/HUD').
-
-% PROBLEMA (resultando em falso no chamado do geraTabuleiroDispor com disporEspacos) - necessita de cortes
 
 % Gera o tabuleiro base e dispões os elementos especiais
 geraTabuleiroDispor(TabelaPronta) :-
@@ -140,16 +139,21 @@ semGrupoAdjacente(Tabela, [(L, C) | T], Char) :-
     \+ temGrupoAdjacente(Tabela, L, C, Char, Direcoes),
     semGrupoAdjacente(Tabela, T, Char).
 
-temGrupoAdjacente(_, _, _, _, []) :- !.
-temGrupoAdjacente(Tabela, Linha, Coluna, Char, [(DL, DC) | T]) :-
+temGrupoAdjacente(_, _, _, _, []) :- fail. 
+temGrupoAdjacente(Tabela, Linha, Coluna, Char, [(DL, DC) | _]) :-
     L is Linha + DL,
     C is Coluna + DC,
-    L >= 0, L < 12, C >= 0, C < 12,
+    L >= 0, L < 12,
+    C >= 0, C < 12,
     nth0(L, Tabela, LinhaTab),
     nth0(C, LinhaTab, Coord),
-    getElemEspecial(Coord, Char),
-    temGrupoAdjacente(Tabela, Linha, Coluna, Char, T).
+    getElemEspecial(Coord, OutroChar),
+    OutroChar == Char, !. 
 
+temGrupoAdjacente(Tabela, Linha, Coluna, Char, [_ | Resto]) :-
+    temGrupoAdjacente(Tabela, Linha, Coluna, Char, Resto).
+
+% Dispor os espaços ao tabuleiro, até encontrar um caso que for êxito para todos os espaços
 mainDisporElem(Tabela, NovaTabela) :-
     (disporEspacos(Tabela, NovaTabela) -> !
     ; mainDisporElem(Tabela, NovaTabela)).
@@ -246,4 +250,4 @@ checaSeAcertouNaMina(Coord, MinaFoiAcertada) :-
     getElemEspecial(Coord, ElemEspecial),
     (ElemEspecial == '#' -> MinaFoiAcertada = true ; MinaFoiAcertada = false).
 
-% Regras para lógica do drone e mina (espaços especiais)
+% Regras para lógica do drone
