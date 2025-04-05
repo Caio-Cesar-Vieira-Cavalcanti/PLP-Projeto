@@ -24,11 +24,10 @@ novoJogo :-
     format('~n             CARREGANDO O NOVO JOGO...~n~n~n'),
     format('> Digite o seu nome: ').
 
-% Necessário revisão ao fazer BD
 carregarJogo :-
-    % saveStates(SlotsFormatados),
-    format('Escolha um slot para carregar o estado do jogo:~n~n').
-    % maplist(format('~s~n'), SlotsFormatados),
+    format('Escolha um slot para carregar o estado do jogo:~n~n'), nl,
+    saveStates(Estados),
+    write(Estados). 
 
 historiaJogo :-
     historiaArt,

@@ -1,7 +1,9 @@
-:- module(hud, [mainScreen/1, saveJogoScreen/0, mercadoScreen/0]).
+:- module(hud, [mainScreen/1, saveJogoScreen/0, mercadoScreen/1]).
 
 :- use_module('./UtilsUI').
+:- use_module('../Modelos/Jogo').
 :- use_module('../Modelos/Tabuleiro').
+:- use_module('../Modelos/Jogador').
 
 % REVISAR (falta imprimir a tabela do bot) - inserir as futuras importações e dados do jogo!
 % Inserir cortes
@@ -74,21 +76,19 @@ moedas(X) :-
     format('Moedas: ~w', [X]).
 
 % Mercado
-mercadoScreen :-
+mercadoScreen(Jogo) :-
     logoMercado,
-
-    /* Obter do estado de jogo atual, o jogador, passando para a regra inventário
-    getJogador(JogoAtual, JogadorAtual),
-    inventario(JogadorAtual),
-    */
-
+    getJogador(Jogo, Jogador),
+    getBombasPequenas(Jogador, BP),
+    getBombasMedias(Jogador, BM),
+    getBombasGrandes(Jogador, BG),
+    getDroneVisualizador(Jogador, DV),
+    inventario(BP, BM, BG, DV),
     nl, write('Atalhos:'), nl,
     format('\'1\' -> Comprar bombas médias               ($~d)~n', [250]),
     format('\'2\' -> Comprar bombas grandes              ($~d)~n', [400]),
     format('\'3\' -> Comprar drone visualizador de áreas ($~d)~n', [350]),
     nl, write('> Digite o item ou \'v\' para voltar: ').
-
-
 
 % Regras auxiliares da HUD
 inimigosDestruidos(X) :-

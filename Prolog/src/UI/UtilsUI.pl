@@ -25,7 +25,10 @@ defaultSlots([
 
 saveStates(TextoFinal) :-
     Pasta = '../BD',
-    ( exists_directory(Pasta) ->
+    Arquivo1 = '../BD/save1',
+    Arquivo2 = '../BD/save2',
+    Arquivo3 = '../BD/save3',
+    ( (exists_file(Arquivo1) ; exists_file(Arquivo2) ; exists_file(Arquivo3)) ->
         directory_files(Pasta, ArquivosBrutos),
         include(arquivoSave, ArquivosBrutos, Arquivos),
         maplist(formatarSave(Pasta), Arquivos, Saves),
@@ -38,6 +41,7 @@ saveStates(TextoFinal) :-
       atomic_list_concat(Todos, '\n', TextoComQuebra),
       atom_string(TextoComQuebra, TextoFinal)
     ).
+
 
 % Verifica se o arquivo é um save válido
 
