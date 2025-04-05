@@ -28,14 +28,13 @@ getDataJogo(jogo(_, _, _, DataJogo), DataJogo).
 setJogador(jogo(_, Bot, Mercado, DataJogo), NovoJogador, jogo(NovoJogador, Bot, Mercado, DataJogo)).
 % setBot(jogo(Jogador, _, Mercado, DataJogo), NovoBot, jogo(Jogador, NovoBot, Mercado, DataJogo)).
 
-% Salvar jogo em arquivo
+% Salvar jogo em arquivo (../BD/save{num})
 
 salvarJogo(Caminho, Jogo) :-
     open(Caminho, write, Stream),
     write_canonical(Stream, Jogo), 
     write(Stream, '.\n'),  
     close(Stream).
-
 
 % Carregar jogo de arquivo
 
@@ -53,8 +52,8 @@ carregarSave(Caminho, Jogo) :-
 inicializarJogo(NomeJogador, jogo(Jogador, _, Mercado, DataJogo)) :-
     get_time(TempoAtual),
     format_time(atom(DataJogo), '%Y-%m-%dT%H:%M:%S', TempoAtual),
-    geraTabuleiroInicial(11, 11, TabelaJogador),
-    % geraTabuleiroInicial(11, 11, TabelaBot),
+    geraTabuleiroDispor(TabelaJogador),
+    % geraTabuleiroDispor(TabelaBot),
     iniciarJogador(NomeJogador, TabelaJogador, Jogador),
     % iniciarBot(TabelaBot, Bot),
     Mercado = mercado(250, 400, 350).

@@ -1,4 +1,11 @@
-:- module(utils_ui, [opcaoInvalida/0, opcaoInvalidaVoltar/0, confirmacao/0, voltarMenu/0, defaultSlots/1]).
+:- module(utils_ui, [opcaoInvalida/0, opcaoInvalidaVoltar/0, confirmacao/0, voltarMenu/0, defaultSlots/1, saveStates/1]).
+
+:- use_module(library(filesex)).
+:- use_module(library(apply)).
+:- use_module(library(lists)).
+:- use_module(library(readutil)).
+:- use_module('../Modelos/Jogo.pl').
+:- use_module('../Modelos/Jogador.pl').
 
 opcaoInvalida :- format('> Opcao invalida, digite novamente: ').
 
@@ -14,40 +21,69 @@ defaultSlots([
     '[3]. Slot 3 - Vazio'
 ]).
 
-% Revisar ao fazer salvamento
+% Função principal: retorna lista formatada dos slots
 
-/*
-save_states(SlotsFormatados) :-
-    pasta_bd("src/BD"),
-    (   exists_directory(pasta_bd) ->
-        directory_files(pasta_bd, Arquivos),
-        sort(Arquivos, ArquivosOrdenados),
-        maplist(formatar_save, ArquivosOrdenados, SaveSlots),
-        corrigir_ordem_slots(SaveSlots, SlotsFormatados)
-    ;   default_slots(DefaultSlots),
-        append(DefaultSlots, ["", "> Digite o slot ou 'v' para voltar ao menu: "], SlotsFormatados)
+saveStates(TextoFinal) :-
+    Pasta = '../BD',
+    Arquivo1 = '../BD/save1',
+    Arquivo2 = '../BD/save2',
+    Arquivo3 = '../BD/save3',
+    ( (exists_file(Arquivo1) ; exists_file(Arquivo2) ; exists_file(Arquivo3)) ->
+        directory_files(Pasta, ArquivosBrutos),
+        include(arquivoSave, ArquivosBrutos, Arquivos),
+        maplist(formatarSave(Pasta), Arquivos, Saves),
+        corrigirOrdemSlots(Saves, SlotsCorrigidos),
+        append(SlotsCorrigidos, ['', '> Digite o slot ou "v" para voltar ao menu: '], Todos),
+        atomic_list_concat(Todos, '\n', TextoComQuebra),
+        atom_string(TextoComQuebra, TextoFinal)
+    ; defaultSlots(Slots),
+      append(Slots, ['', '> Digite o slot ou "v" para voltar ao menu: '], Todos),
+      atomic_list_concat(Todos, '\n', TextoComQuebra),
+      atom_string(TextoComQuebra, TextoFinal)
     ).
 
-formatar_save(Arquivo, (SlotNum, SlotFormatado)) :-
-    atom_concat("src/BD/", Arquivo, CaminhoArquivo),
-    carregar_save(CaminhoArquivo, JogoSalvo),
-    atom_chars(Arquivo, Chars),
-    include(is_digit, Chars, SlotNumChars),
-    atom_chars(SlotNumAtom, SlotNumChars),
-    atom_number(SlotNumAtom, SlotNum),
-    (   JogoSalvo = jogo(Jogador, DataJogo) ->
-        get_nome(Jogador, NomeJogador),
-        format_time("%d/%m/%Y %H:%M", DataJogo, DataFormatada),
-        format(atom(SlotFormatado), "[~w]. ~w - Jogo salvo em ~w", [SlotNum, NomeJogador, DataFormatada])
-    ;   format(atom(SlotFormatado), "[~w]. Slot ~w - Vazio", [SlotNum, SlotNum])
-    ).
 
-corrigir_ordem_slots(Saves, SlotsCorrigidos) :-
-    default_slots(DefaultSlots),
-    maplist(find_or_default(Saves, DefaultSlots), [1,2,3], SlotsCorrigidos).
+% Verifica se o arquivo é um save válido
 
-find_or_default(Saves, DefaultSlots, N, Slot) :-
-    (   member((N, SlotEncontrado), Saves) -> Slot = SlotEncontrado
-    ;   nth1(N, DefaultSlots, Slot)
+arquivoSave(Nome) :-
+    sub_atom(Nome, _, _, _, 'save').
+
+% Formata um save carregado
+formatarSave(Pasta, Arquivo, (SlotNum, TextoFinal)) :-
+    atomic_list_concat([Pasta, '/', Arquivo], Caminho),
+    carregarSave(Caminho, jogo(Jogador, _, _, DataJogoAtom)),
+    once((
+        parse_time(DataJogoAtom, iso_8601, Timestamp) ->
+            format_time(atom(DataAtom), '%d/%m/%Y %H:%M', Timestamp),
+            atom_string(DataAtom, DataFormatada)
+        ;
+            DataFormatada = "Data inválida"
+    )),
+    getNome(Jogador, NomeJogador),
+    extraiNumeroSlot(Arquivo, SlotNum),
+    format(string(TextoFinal), "[~w]. ~w - Jogo salvo em ~w", [SlotNum, NomeJogador, DataFormatada]).
+
+% Extrai o número do slot a partir do nome do arquivo
+
+extraiNumeroSlot(NomeArq, Num) :-
+    atom_chars(NomeArq, Chars),
+    include(char_type_digit, Chars, Digits),
+    atom_chars(DigitsAtom, Digits),
+    atom_number(DigitsAtom, Num), !.
+extraiNumeroSlot(_, 0).
+
+char_type_digit(Char) :- char_type(Char, digit).
+
+% Corrige a ordem dos slots e preenche os vazios
+
+corrigirOrdemSlots(Saves, Corrigidos) :-
+    defaultSlots(Default),
+    find_slot(Saves, 1, S1, Default),
+    find_slot(Saves, 2, S2, Default),
+    find_slot(Saves, 3, S3, Default),
+    Corrigidos = [S1, S2, S3].
+
+find_slot(Saves, N, Texto, Default) :-
+    ( member((N, Texto), Saves) -> true
+    ; nth1(N, Default, Texto)
     ).
-*/
