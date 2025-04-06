@@ -87,7 +87,7 @@ creditosArt :-
 
 historia :-
     writeln('-> No coração da pequena cidade do Império de Prologia, o equilíbrio entre tradição e progresso é abalado por uma invasão iminente.'),
-    writeln('A república de Haskelland, nação vizinha e rival de longa data, por diferenças de paradigmas, inicia uma ofensiva estratégica para tomar'),
+    writeln('A República de Haskelland, nação vizinha e rival de longa data, por diferenças de paradigmas, inicia uma ofensiva estratégica para tomar'),
     writeln('o controle da cidade rica em Silício, um recurso valioso para a construção de processadores na indústria de computadores voltados para o uso militar.\n'),
     writeln('-> Você joga como um piloto renomado de aviões bombardeiros do exército de Prologia, que serve como a última esperança para combater os inimigos da'),
     writeln('República de Haskelland. Munido de poucos recursos, e sem ferir os direitos impostos pela Convenção de Genebra, em proteção dos civis de Prologia,'),

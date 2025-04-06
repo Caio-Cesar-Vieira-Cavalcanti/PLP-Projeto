@@ -1,12 +1,12 @@
 :- module(menu_controlador, [iniciarMenu/0]).
 
-:- use_module('../UI/HUD.pl').
-:- use_module('../UI/Menu.pl').
-:- use_module('../UI/UtilsUI.pl').
+:- use_module('../UI/HUD').
+:- use_module('../UI/Menu').
+:- use_module('../UI/UtilsUI').
 
-:- use_module('../Modelos/Jogo.pl').
-:- use_module('../Modelos/Jogador.pl').
-:- use_module('../Modelos/Mercado.pl').
+:- use_module('../Modelos/Jogo').
+:- use_module('../Modelos/Jogador').
+:- use_module('../Modelos/Mercado').
 
 % AUSENTE A IMPORTAÇÃO DE TODOS OS MODELOS E DEMAIS ARQUIVOS NECESSÁRIOS!
 
@@ -93,9 +93,7 @@ carregarJogo(_) :-
 % Falta a condição de vitória e derrota para o loop ficar totalmente funcional
 loopJogo(Jogo) :- 
     clear_screen,
-    getJogador(Jogo, Jogador),
-    getNome(Jogador, Nome), 
-    mainScreen(Nome).
+    mainScreen(Jogo).
 
 % TO DO - processarOpcaoLoop 1, 2, 3 e 4
 

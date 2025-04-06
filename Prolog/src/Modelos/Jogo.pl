@@ -5,9 +5,9 @@
     getMercado/2, getDataJogo/2
 ]).
 
-:- use_module('./Jogador.pl').
-:- use_module('./Mercado.pl').
-:- use_module('./Tabuleiro.pl').
+:- use_module('./Jogador').
+:- use_module('./Mercado').
+:- use_module('./Tabuleiro').
 % :- use_module('./Bot.pl').
 :- use_module(library(time)).  
 :- use_module(library(filesex)).

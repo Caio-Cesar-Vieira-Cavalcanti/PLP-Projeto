@@ -3,7 +3,7 @@
     comprarItem/4
 ]).
 
-:- use_module('./Jogador.pl').
+:- use_module('./Jogador').
 
 :- dynamic mercado/3.
 

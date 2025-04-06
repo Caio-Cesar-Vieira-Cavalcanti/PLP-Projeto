@@ -10,13 +10,15 @@
 
 % Regra principal da HUD
 
-mainScreen(Nome) :-
+mainScreen(Jogo) :-
+    getJogador(Jogo, Jogador),
+    getNome(Jogador, Nome),
     format('Jogador: ~w', [Nome]), nl, nl,
-    mainTabela, nl, nl,
+    mainTabela(Jogador), nl, nl,
     inimigosDestruidos(0), nl,
     espacosAmigosAtingidos(0), nl, nl,
-    inventario(55, 2, 1, 0), nl, nl,
-    moedas(0), nl, nl,
+    inventario(Jogador), nl, nl,
+    moedas(Jogador), nl, nl,
     writeln('Atalhos:'),
     writeln('\'1\' -> Usar bomba pequena'),
     writeln('\'2\' -> Usar bomba média'),
@@ -53,9 +55,9 @@ imprimiTabela([H | T]) :-
     imprimiTabela(T).
 
 % Regra principal da tabela 
-mainTabela :-
-    geraTabuleiroDispor(TabelaDisposta),
-    geraTabuleiroString(TabelaDisposta, TabelaStr),
+mainTabela(Jogador) :-
+    getTabelaJogador(Jogador, TabelaJogador),
+    geraTabuleiroString(TabelaJogador, TabelaStr),
     adicionaNumeros(12, 1, TabelaStr, NewT),
     concatenaCabecalho(NewT, TabelaPronta),
     imprimiTabela(TabelaPronta).
@@ -67,23 +69,23 @@ saveJogoScreen :-
     write(Estados). 
 
 % Inventário
-inventario(A, B, C, D) :-
-    writeln('Inventário:'),
-    format('Bombas pequenas: ~w | Bombas médias: ~w | Bombas grandes: ~w', [A, B, C]), nl,
-    format('Drone visualizador de áreas: ~w', [D]).
-
-moedas(X) :-
-    format('Moedas: ~w', [X]).
-
-% Mercado
-mercadoScreen(Jogo) :-
-    logoMercado,
-    getJogador(Jogo, Jogador),
+inventario(Jogador) :-
     getBombasPequenas(Jogador, BP),
     getBombasMedias(Jogador, BM),
     getBombasGrandes(Jogador, BG),
     getDroneVisualizador(Jogador, DV),
-    inventario(BP, BM, BG, DV),
+    writeln('Inventário:'),
+    format('Bombas pequenas: ~w | Bombas médias: ~w | Bombas grandes: ~w', [BP, BM, BG]), nl,
+    format('Drone visualizador de áreas: ~w', [DV]).
+
+moedas(Jogador) :-
+    getMoedas(Jogador, Moedas),
+    format('Moedas: ~w', [Moedas]).
+
+% Mercado
+mercadoScreen(Jogo) :-
+    logoMercado,
+    inventario(Jogo),
     nl, write('Atalhos:'), nl,
     format('\'1\' -> Comprar bombas médias               ($~d)~n', [250]),
     format('\'2\' -> Comprar bombas grandes              ($~d)~n', [400]),
