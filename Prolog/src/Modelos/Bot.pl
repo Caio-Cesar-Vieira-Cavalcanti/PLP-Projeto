@@ -4,18 +4,20 @@
     bot_joga/0
 ]).
 
-:- dynamic bot/1.
+:- dynamic bot/4.
+% bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas).
 
+% getters
+getTabelaBot(bot(Tabela, _, _, _), Tabela).
+getQtdJogadasParaBombaMedia(bot(_, QtdJogadasParaBombaMedia, _, _), QtdJogadasParaBombaMedia).
+getQtdJogadasParaBombaGrande(bot(_, _, QtdJogadasParaBombaGrande, _), QtdJogadasParaBombaGrande).
+getQtdJogadasFeitas(bot(_, _, _, QtdJogadasFeitas), QtdJogadasFeitas).
 
-% Obtém a tabela do bot armazenado
-getTabelaBot(Tabela) :-
-    bot(Tabela).
-
-
-% Modifica a tabela do bot
-setTabelaBot(NovaTabela) :-
-    retract(bot(_)),
-    assertz(bot(NovaTabela)).
+% setters
+setTabelaBot(bot(_, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas), NovaTabelaBot, bot(NovaTabelaBot, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas)).
+setTabelaQtdJogadasParaBombaMedia(bot(Tabela, _, QtdJogadasParaBombaGrande, QtdJogadasFeitas), NovoQtdJogadasParaBombaMedia, bot(Tabela, NovoQtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas)).
+setTabelaQtdJogadasParaBombaGrande(bot(Tabela, QtdJogadasParaBombaMedia, _, QtdJogadasFeitas), NovoQtdJogadasParaBombaGrande, bot(Tabela, QtdJogadasParaBombaMedia, NovoQtdJogadasParaBombaGrande, QtdJogadasFeitas)).
+setQtdJogadasFeitas(bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaMedia, _), NovoQtdJogadasFeitas, bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, NovoQtdJogadasFeitas)).
 
 
 
@@ -82,6 +84,7 @@ m((X, Y), Targets) :-
             between(0, 11, NY)
         ),
         Targets).
+
 l((X, Y), Targets):-
     findall((NX, NY), 
         (
@@ -92,6 +95,7 @@ l((X, Y), Targets):-
             between(0, 11, NY)
         ),
         Targets).
+
 % Predicado principal: faz o bot jogar e atualiza seu estado
 bot_joga :-
     getTabelaBot(Tabela),
