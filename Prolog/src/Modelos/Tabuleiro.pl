@@ -2,12 +2,13 @@
     geraTabuleiroString/2,
     geraTabuleiroDispor/1,
     mainAtirouNaCoordenada/5,
-    pontuacaoElemento/2
+    contabilizarAmigos/2,
+    contabilizarInimigos/2
 ]).
 
 :- use_module('./Coordenada').
 
-% apagar esse use_module de HUD ao final do projeto, porque é só para testes locais em Tabuleiro.pl.
+% apagar esse use_module de HUD ao final do projeto, porque é só para testes locais em Tabuleiro.pl. - REMOVER ESTE COMENTÁRIO QUANDO FINALIZAR O PROJETO
 :- use_module('../UI/HUD').
 
 % Gera o tabuleiro base e dispões os elementos especiais
@@ -16,7 +17,8 @@ geraTabuleiroDispor(TabelaPronta) :-
     mainDisporElem(TabelaInicial, TabelaPronta). 
 
 % Regras auxiliares da geração do tabuleiro e coordenada
-% * Para testar os elementos especiais dispostos, basta trocar para true
+
+% * Para testar os elementos especiais dispostos, basta trocar para true - REMOVER ESTE COMENTÁRIO QUANDO FINALIZAR O PROJETO
 geraCoordenada(Coord) :- 
     Coord = coordenada('X', '-', false).  
 
@@ -55,6 +57,7 @@ mapTabuleiro(NumArrays, I, [H | T], [H2 | T2]) :-
     mapTabuleiro(NumArrays, I2, T, T2).
 
 % Regra de lógica de acerto à coordenada (+ pontuação)
+
 capturaElemAtirado(MatrizCoord, L, C, ElemEspecial, NewCoord) :-
     nth0(L, MatrizCoord, Linha),
     nth0(C, Linha, Coord),
@@ -88,6 +91,7 @@ pontuacaoElemento('$', 250) :- !.
 pontuacaoElemento(_, 0).
 
 % Regras de alterar o elemento especial de uma coordenada
+
 setElemEspecialAux([], _, _, _, _, []).
 setElemEspecialAux([H | T], NewElemEspecial, I, C, NewElemEspecialPertenceALinha, [H2 | T2]) :-
     (
@@ -110,6 +114,7 @@ setElemEspecial([H | T], NewElemEspecial, I, L, C, [H2 | T2]) :-
     setElemEspecial(T, NewElemEspecial, I2, L, C, T2).
 
 % Regras para dispor os espaços especiais no tabuleiro (amigos e inimigos)
+
 /* 
 Verifica se há espaço livre para a inserção de um grupo de elementos;
 Verificando se todos os espaços reservados por um determinado tamanho são válidos;
@@ -217,12 +222,87 @@ ehAmigoAcertado(Coordenada) :-
     getElemEspecial(Coordenada, Elem),
     member(Elem, ['C', 'E', 'H']).
 
+contabilizarInimigos(Tabela, Total) :-
+    GruposInimigos = [('S', 2), ('M', 3), ('T', 5)],
+    contabilizarTodosGrupos(GruposInimigos, Tabela, 0, Total).
 
+contabilizarTodosGrupos([], _, Total, Total).
+contabilizarTodosGrupos([(Char, Tamanho) | Resto], Tabela, Acum, TotalFinal) :-
+    contarGrupo(Char, Tamanho, Tabela, Qtde),
+    NovoAcum is Acum + Qtde,
+    contabilizarTodosGrupos(Resto, Tabela, NovoAcum, TotalFinal).
 
+contarGrupo(Char, Tamanho, Tabela, Qtde) :-
+    findall(1, (
+        between(0, 11, Linha),
+        between(0, 11, Coluna),
+        ehGrupoValido(Tabela, Char, Tamanho, (Linha, Coluna))
+    ), Lista),
+    length(Lista, Qtde).
 
+ehGrupoValido(Tabela, Char, Tamanho, (Linha, Coluna)) :-
+    ( grupoHorizontalValido(Tabela, Char, Tamanho, Linha, Coluna)
+    ; grupoVerticalValido(Tabela, Char, Tamanho, Linha, Coluna)
+    ).
 
+grupoHorizontalValido(Tabela, Char, Tamanho, Linha, Coluna) :-
+    ColunaMax is Coluna + Tamanho - 1,
+    ColunaMax =< 11,
+
+    (Coluna =:= 0 ;
+     ColAntes is Coluna - 1,
+     nth0(Linha, Tabela, LinhaLista),
+     nth0(ColAntes, LinhaLista, CoordAntes),
+     getElemEspecial(CoordAntes, Outro),
+     Outro \= Char),
+
+    T2 is Tamanho-1,
+    forall(between(0, T2, Offset),
+        (   Col is Coluna + Offset,
+            nth0(Linha, Tabela, LinhaLista),
+            nth0(Col, LinhaLista, Coord),
+            getElemEspecial(Coord, Char),
+            getAcertou(Coord, true)
+        )
+    ),
+
+    (ColunaMax =:= 11 ;
+     ColDepois is ColunaMax + 1,
+     nth0(Linha, Tabela, LinhaLista),
+     nth0(ColDepois, LinhaLista, CoordDepois),
+     getElemEspecial(CoordDepois, Outro2),
+     Outro2 \= Char).
+
+grupoVerticalValido(Tabela, Char, Tamanho, Linha, Coluna) :-
+    LinhaMax is Linha + Tamanho - 1,
+    LinhaMax =< 11,
+
+    (Linha =:= 0 ;
+     LinhaAntes is Linha - 1,
+     nth0(LinhaAntes, Tabela, LinhaListaAntes),
+     nth0(Coluna, LinhaListaAntes, CoordAntes),
+     getElemEspecial(CoordAntes, Outro),
+     Outro \= Char),
+
+    T2 is Tamanho-1,
+    forall(between(0, T2, Offset),
+        (   Lin is Linha + Offset,
+            nth0(Lin, Tabela, LinhaLista),
+            nth0(Coluna, LinhaLista, Coord),
+            getElemEspecial(Coord, Char),
+            getAcertou(Coord, true)
+        )
+    ),
+
+    (LinhaMax =:= 11 ;
+     LinhaDepois is LinhaMax + 1,
+     nth0(LinhaDepois, Tabela, LinhaListaDepois),
+     nth0(Coluna, LinhaListaDepois, CoordDepois),
+     getElemEspecial(CoordDepois, Outro2),
+     Outro2 \= Char).
 
 % Regras para bombas
+
 tiroBombaMedia(Tabela0, L, C, Tabela5, TotalMoedasGanhas) :-
     C2 is C - 1,
     C3 is C + 1,
