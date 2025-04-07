@@ -1,6 +1,12 @@
 :- module(bot, [
-    getTabelaBot/1,
-    setTabelaBot/1, 
+    getTabelaBot/2,
+    getQtdJogadasParaBombaMedia/2,
+    getQtdJogadasParaBombaGrande/2,
+    getQtdJogadasFeitas/2,
+    setTabelaBot/3, 
+    setTabelaQtdJogadasParaBombaMedia/3,
+    setTabelaQtdJogadasParaBombaGrande/3,
+    setQtdJogadasFeitas/3,
     bot_joga/0
 ]).
 
