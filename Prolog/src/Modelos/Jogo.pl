@@ -19,14 +19,14 @@
 % Getters
 
 getJogador(jogo(Jogador, _, _, _), Jogador).
-% getBot(jogo(_, Bot, _, _), Bot).
+getBot(jogo(_, Bot, _, _), Bot).
 getMercado(jogo(_, _, Mercado, _), Mercado).
 getDataJogo(jogo(_, _, _, DataJogo), DataJogo).
 
 % Setters
 
 setJogador(jogo(_, Bot, Mercado, DataJogo), NovoJogador, jogo(NovoJogador, Bot, Mercado, DataJogo)).
-% setBot(jogo(Jogador, _, Mercado, DataJogo), NovoBot, jogo(Jogador, NovoBot, Mercado, DataJogo)).
+setBot(jogo(Jogador, _, Mercado, DataJogo), NovoBot, jogo(Jogador, NovoBot, Mercado, DataJogo)).
 
 % Salvar jogo em arquivo (../BD/save{num})
 
@@ -64,4 +64,4 @@ iniciarJogador(Nome, Tabela, jogador(Nome, 0, Tabela, 55, 2, 1, 0)).
 
 % Inicializar Bot
 
-% iniciarBot(Tabela, Bot) :- getDefaultBot(Tabela, Bot).
+iniciarBot(Tabela, Bot) :- getDefaultBot(Tabela, Bot).
