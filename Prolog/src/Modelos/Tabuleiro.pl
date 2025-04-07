@@ -207,6 +207,18 @@ inserirElementos([(L, C) | T], Char, Tabela, NovaTabela) :-
 
 % Regras para contabilização dos espaços amigos e inimigos
 
+contabilizarAmigos(Tabela, Total) :-
+    flatten(Tabela, TabelaPlanificada),
+    include(ehAmigoAcertado, TabelaPlanificada, AmigosAcertados),
+    length(AmigosAcertados, Total).
+
+ehAmigoAcertado(Coordenada) :-
+    getAcertou(Coordenada, true),
+    getElemEspecial(Coordenada, Elem),
+    member(Elem, ['C', 'E', 'H']).
+
+
+
 
 
 
