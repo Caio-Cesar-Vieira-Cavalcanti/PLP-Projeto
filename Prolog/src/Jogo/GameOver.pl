@@ -1,8 +1,17 @@
-use_module('../Modelos/Bot').
-use_module('../Modelos/Jogador').
-use_module('../Modelos/Jogo').
-use_module('../Modelos/Tabuleiro').
-use_module('../UI/TelasVitoriaDerrota').
+:- module(game_over, [
+    verificaVitoriaDerrotaPlayer/2,
+    checaSePlayerMatouTodosAmigos/2,
+    checaSeBotMatouTodosAmigos/2,
+    checaSePlayerMatouTodosInimigos/2,
+    checaSeBotMatouTodosInimigos/2,
+    checaSeGastouTodasBombas/2
+]).
+
+:- use_module('../Modelos/Bot').
+:- use_module('../Modelos/Jogador').
+:- use_module('../Modelos/Jogo').
+:- use_module('../Modelos/Tabuleiro').
+:- use_module('../UI/TelasVitoriaDerrota').
 
 verificaVitoriaDerrotaPlayer(Jogo, true) :-
     checaSePlayerMatouTodosAmigos(Jogo, true),

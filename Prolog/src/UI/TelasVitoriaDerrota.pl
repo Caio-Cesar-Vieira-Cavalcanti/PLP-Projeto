@@ -1,3 +1,8 @@
+:- module(telas_vitoria_derrota, [
+    winScreen/1,
+    loseScreen/1
+]).
+
 :- use_module('./UtilsUI').
 
 % REVISAR O USO DO HALT

@@ -7,6 +7,7 @@
     setTabelaQtdJogadasParaBombaMedia/3,
     setTabelaQtdJogadasParaBombaGrande/3,
     setQtdJogadasFeitas/3,
+    getDefaultBot/2,
     bot_joga/0
 ]).
 
@@ -25,7 +26,8 @@ setTabelaQtdJogadasParaBombaMedia(bot(Tabela, _, QtdJogadasParaBombaGrande, QtdJ
 setTabelaQtdJogadasParaBombaGrande(bot(Tabela, QtdJogadasParaBombaMedia, _, QtdJogadasFeitas), NovoQtdJogadasParaBombaGrande, bot(Tabela, QtdJogadasParaBombaMedia, NovoQtdJogadasParaBombaGrande, QtdJogadasFeitas)).
 setQtdJogadasFeitas(bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaMedia, _), NovoQtdJogadasFeitas, bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, NovoQtdJogadasFeitas)).
 
-
+getDefaultBot(Tabela, Bot) :-
+    Bot = (Tabela, 5, 10, 0).
 
 % Verifica se uma coordenada ainda não foi acertada
 getAcertou(coordenada(_, _, Acertou), Acertou).
