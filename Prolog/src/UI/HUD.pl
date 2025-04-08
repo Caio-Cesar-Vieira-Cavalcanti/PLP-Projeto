@@ -85,7 +85,8 @@ moedas(Jogador) :-
 % Mercado
 mercadoScreen(Jogo) :-
     logoMercado,
-    inventario(Jogo),
+    getJogador(Jogo, Jogador),
+    inventario(Jogador),
     nl, write('Atalhos:'), nl,
     format('\'1\' -> Comprar bombas médias               ($~d)~n', [250]),
     format('\'2\' -> Comprar bombas grandes              ($~d)~n', [400]),

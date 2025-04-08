@@ -1,14 +1,14 @@
 :- module(jogo, [
     inicializarJogo/2, carregarSave/2, salvarJogo/2, 
-    setJogador/3, % setBot/3, 
-    getJogador/2, % getBot/2, 
+    setJogador/3, setBot/3, 
+    getJogador/2, getBot/2, 
     getMercado/2, getDataJogo/2
 ]).
 
 :- use_module('./Jogador').
 :- use_module('./Mercado').
 :- use_module('./Tabuleiro').
-% :- use_module('./Bot.pl').
+:- use_module('./Bot.pl').
 :- use_module(library(time)).  
 :- use_module(library(filesex)).
 
@@ -49,13 +49,13 @@ carregarSave(Caminho, Jogo) :-
 % Inicialização do jogo
 % Tirar o _ ao fazer o Bot e substituir por ele
 
-inicializarJogo(NomeJogador, jogo(Jogador, _, Mercado, DataJogo)) :-
+inicializarJogo(NomeJogador, jogo(Jogador, Bot, Mercado, DataJogo)) :-
     get_time(TempoAtual),
     format_time(atom(DataJogo), '%Y-%m-%dT%H:%M:%S', TempoAtual),
     geraTabuleiroDispor(TabelaJogador),
-    % geraTabuleiroDispor(TabelaBot),
+    geraTabuleiroDispor(TabelaBot),
     iniciarJogador(NomeJogador, TabelaJogador, Jogador),
-    % iniciarBot(TabelaBot, Bot),
+    iniciarBot(TabelaBot, Bot),
     Mercado = mercado(250, 400, 350).
 
 % Inicializar Jogador

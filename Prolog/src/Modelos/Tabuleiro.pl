@@ -3,7 +3,11 @@
     geraTabuleiroDispor/1,
     mainAtirouNaCoordenada/5,
     contabilizarAmigos/2,
-    contabilizarInimigos/2
+    contabilizarInimigos/2,
+    tiroBombaMedia/5,
+    tiroBombaGrande/5,
+    drone/4,
+    desfazVisualizacaoDrone/2
 ]).
 
 :- use_module('./Coordenada').
@@ -343,3 +347,51 @@ checaSeAcertouNaMina(Coord, MinaFoiAcertada) :-
     (ElemEspecial == '#' -> MinaFoiAcertada = true ; MinaFoiAcertada = false).
 
 % Regras para lógica do drone
+
+drone(Tabela, C, L, NovaTabela) :-
+    visualizacaoDrone(Tabela, C, L, T1),
+    C1 is C - 1, visualizacaoDrone(T1, C1, L, T2),
+    C2 is C + 1, visualizacaoDrone(T2, C2, L, T3),
+    L1 is L - 1, visualizacaoDrone(T3, C, L1, T4),
+    L2 is L + 1, visualizacaoDrone(T4, C, L2, T5),
+    visualizacaoDrone(T5, C1, L1, T6),
+    visualizacaoDrone(T6, C1, L2, T7),
+    visualizacaoDrone(T7, C2, L1, T8),
+    visualizacaoDrone(T8, C2, L2, NovaTabela).
+
+visualizacaoDrone(Tabela, C, L, NovaTabela) :-
+    C >= 0, C =< 11, L >= 0, L =< 11,
+    atualizaCoordenada(Tabela, L, C, NovaTabela), !.
+visualizacaoDrone(Tabela, _, _, Tabela).  
+
+atualizaCoordenada(Tabela, L, C, NovaTabela) :-
+    nth0(L, Tabela, Linha),
+    nth0(C, Linha, Coord),
+    mascaraViraInterrogacao(Coord, NovoCoord),
+    substituiNaLinha(Linha, C, NovoCoord, NovaLinha),
+    substituiNaLinha(Tabela, L, NovaLinha, NovaTabela).
+
+mascaraViraInterrogacao(Coord, NovoCoord) :-
+    getElemEspecial(Coord, Especial),
+    (Especial \= '-' ->
+        setMascara(Coord, '?', NovoCoord)
+    ;
+        setMascara(Coord, '-', NovoCoord)
+    ).
+
+desfazVisualizacaoDrone([], []).
+desfazVisualizacaoDrone([Linha | T], [NovaLinha | NT]) :-
+    desfazLinhaDrone(Linha, NovaLinha),
+    desfazVisualizacaoDrone(T, NT).
+
+desfazLinhaDrone([], []).
+desfazLinhaDrone([C | T], [NovoC | NT]) :-
+    getMascara(C, Masc),
+    (Masc \= 'X' -> setMascara(C, 'X', NovoC) ; NovoC = C),
+    desfazLinhaDrone(T, NT).
+
+substituiNaLinha(Lista, Index, Elem, NovaLista) :-
+    same_length(Lista, NovaLista),
+    append(Prefixo, [_|Sufixo], Lista),
+    length(Prefixo, Index),
+    append(Prefixo, [Elem|Sufixo], NovaLista).
