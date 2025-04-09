@@ -17,6 +17,7 @@
 :- use_module(library(random)).
 
 % Limpar a tela
+
 clear_screen :- 
     write('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n').
 
@@ -72,6 +73,7 @@ processarOpcao(_) :-
     processarOpcao(Opcao).
 
 % Regras auxiliares para voltar ao menu principal ou subopções dentro do menu
+
 subMenu :-
     clear_screen,
     opcoesMenu,

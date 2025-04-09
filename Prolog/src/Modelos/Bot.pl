@@ -12,13 +12,12 @@
 % bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas).
 
 % getters
+
 getTabelaBot(bot(Tabela, _, _, _), Tabela).
 getQtdJogadasParaBombaMedia(bot(_, QtdJogadasParaBombaMedia, _, _), QtdJogadasParaBombaMedia).
 getQtdJogadasParaBombaGrande(bot(_, _, QtdJogadasParaBombaGrande, _), QtdJogadasParaBombaGrande).
 getQtdJogadasFeitas(bot(_, _, _, QtdJogadasFeitas), QtdJogadasFeitas).
-
 getDefaultBot(Tabela,bot(Tabela, 3, 5, 1)).
-
 getAcertou(coordenada(_, _, Acertou), Acertou).
 
 coordenadaNaoAcertada(Coordenada) :-
@@ -58,7 +57,7 @@ coordenadaEspecialAcertada(coordenada(_, Elem, true)) :-
 
 coordenadasVizinhas(X, Y, Vizinhos) :-
     findall((NX, NY), (
-        member((DX, DY), [(0,1), (1,0), (0,-1), (-1,0)]), % Cima, Direita, Baixo, Esquerda
+        member((DX, DY), [(0,1), (1,0), (0,-1), (-1,0)]), 
         NX is X + DX, NY is Y + DY,
         between(0, 11, NX), between(0, 11, NY)
     ), Vizinhos).
@@ -78,7 +77,7 @@ s(Alvo, [Alvo]).
 m((X, Y), Targets) :-
     findall((NX, NY), 
         (
-            member((DX, DY), [(0, -1), (0, 1), (-1, 0), (1, 0)]),  % Apenas vizinhos
+            member((DX, DY), [(0, 0), (0, -1), (0, 1), (-1, 0), (1, 0)]),
             NX is X + DX, 
             NY is Y + DY,
             between(0, 11, NX), 
@@ -86,10 +85,10 @@ m((X, Y), Targets) :-
         ),
         Targets).
 
-l((X, Y), Targets):-
+l((X, Y), Targets) :-
     findall((NX, NY), 
         (
-            member((DX, DY), [(0, -1), (-1,-1), (-1, 0), (0, 1), (1,1) ,(1, 0),(1,-1), (-1,1)]),  % Apenas vizinhos
+            member((DX, DY), [(0, 0), (0, -1), (-1,-1), (-1, 0), (0, 1), (1,1), (1, 0), (1,-1), (-1,1)]), 
             NX is X + DX, 
             NY is Y + DY,
             between(0, 11, NX), 

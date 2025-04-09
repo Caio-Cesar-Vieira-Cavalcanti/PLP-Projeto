@@ -13,6 +13,7 @@
 :- use_module('./Coordenada').
 
 % Gera o tabuleiro base e dispões os elementos especiais
+
 geraTabuleiroDispor(TabelaPronta) :-
     geraTabuleiroInicial(12, 12, TabelaInicial),
     mainDisporElem(TabelaInicial, TabelaPronta). 
@@ -160,6 +161,7 @@ temGrupoAdjacente(Tabela, Linha, Coluna, Char, [_ | Resto]) :-
     temGrupoAdjacente(Tabela, Linha, Coluna, Char, Resto).
 
 % Dispor os espaços ao tabuleiro, até encontrar um caso que for êxito para todos os espaços
+
 mainDisporElem(Tabela, NovaTabela) :-
     (disporEspacos(Tabela, NovaTabela) -> !
     ; mainDisporElem(Tabela, NovaTabela)).

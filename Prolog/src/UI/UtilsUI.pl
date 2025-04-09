@@ -50,6 +50,7 @@ arquivoSave(Nome) :-
     sub_atom(Nome, _, _, _, 'save').
 
 % Formata um save carregado
+
 formatarSave(Pasta, Arquivo, (SlotNum, TextoFinal)) :-
     atomic_list_concat([Pasta, '/', Arquivo], Caminho),
     carregarSave(Caminho, jogo(Jogador, _, _, DataJogoAtom)),
