@@ -4,6 +4,7 @@
 :- use_module(library(apply)).
 :- use_module(library(lists)).
 :- use_module(library(readutil)).
+
 :- use_module('../Modelos/Jogo').
 :- use_module('../Modelos/Jogador').
 

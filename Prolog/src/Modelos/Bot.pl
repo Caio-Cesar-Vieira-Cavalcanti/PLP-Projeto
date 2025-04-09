@@ -1,5 +1,6 @@
 :- module(bot, [
     getTabelaBot/2,
+    getDefaultBot/2,
     getQtdJogadasParaBombaMedia/2,
     getQtdJogadasParaBombaGrande/2,
     getQtdJogadasFeitas/2,
@@ -7,11 +8,11 @@
     setTabelaQtdJogadasParaBombaMedia/3,
     setTabelaQtdJogadasParaBombaGrande/3,
     setQtdJogadasFeitas/3,
-    getDefaultBot/2,
     bot_joga/0
 ]).
 
 :- dynamic bot/4.
+
 % bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas).
 
 % getters
@@ -29,7 +30,6 @@ setQtdJogadasFeitas(bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaMed
 getDefaultBot(Tabela, Bot) :-
     Bot = (Tabela, 5, 10, 0).
 
-% Verifica se uma coordenada ainda não foi acertada
 getAcertou(coordenada(_, _, Acertou), Acertou).
 
 coordenadaNaoAcertada(Coordenada) :-
@@ -57,11 +57,9 @@ aplica_tiros(Tabela, [(X, Y) | Resto], NovaTabela) :-
     atirouNaCoordenada(Tabela, X, Y, TabelaModificada),
     aplica_tiros(TabelaModificada, Resto, NovaTabela).
 
-% Verifica se há uma coordenada com 'S', 'M' ou 'T' já acertada
 coordenadaEspecialAcertada(coordenada(_, Elem, true)) :-
     member(Elem, ['S', 'M', 'T']).
 
-% Obtém coordenadas vizinhas válidas dentro do tabuleiro
 coordenadasVizinhas(X, Y, Vizinhos) :-
     findall((NX, NY), (
         member((DX, DY), [(0,1), (1,0), (0,-1), (-1,0)]), % Cima, Direita, Baixo, Esquerda
@@ -69,7 +67,6 @@ coordenadasVizinhas(X, Y, Vizinhos) :-
         between(0, 11, NX), between(0, 11, NY)
     ), Vizinhos).
 
-% Encontra espaços próximos a uma coordenada especial acertada
 espacosProximosEspeciais(Tabela, EspacosVizinhos) :-
     findall((NX, NY), (
         between(0, 11, Y), between(0, 11, X),
@@ -104,7 +101,6 @@ l((X, Y), Targets):-
         ),
         Targets).
 
-% Predicado principal: faz o bot jogar e atualiza seu estado
 bot_joga :-
     getTabelaBot(Tabela),
     coordenadasNaoAcertadas(Tabela, NaoAcertados),

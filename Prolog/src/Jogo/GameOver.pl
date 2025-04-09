@@ -11,6 +11,7 @@
 :- use_module('../Modelos/Jogador').
 :- use_module('../Modelos/Jogo').
 :- use_module('../Modelos/Tabuleiro').
+
 :- use_module('../UI/TelasVitoriaDerrota').
 
 verificaVitoriaDerrotaPlayer(Jogo, true) :-

@@ -4,17 +4,17 @@
 :- use_module('../Modelos/Jogo').
 :- use_module('../Modelos/Tabuleiro').
 :- use_module('../Modelos/Jogador').
+% :- use_module('../Modelos/Bot').
 
-% REVISAR (falta imprimir a tabela do bot) - inserir as futuras importações e dados do jogo!
-% Inserir cortes
+% REVISAR (falta imprimir a tabela do bot)
 
 % Regra principal da HUD
 
 mainScreen(Jogo) :-
     getJogador(Jogo, Jogador),
-    % getBot(Jogo, Bot),
     getNome(Jogador, Nome),
     getTabelaJogador(Jogador, TabelaJogador),
+    % getBot(Jogo, Bot),
     % getTabelaBot(Bot, TabelaBot),
     format('Jogador: ~w', [Nome]), nl, nl,
     mainTabela(Jogador), nl, nl,
@@ -103,15 +103,15 @@ inimigosDestruidos(TabelaJogador, _) :-
     contabilizarInimigos(TabelaJogador, InimigosJogador),
     % contabilizarInimigos(TabelaBot, InimigosBot),
     format('Inimigos: ~w/6', [InimigosJogador]),
-    write('                                                       '),
-    format('Inimigos do Oponente: ~w/6', [0]).
+    write('                                                       ').
+    % format('Inimigos do Oponente: ~w/6', [InimigosBot]).
 
 espacosAmigosAtingidos(TabelaJogador, _) :-
     contabilizarAmigos(TabelaJogador, AmigosJogador),
     % contabilizarAmigos(TabelaBot, AmigosBot),
     format('Espaços Amigos: ~w/3', [AmigosJogador]),
-    write('                                                 '),
-    format('Espaços Amigos do Oponente: ~w/3', [0]).
+    write('                                                 ').
+    % format('Espaços Amigos do Oponente: ~w/3', [AmigosBot]).
 
 logoMercado :-
     writeln('  __  __                             _        '),

@@ -8,13 +8,14 @@
 :- use_module('./Jogador').
 :- use_module('./Mercado').
 :- use_module('./Tabuleiro').
-:- use_module('./Bot.pl').
+:- use_module('./Bot').
+
 :- use_module(library(time)).  
 :- use_module(library(filesex)).
 
 :- dynamic jogo/4.
 
-% jogo(Jogador, Bot, Mercado, DataJogo) // Em teoria, falta o Bot.
+% jogo(Jogador, Bot, Mercado, DataJogo)
 
 % Getters
 
@@ -47,7 +48,6 @@ carregarSave(Caminho, Jogo) :-
     ).
 
 % Inicialização do jogo
-% Tirar o _ ao fazer o Bot e substituir por ele
 
 inicializarJogo(NomeJogador, jogo(Jogador, Bot, Mercado, DataJogo)) :-
     get_time(TempoAtual),

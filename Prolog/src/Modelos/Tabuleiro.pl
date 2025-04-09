@@ -12,9 +12,6 @@
 
 :- use_module('./Coordenada').
 
-% apagar esse use_module de HUD ao final do projeto, porque é só para testes locais em Tabuleiro.pl. - REMOVER ESTE COMENTÁRIO QUANDO FINALIZAR O PROJETO
-:- use_module('../UI/HUD').
-
 % Gera o tabuleiro base e dispões os elementos especiais
 geraTabuleiroDispor(TabelaPronta) :-
     geraTabuleiroInicial(12, 12, TabelaInicial),
@@ -22,7 +19,7 @@ geraTabuleiroDispor(TabelaPronta) :-
 
 % Regras auxiliares da geração do tabuleiro e coordenada
 
-% * Para testar os elementos especiais dispostos, basta trocar para true - REMOVER ESTE COMENTÁRIO QUANDO FINALIZAR O PROJETO
+% * Para testar os elementos especiais dispostos, basta trocar para true
 geraCoordenada(Coord) :- 
     Coord = coordenada('X', '-', false).  
 
