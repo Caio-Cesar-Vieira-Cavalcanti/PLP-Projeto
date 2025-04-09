@@ -4,11 +4,7 @@
     getQtdJogadasParaBombaMedia/2,
     getQtdJogadasParaBombaGrande/2,
     getQtdJogadasFeitas/2,
-    setTabelaBot/3, 
-    setTabelaQtdJogadasParaBombaMedia/3,
-    setTabelaQtdJogadasParaBombaGrande/3,
-    setQtdJogadasFeitas/3,
-    bot_joga/0
+    bot_joga/2
 ]).
 
 :- dynamic bot/4.
@@ -21,14 +17,7 @@ getQtdJogadasParaBombaMedia(bot(_, QtdJogadasParaBombaMedia, _, _), QtdJogadasPa
 getQtdJogadasParaBombaGrande(bot(_, _, QtdJogadasParaBombaGrande, _), QtdJogadasParaBombaGrande).
 getQtdJogadasFeitas(bot(_, _, _, QtdJogadasFeitas), QtdJogadasFeitas).
 
-% setters
-setTabelaBot(bot(_, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas), NovaTabelaBot, bot(NovaTabelaBot, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas)).
-setTabelaQtdJogadasParaBombaMedia(bot(Tabela, _, QtdJogadasParaBombaGrande, QtdJogadasFeitas), NovoQtdJogadasParaBombaMedia, bot(Tabela, NovoQtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas)).
-setTabelaQtdJogadasParaBombaGrande(bot(Tabela, QtdJogadasParaBombaMedia, _, QtdJogadasFeitas), NovoQtdJogadasParaBombaGrande, bot(Tabela, QtdJogadasParaBombaMedia, NovoQtdJogadasParaBombaGrande, QtdJogadasFeitas)).
-setQtdJogadasFeitas(bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaMedia, _), NovoQtdJogadasFeitas, bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, NovoQtdJogadasFeitas)).
-
-getDefaultBot(Tabela, Bot) :-
-    Bot = (Tabela, 5, 10, 0).
+getDefaultBot(Tabela,bot(Tabela, 3, 5, 1)).
 
 getAcertou(coordenada(_, _, Acertou), Acertou).
 
@@ -46,11 +35,18 @@ coordenadasNaoAcertadas(Tabela, Coordenadas) :-
         ), 
         Coordenadas).
 
+substitui_na_lista(0, Elem, [_|Tail], [Elem|Tail]).
+substitui_na_lista(Index, Elem, [Head|Tail], [Head|NovaTail]) :-
+    Index > 0,
+    Index1 is Index - 1,
+    substitui_na_lista(Index1, Elem, Tail, NovaTail).
+
 atirouNaCoordenada(Tabela, X, Y, NovaTabela) :-
-    nth0(Y, Tabela, Linha, RestoTabela),
-    nth0(X, Linha, coordenada(X, Y, _), RestoLinha),
-    nth0(X, NovaLinha, coordenada(X, Y, true), RestoLinha),
-    nth0(Y, NovaTabela, NovaLinha, RestoTabela).
+    nth0(Y, Tabela, Linha),
+    nth0(X, Linha, coordenada(_, Elem, _)),
+    NovaCoord = coordenada(X, Elem, true),
+    substitui_na_lista(X, NovaCoord, Linha, NovaLinha),
+    substitui_na_lista(Y, NovaLinha, Tabela, NovaTabela).
 
 aplica_tiros(Tabela, [], Tabela).
 aplica_tiros(Tabela, [(X, Y) | Resto], NovaTabela) :-
@@ -101,16 +97,19 @@ l((X, Y), Targets):-
         ),
         Targets).
 
-bot_joga :-
-    getTabelaBot(Tabela),
+bot_joga(bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas), bot(NovaTabela,QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, NovaQtdJogadasFeitas)) :-
+
     coordenadasNaoAcertadas(Tabela, NaoAcertados),
     espacosProximosEspeciais(Tabela, ProximosEspeciaisNaoAcertados),
-    random_member(TipoGolpe,['S','S','S','S','S','M','M','L']),
+
+    ( QtdJogadasFeitas mod QtdJogadasParaBombaGrande =:= 0 -> TipoGolpe = 'L' 
+    ; QtdJogadasFeitas mod QtdJogadasParaBombaMedia =:= 0 -> TipoGolpe = 'M' 
+    ; TipoGolpe = 'S'),
+
     length(ProximosEspeciaisNaoAcertados,Size),
     (Size>0 -> random_member(Alvo,ProximosEspeciaisNaoAcertados) ; random_member(Alvo,NaoAcertados)), 
     ( TipoGolpe == 'S' -> s(Alvo,Alvos) 
     ; TipoGolpe == 'M' -> m(Alvo,Alvos) 
     ; TipoGolpe == 'L' -> l(Alvo,Alvos) ),
     aplica_tiros(Tabela, Alvos, NovaTabela),
-    retract(bot(_)),
-    assertz(bot(NovaTabela)).
+    NovaQtdJogadasFeitas is QtdJogadasFeitas + 1.

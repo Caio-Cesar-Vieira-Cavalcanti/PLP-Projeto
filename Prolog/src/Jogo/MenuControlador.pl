@@ -8,6 +8,7 @@
 :- use_module('../Modelos/Jogador').
 :- use_module('../Modelos/Mercado').
 :- use_module('../Modelos/Tabuleiro').
+:- use_module('../Modelos/Bot').
 
 :- use_module('./GameOver').
 
@@ -127,7 +128,6 @@ processarOpcaoLoop("1", Jogo) :-
         LinhaIndex is Linha - 1,
         mainAtirouNaCoordenada(TabelaAtual, LinhaIndex, ColunaIndex, NovaTabelaJog, NovasMoedas),
 
-        % random_between(0, 143, R),
         getMoedas(Jogador, MoedasAtuais),
         NovoTotalMoedas is MoedasAtuais + NovasMoedas,
         getBombasPequenas(Jogador, BP),
@@ -137,13 +137,12 @@ processarOpcaoLoop("1", Jogo) :-
         setBombasPequenas(JogadorTemp1, NovoNumBombas, JogadorTemp2),
         setMoedas(JogadorTemp2, NovoTotalMoedas, NovoJogador),
 
-        % Aqui o bot deveria jogar
         getBot(Jogo, Bot),
-        % jogarBot(Bot, R, NovoBot),
+        bot_joga(Bot, NovoBot),
 
         getMercado(Jogo, Mercado),
         getDataJogo(Jogo, DataJogo),
-        JogoAtualizado = jogo(NovoJogador, Bot, Mercado, DataJogo),
+        JogoAtualizado = jogo(NovoJogador, NovoBot, Mercado, DataJogo),
         loopJogo(JogoAtualizado)
     ).
 
@@ -166,7 +165,6 @@ processarOpcaoLoop("2", Jogo) :-
         LinhaIndex is Linha - 1,
         tiroBombaMedia(TabelaAtual, LinhaIndex, ColunaIndex, NovaTabelaJog, NovasMoedas),
 
-        % random_between(0, 143, R),
         getMoedas(Jogador, MoedasAtuais),
         NovoTotalMoedas is MoedasAtuais + NovasMoedas,
         getBombasMedias(Jogador, BM),
@@ -176,13 +174,12 @@ processarOpcaoLoop("2", Jogo) :-
         setBombasMedias(JogadorTemp1, NovoNumBombas, JogadorTemp2),
         setMoedas(JogadorTemp2, NovoTotalMoedas, NovoJogador),
 
-        % Aqui o bot deveria jogar
         getBot(Jogo, Bot),
-        % jogarBot(Bot, R, NovoBot),
+        bot_joga(Bot, NovoBot),
 
         getMercado(Jogo, Mercado),
         getDataJogo(Jogo, DataJogo),
-        JogoAtualizado = jogo(NovoJogador, Bot, Mercado, DataJogo),
+        JogoAtualizado = jogo(NovoJogador, NovoBot, Mercado, DataJogo),
         loopJogo(JogoAtualizado)
     ).
 
@@ -205,7 +202,6 @@ processarOpcaoLoop("3", Jogo) :-
         LinhaIndex is Linha - 1,
         tiroBombaGrande(TabelaAtual, LinhaIndex, ColunaIndex, NovaTabelaJog, NovasMoedas),
 
-        % random_between(0, 143, R),
         getMoedas(Jogador, MoedasAtuais),
         NovoTotalMoedas is MoedasAtuais + NovasMoedas,
         getBombasGrandes(Jogador, BG),
@@ -215,13 +211,12 @@ processarOpcaoLoop("3", Jogo) :-
         setBombasGrandes(JogadorTemp1, NovoNumBombas, JogadorTemp2),
         setMoedas(JogadorTemp2, NovoTotalMoedas, NovoJogador),
 
-        % Aqui o bot deveria jogar
         getBot(Jogo, Bot),
-        % jogarBot(Bot, R, NovoBot)
+        bot_joga(Bot, NovoBot),
 
         getMercado(Jogo, Mercado),
         getDataJogo(Jogo, DataJogo),
-        JogoAtualizado = jogo(NovoJogador, Bot, Mercado, DataJogo),
+        JogoAtualizado = jogo(NovoJogador, NovoBot, Mercado, DataJogo),
         loopJogo(JogoAtualizado)
     ).
 
@@ -244,9 +239,11 @@ processarOpcaoLoop("4", Jogo) :-
         setDroneVisualizador(JogadorTemp, NovoNumDrones, NovoJogador),
 
         getBot(Jogo, Bot),
+        bot_joga(Bot, NovoBot),
+
         getMercado(Jogo, Mercado),
         getDataJogo(Jogo, DataJogo),
-        JogoAtualizado = jogo(NovoJogador, Bot, Mercado, DataJogo),
+        JogoAtualizado = jogo(NovoJogador, NovoBot, Mercado, DataJogo),
         loopJogo(JogoAtualizado)
     ).  
 
