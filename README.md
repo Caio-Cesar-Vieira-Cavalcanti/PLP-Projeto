@@ -6,7 +6,7 @@
 </div> <br>
 
 ![Haskell](https://img.shields.io/badge/Haskell-Done-green?style=flat-square&logo=haskell&labelColor=%235D4F85) 
-![Prolog](https://img.shields.io/badge/Prolog-In_processing-red?style=flat-square&labelColor=%23184e60)
+![Prolog](https://img.shields.io/badge/Prolog-Done-green?style=flat-square&labelColor=%23184e60)
 
 
 ## Linguagens:
