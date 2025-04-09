@@ -15,8 +15,7 @@ winScreen(NomeJogador) :-
     format('               Prologia agradece seu heroismo!           ~n', []),
     format('                                                            ~n', []),
     format('~n', []),
-    voltarMenu,
-    halt.
+    voltarMenu.
 
 loseScreen(MotivoDerrota) :-
     format('                                                            ~n', []),
@@ -27,5 +26,4 @@ loseScreen(MotivoDerrota) :-
     format('                                                            ~n', []),
     format('                                                            ~n', []),
     format('~n', []),
-    voltarMenu,
-    halt.
+    voltarMenu.

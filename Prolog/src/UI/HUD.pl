@@ -12,11 +12,14 @@
 
 mainScreen(Jogo) :-
     getJogador(Jogo, Jogador),
+    % getBot(Jogo, Bot),
     getNome(Jogador, Nome),
+    getTabelaJogador(Jogador, TabelaJogador),
+    % getTabelaBot(Bot, TabelaBot),
     format('Jogador: ~w', [Nome]), nl, nl,
     mainTabela(Jogador), nl, nl,
-    inimigosDestruidos(0), nl,
-    espacosAmigosAtingidos(0), nl, nl,
+    inimigosDestruidos(TabelaJogador, _), nl,
+    espacosAmigosAtingidos(TabelaJogador, _), nl, nl,
     inventario(Jogador), nl, nl,
     moedas(Jogador), nl, nl,
     writeln('Atalhos:'),
@@ -28,7 +31,9 @@ mainScreen(Jogo) :-
     nl,
     writeln('\'m\' -> Acesso ao mercado'),
     writeln('\'s\' -> Salvar o jogo no estado atual'),
-    writeln('\'q\' -> Sair do jogo sem salvar').
+    writeln('\'q\' -> Sair do jogo sem salvar'),
+    nl,
+    write('> Digite a opção: ').
 
 % Regras auxiliares para a tabela
 inteiroParaString(N, S3) :-
@@ -94,11 +99,19 @@ mercadoScreen(Jogo) :-
     nl, write('> Digite o item ou \'v\' para voltar: ').
 
 % Regras auxiliares da HUD
-inimigosDestruidos(X) :-
-    format('Inimigos: ~w/6', [X]).
+inimigosDestruidos(TabelaJogador, _) :-
+    contabilizarInimigos(TabelaJogador, InimigosJogador),
+    % contabilizarInimigos(TabelaBot, InimigosBot),
+    format('Inimigos: ~w/6', [InimigosJogador]),
+    write('                                                       '),
+    format('Inimigos do Oponente: ~w/6', [0]).
 
-espacosAmigosAtingidos(X) :-
-    format('Espaços Amigos: ~w/3', [X]).
+espacosAmigosAtingidos(TabelaJogador, _) :-
+    contabilizarAmigos(TabelaJogador, AmigosJogador),
+    % contabilizarAmigos(TabelaBot, AmigosBot),
+    format('Espaços Amigos: ~w/3', [AmigosJogador]),
+    write('                                                 '),
+    format('Espaços Amigos do Oponente: ~w/3', [0]).
 
 logoMercado :-
     writeln('  __  __                             _        '),
