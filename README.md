@@ -11,7 +11,7 @@
 
 ## Linguagens:
 * Implementação em [Haskell](https://github.com/Caio-Cesar-Vieira-Cavalcanti/PLP-Projeto/blob/main/Haskell/README.md)
-* Implementação em [Prolog]()
+* Implementação em [Prolog](https://github.com/Caio-Cesar-Vieira-Cavalcanti/PLP-Projeto/blob/main/Prolog/README.md)
 
 
 ## Participantes:
