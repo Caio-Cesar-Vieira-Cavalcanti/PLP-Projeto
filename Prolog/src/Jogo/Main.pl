@@ -1,6 +1,6 @@
 :- initialization(main).
 
-:- use_module('../src/Jogo/MenuControlador').
+:- use_module('./MenuControlador').
 
 main :-
     iniciarMenu.
