@@ -16,7 +16,7 @@ mainScreen(Jogo) :-
     getBot(Jogo, Bot),
     getTabelaBot(Bot, TabelaBot),
     format('Jogador: ~w', [Nome]),
-    write('                           '),
+    write('                       '),
     write('Oponente: República de Haskelland'), nl, nl,
     mainTabela(TabelaJogador, TabelaBot), nl, nl,
     inimigosDestruidos(TabelaJogador, TabelaBot), nl,
@@ -119,7 +119,7 @@ inimigosDestruidos(TabelaJogador, TabelaBot) :-
     contabilizarInimigos(TabelaJogador, InimigosJogador),
     contabilizarInimigos(TabelaBot, InimigosBot),
     format('Inimigos: ~w/6', [InimigosJogador]),
-    write('                        '),
+    write('                       '),
     format('Inimigos do Oponente: ~w/6', [InimigosBot]).
 
 espacosAmigosAtingidos(TabelaJogador, TabelaBot) :-
