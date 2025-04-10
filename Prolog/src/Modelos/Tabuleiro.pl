@@ -60,6 +60,11 @@ mapTabuleiro(NumArrays, I, [H | T], [H2 | T2]) :-
 
 % Regra de lógica de acerto à coordenada (+ pontuação)
 
+checaSeJaFoiAtirado(MatrizCoord, L, C, R) :-
+    nth0(L, MatrizCoord, Linha),
+    nth0(C, Linha, Coord),
+    getAcertou(Coord, R).
+
 capturaElemAtirado(MatrizCoord, L, C, ElemEspecial, NewCoord) :-
     nth0(L, MatrizCoord, Linha),
     nth0(C, Linha, Coord),
@@ -82,9 +87,13 @@ atirouNaCoordenada([H | T], NewCoord, I, L, C, [H2 | T2]) :-
     atirouNaCoordenada(T, NewCoord, I2, L, C, T2).
 
 mainAtirouNaCoordenada(MatrizCoord, L, C, NovaMatrizCoord, MoedasGanhas) :-
+    checaSeJaFoiAtirado(MatrizCoord, L, C, R),
+    (R -> 
+    NovaMatrizCoord = MatrizCoord,
+    MoedasGanhas = 0 ; 
     capturaElemAtirado(MatrizCoord, L, C, ElemEspecial, NewCoord),
     atirouNaCoordenada(MatrizCoord, NewCoord, 0, L, C, NovaMatrizCoord),
-    pontuacaoElemento(ElemEspecial, MoedasGanhas).
+    pontuacaoElemento(ElemEspecial, MoedasGanhas)).
 
 pontuacaoElemento('S', 25) :- !.
 pontuacaoElemento('M', 34) :- !.
