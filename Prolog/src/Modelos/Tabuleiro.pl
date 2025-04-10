@@ -86,14 +86,29 @@ atirouNaCoordenada([H | T], NewCoord, I, L, C, [H2 | T2]) :-
     I2 is I + 1,
     atirouNaCoordenada(T, NewCoord, I2, L, C, T2).
 
+coordenadaValida(L, C) :-
+    between(0, 11, L),
+    between(0, 11, C).
+
 mainAtirouNaCoordenada(MatrizCoord, L, C, NovaMatrizCoord, MoedasGanhas) :-
     checaSeJaFoiAtirado(MatrizCoord, L, C, R),
-    (R -> 
-    NovaMatrizCoord = MatrizCoord,
-    MoedasGanhas = 0 ; 
-    capturaElemAtirado(MatrizCoord, L, C, ElemEspecial, NewCoord),
-    atirouNaCoordenada(MatrizCoord, NewCoord, 0, L, C, NovaMatrizCoord),
-    pontuacaoElemento(ElemEspecial, MoedasGanhas)).
+    (
+        R -> 
+            NovaMatrizCoord = MatrizCoord,
+            MoedasGanhas = 0
+        ;
+            capturaElemAtirado(MatrizCoord, L, C, ElemEspecial, NewCoord),
+            (
+                ElemEspecial == '#' ->
+                    atirouNaCoordenada(MatrizCoord, NewCoord, 0, L, C, TabelaComMinaAcertada),
+                    atirouNaMina(TabelaComMinaAcertada, L, C, NovaMatrizCoord, MoedasExplosao),
+                    pontuacaoElemento(ElemEspecial, MoedasCentro),
+                    MoedasGanhas is MoedasCentro + MoedasExplosao
+                ;
+                    atirouNaCoordenada(MatrizCoord, NewCoord, 0, L, C, NovaMatrizCoord),
+                    pontuacaoElemento(ElemEspecial, MoedasGanhas)
+            )
+    ).
 
 pontuacaoElemento('S', 25) :- !.
 pontuacaoElemento('M', 34) :- !.
@@ -339,15 +354,17 @@ tiroBombaGrande(Tabela0, L, C, Tabela5, TotalMoedasGanhas) :-
     mainAtirouNaCoordenada(Tabela4, L3, C3, Tabela5, MoedasGanhas5),
     TotalMoedasGanhas is MoedasGanhas1 + MoedasGanhas2 + MoedasGanhas3 + MoedasGanhas4 + MoedasGanhas5.
 
-atirouNaMina(Tabela1, L, C, Tabela5, TotalMoedasGanhas) :-
+atirouNaMina(Tabela1, L, C, TabelaFinal, TotalMoedasGanhas) :-
     C2 is C - 1,
     C3 is C + 1,
     L2 is L - 1,
     L3 is L + 1,
-    mainAtirouNaCoordenada(Tabela1, L, C2, Tabela2, MoedasGanhas2),
-    mainAtirouNaCoordenada(Tabela2, L, C3, Tabela3, MoedasGanhas3),
-    mainAtirouNaCoordenada(Tabela3, L2, C, Tabela4, MoedasGanhas4),
-    mainAtirouNaCoordenada(Tabela4, L3, C, Tabela5, MoedasGanhas5),
+
+    (coordenadaValida(L, C2) -> mainAtirouNaCoordenada(Tabela1, L, C2, Tabela2, MoedasGanhas2) ; Tabela2 = Tabela1, MoedasGanhas2 = 0),
+    (coordenadaValida(L, C3) -> mainAtirouNaCoordenada(Tabela2, L, C3, Tabela3, MoedasGanhas3) ; Tabela3 = Tabela2, MoedasGanhas3 = 0),
+    (coordenadaValida(L2, C) -> mainAtirouNaCoordenada(Tabela3, L2, C, Tabela4, MoedasGanhas4) ; Tabela4 = Tabela3, MoedasGanhas4 = 0),
+    (coordenadaValida(L3, C) -> mainAtirouNaCoordenada(Tabela4, L3, C, TabelaFinal, MoedasGanhas5) ; TabelaFinal = Tabela4, MoedasGanhas5 = 0),
+
     TotalMoedasGanhas is MoedasGanhas2 + MoedasGanhas3 + MoedasGanhas4 + MoedasGanhas5.
 
 checaSeAcertouNaMina(Coord, MinaFoiAcertada) :-

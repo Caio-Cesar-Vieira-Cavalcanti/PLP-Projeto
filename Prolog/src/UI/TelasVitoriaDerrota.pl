@@ -4,8 +4,10 @@
 ]).
 
 :- use_module('./UtilsUI').
+:- use_module('../Jogo/MenuControlador').
 
 winScreen(NomeJogador) :-
+    clear_screen,
     format('                                                            ~n', []),
     format('                                                            ~n', []),
     format('   Parabens ~w, Voce venceu a Guerra dos Paradigmas!   ~n', [NomeJogador]),
@@ -16,6 +18,7 @@ winScreen(NomeJogador) :-
     voltarMenu.
 
 loseScreen(MotivoDerrota) :-
+    clear_screen,
     format('                                                            ~n', []),
     format('                                                            ~n', []),
     format('                       GAME OVER!                           ~n', []),
