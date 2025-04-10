@@ -1,4 +1,4 @@
-:- module(menu_controlador, [iniciarMenu/0]).
+:- module(menu_controlador, [iniciarMenu/0, clear_screen/0]).
 
 :- use_module('../UI/HUD').
 :- use_module('../UI/Menu').

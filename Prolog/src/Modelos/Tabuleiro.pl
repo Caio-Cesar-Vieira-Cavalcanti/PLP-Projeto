@@ -88,12 +88,19 @@ atirouNaCoordenada([H | T], NewCoord, I, L, C, [H2 | T2]) :-
 
 mainAtirouNaCoordenada(MatrizCoord, L, C, NovaMatrizCoord, MoedasGanhas) :-
     checaSeJaFoiAtirado(MatrizCoord, L, C, R),
-    (R -> 
-    NovaMatrizCoord = MatrizCoord,
-    MoedasGanhas = 0 ; 
-    capturaElemAtirado(MatrizCoord, L, C, ElemEspecial, NewCoord),
-    atirouNaCoordenada(MatrizCoord, NewCoord, 0, L, C, NovaMatrizCoord),
-    pontuacaoElemento(ElemEspecial, MoedasGanhas)).
+    (
+        R -> 
+        NovaMatrizCoord = MatrizCoord,
+        MoedasGanhas = 0 ;
+        capturaElemAtirado(MatrizCoord, L, C, ElemEspecial, NewCoord),
+        (
+            ElemEspecial == '#' -> 
+            atirouNaMina(MatrizCoord, L, C, NovaMatrizCoord, MoedasGanhas),
+            pontuacaoElemento(ElemEspecial, MoedasGanhas) ;
+            atirouNaCoordenada(MatrizCoord, NewCoord, 0, L, C, NovaMatrizCoord),
+            pontuacaoElemento(ElemEspecial, MoedasGanhas)
+        )
+    ).
 
 pontuacaoElemento('S', 25) :- !.
 pontuacaoElemento('M', 34) :- !.
