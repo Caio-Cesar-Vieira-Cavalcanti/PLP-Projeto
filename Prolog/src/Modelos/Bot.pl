@@ -36,19 +36,6 @@ coordenadasNaoAcertadas(Tabela, Coordenadas) :-
         ), 
         Coordenadas).
 
-substitui_na_lista(0, Elem, [_|Tail], [Elem|Tail]).
-substitui_na_lista(Index, Elem, [Head|Tail], [Head|NovaTail]) :-
-    Index > 0,
-    Index1 is Index - 1,
-    substitui_na_lista(Index1, Elem, Tail, NovaTail).
-
-atirouNaCoordenada(Tabela, X, Y, NovaTabela) :-
-    nth0(Y, Tabela, Linha),
-    nth0(X, Linha, coordenada(_, Elem, _)),
-    NovaCoord = coordenada(X, Elem, true),
-    substitui_na_lista(X, NovaCoord, Linha, NovaLinha),
-    substitui_na_lista(Y, NovaLinha, Tabela, NovaTabela).
-
 aplica_tiros(Tabela, [], Tabela).
 aplica_tiros(Tabela, [(X, Y) | Resto], NovaTabela) :-
     mainAtirouNaCoordenada(Tabela, Y, X, TabelaModificada, _),
