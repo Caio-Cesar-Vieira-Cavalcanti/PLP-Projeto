@@ -7,6 +7,8 @@
     bot_joga/2
 ]).
 
+:- use_module('./Tabuleiro').
+
 :- dynamic bot/4.
 
 % bot(Tabela, QtdJogadasParaBombaMedia, QtdJogadasParaBombaGrande, QtdJogadasFeitas).
@@ -49,7 +51,7 @@ atirouNaCoordenada(Tabela, X, Y, NovaTabela) :-
 
 aplica_tiros(Tabela, [], Tabela).
 aplica_tiros(Tabela, [(X, Y) | Resto], NovaTabela) :-
-    atirouNaCoordenada(Tabela, X, Y, TabelaModificada),
+    mainAtirouNaCoordenada(Tabela, Y, X, TabelaModificada, _),
     aplica_tiros(TabelaModificada, Resto, NovaTabela).
 
 coordenadaEspecialAcertada(coordenada(_, Elem, true)) :-
